@@ -1,0 +1,48 @@
+---
+title: "The effect of incentive schemes on COVID-19 vaccination rates: Evidence from Poland"
+author: "Benedikt Stelter"
+date: "01/03/2023"
+supervisor: "Prof. Achim Wambach, PhD / Sabrina Schubert"
+
+
+
+output: 
+   pdf_document: 
+      template: main.tex
+      keep_tex: true
+      latex_engine: xelatex
+      citation_package: biblatex
+
+
+figsintext : yes
+
+
+geometry: margin=1in
+# References
+bibliography: ../literatur.bib
+biblio-style: apa #Select from https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
+biblio-title: "References"
+
+editor_options: 
+  markdown: 
+    wrap: 72
+    
+header-includes:
+   - \usepackage{floatrow}
+   - \floatsetup[figure]{capposition=top}
+   - \usepackage{subfig}
+   - \usepackage{amsmath}
+   - \usepackage{tabu}
+
+---
+
+
+
+\chapter{Test}
+Das ist ein test
+
+
+
+
+
+
