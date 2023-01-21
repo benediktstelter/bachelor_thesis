@@ -11,6 +11,30 @@
 
 \documentclass{scrbook}
 
+\usepackage{tikz}
+
+\newcommand{\ExternalLink}{%
+    \tikz[x=1.2ex, y=1.2ex, baseline=-0.05ex]{% 
+        \begin{scope}[x=1ex, y=1ex]
+            \clip (-0.1,-0.1) 
+                --++ (-0, 1.2) 
+                --++ (0.6, 0) 
+                --++ (0, -0.6) 
+                --++ (0.6, 0) 
+                --++ (0, -1);
+            \path[draw, 
+                line width = 0.5, 
+                rounded corners=0.5] 
+                (0,0) rectangle (1,1);
+        \end{scope}
+        \path[draw, line width = 0.5] (0.5, 0.5) 
+            -- (1, 1);
+        \path[draw, line width = 0.5] (0.6, 1) 
+            -- (1, 1) -- (1, 0.6);
+        }
+    }
+
+
 %% Alle wichtigen Einstellungen sind in der Datei einstellungen.tex getätigt
 %% und können dort verändert werden.
 \input{settings.tex}
@@ -83,129 +107,6 @@ Symbol 3 & Erläuterung 3\\
 
 $body$
 
-\chapter{Introduction}
-
-\chapter{Background}
-
-Der Aufbau einer wissenschaftlichen Arbeit folgt in der Regel einer festen Struktur und beinhaltet immer ein Titelblatt, ein Inhaltsverzeichnis, den Haupttext, ein Literaturverzeichnis sowie die ehrenwörtliche Erklärung. Optional können Abkürzungs-, Symbol-, Tabellen- und Abbildungsverzeichnisse sowie ein Anhang (bzw. mehrere Anhänge) hinzukommen. Die einzelnen Elemente werden im Folgenden kurz erläutert.
-
-\section{Characterization of the policy}
-Das Titelblatt wurde für Bachelorarbeiten entsprechend den Richtlinien der Abteilung VWL gestaltet. Bitte fügen Sie die fehlenden Angaben in das Dokument \texttt{titel.tex} ein. Abweichungen davon sind möglich. Allerdings sollten die aufgeführten Informationen auch bei einer anderen Gestaltung nicht fehlen. Für Seminararbeiten ist das Titelblatt sinngemäß abzuändern. Insbesondere ist der Titel des Seminars und des Dozenten anzugeben.
-
-\section{Literature review}
-Das Inhaltsverzeichnis aktualisiert sich automatisch. Dafür ist bei \LaTeX\ ein zweimaliges Setzen erforderlich – man muss das Programm \LaTeX\ also mindestens zweimal aufrufen.
-
-Im Gegensatz zum Inhaltsverzeichnis sind  Abbildungs- und Tabellenverzeichnis nicht für jede Arbeit notwendig. Sie sind dann sinnvoll, wenn Sie mit vielen Abbildungen und Tabellen arbeiten. In diesem Fall sind Abbildungen und Tabellen getrennt voneinander durchzunummerieren (geschieht automatisch). Beide Verzeichnisse werden von \LaTeX\ automatisch aktualisiert, sofern Sie bei jeder Abbildung und jeder Grafik eine entspsprechende Beschriftung angeben (siehe hierzu Abschnitt \ref{sec:gleitumgebungen}).
-
-Wie das Abbildungs- und Tabellenverzeichnis sind Abkürzungs- und Symbolverzeichnis keine Pflicht. In das Abkürzungsverzeichnis nehmen Sie Abkürzungen auf, die nicht in der Alltagssprache Verwendung finden. Die Abkürzungen DDR, PC oder z.\,B. müssen also nicht aufgeführt werden. Ins Symbolverzeichnis nehmen Sie alle von Ihnen eingesetzten Symbole auf. Achten Sie in beiden Fällen darauf, die Abkürzungen und Symbole bei ihrer ersten Verwendung zu erklären. 
-
-
-Es folgt die eigentliche Arbeit, in der Sie die von Ihnen gewählte Forschungs\-frage beantworten. Dieser Teil gliedert sich mindestens in die drei Kapitel „Einleitung“, „Hauptteil“ und „Schluss“, wobei der Hauptteil in der Regel in mehrere Kapitel und Unterkapitel untergliedert ist. Für weitere Informationen zur inhaltlichen Gestaltung Ihrer wissenschaftlichen Arbeit lesen Sie bitte die „Tipps für wissenschaftliche Arbeiten“, die Sie auf der \href{https://www.vwl.uni-mannheim.de/studium/bachelorstudium/schreibberatung/weiterfuehrendes-material-und-vorlagen/}{\color{blue} Website der Schreibberatung} herunterladen bzw. online lesen können.
-
-Im Literaturverzeichnis listen Sie sämtliche von Ihnen verwendete Quellen auf. Die Quellen sind nach dem Nachnamen des Autors alphabetisch zu sortieren. Bitte orientieren Sie sich an der Harvard-Zitation und seien Sie konsistent. Ausführliche Informationen hierzu finden Sie auch in den „Tipps für wissenschaftliche Arbeiten“.
-
-In den Anhang fügen Sie ergänzende Informationen ein, auf die Sie im Hauptteil verweisen, die dort jedoch zu viel Platz einnehmen würden. In der Regel handelt es sich um Fragebögen, Tabellen, Statistiken, Datenauswertungen oder Transkripte von Interviews. Beachten Sie aber, dass alle für die Beantwortung Ihrer Forschungsfrage wesentlichen Informationen in den Hauptteil gehören. Sie dürfen in den Anhang also keinesfalls umfangreiche wichtige Textpassagen oder Abbildungen packen, um auf diese Weise Seitenbeschränkungen zu unterwandern.
-
-Mit der Erklärung versichern Sie, Ihre wissenschaftliche Arbeit selbständig verfasst und alle verwendeten Quellen angegeben zu haben. Eine Täuschung kann zum Entzug Ihres Bachelortitels führen. Die Erklärung muss im Wortlaut belassen, auf den abzuliefernden Exemplaren von Hand unterschrieben und mit dem Datum versehen werden.
-
-\chapter{Methods and data}
-
-\section{Formatvorlagen}
-Anders als Word arbeitet \LaTeX\ nicht mit Formatvorlagen. Als WYSIWYM-Programm (What you see is what you mean) sind Layout und Inhalt bei \LaTeX\ strikt getrennt. Im Gegensatz hierzu handelt es sich bei Word um ein WYSIWYG-Programm (What you see is what you get), sodass Sie Änderungen im Format direkt am Bildschirm sehen können.
-In der vorliegenden Vorlage sind zentrale Eigenschaften wie Schriftgrößen oder Abstände bereits definiert. Alle Einstellungen und Pakete werden in der Datei \texttt{einstellungen.tex} geladen. Dort können Sie selbstverständlich Änderungen vornehmen, oder benötigte Pakete ergänzen. Es sei allerdings nochmals davor gewarnt, allzu viel am Layout herumzubasteln, da dies meistens zu "`Verschlimmbesserungen"' führt. 
-
-\section{Gliederungsebenen}
-Um Ihren Text zu gliedern, stehen Ihnen die Befehle \verb|\section|, \verb|\subsection| und \verb|\subsubsection| zur Verfügung. In aller Regel sollten diese drei Gliederungsebenen ausreichen. Notfalls können Sie auf die Befehle \verb|\paragraph| und \verb|\subparagraph| zurückgreifen. Damit im Inhaltsverzeichnis mehr als zwei Gliederungsebenen erscheinen, können Sie die Gliederungstiefe mit Hilfe des Befehls \begin {verbatim} \setcounter{tocdepth}{1} \end{verbatim} anpassen. 
-
-\section{Einfügen von Elementen}
-\label{sec:gleitumgebungen}
-
-\subsection{Abbildungen}
-Um Bilder einfügen zu können, wird das Paket \texttt{graphicx}  benötigt. Dieses ist bereits in die Vorlage eingebunden. Grundsätzlich gibt es unzählige Möglichkeiten,  Bilder in \LaTeX{} einzufügen. Es sei an dieser Stelle daher nur ein Beispiel gegeben und auf eine Internetrecherche oder entsprechende \LaTeX-Handbücher verwiesen. Einen guten Einstieg finden Sie bei \href{https://mirrors.ctan.org/info/l2picfaq/german/l2picfaq.pdf}{\color{blue} Dominik Bischoff}.\footnote{Die verlinkte Einführung ist mitlerweile etwas in die Jahre gekommen und schließt neuere Entwicklungen wie \hologo{XeLaTeX} oder \hologo{LuaLaTeX} leider nicht mit ein.} 
-Beachten Sie bitte, dass Sie alle Abbildungen mit dem Befehl \verb|\caption| beschriften. Dieser Titel wird automatisch ins Abbildungsverzeichnis übernommen. Abbildung  beispielsweise zeigt das \LaTeX-Logo und dient hier der Illustration.
-
-
-\subsection{Links}
-In diesem Abschnitt sehen Sie ein Beispiel für das Einbinden von Links auf eine externe Website:
-
-\begin{center}
-	\href{http://en.wikibooks.org/wiki/LaTeX/Tables}{\color{blue} http://en.wikibooks.org/wiki/LaTeX/Tables}
-\end{center}
- 
-\subsection{Tabellen}
-Komplexer ist das Erstellen von Tabellen. Auch hier sei auf hervorragende Anleitungen im Internet verwiesen, wie sie unter anderem \href{https://www.tug.org/pracjourn/2007-1/mori/mori.pdf}{\color{blue} Lapo Mori} geschrieben hat. Als Beispiel dient die Wettervorhersage für drei Tage, welche Sie Tabelle~\ref{tab:wetter} entnehmen können. Denken Sie auch hier an die Beschriftung mittels \verb|\caption|, die automatisch im Tabellenverzeichnis erscheint. Übrigens fügt \LaTeX\ Tabellen dort ein, wo sie am besten ins Layout passen. Prinzipiell ist es möglich, Tabellen zu fixieren und im Text zu positionieren. Mit diesen Korrekturen sollten Sie allerdings warten, bis Sie die gesamte Arbeit abgeschlossen haben.
-
-\begin{table}
-\centering
-\begin{tabular}{ lll p{5cm} }
-    \toprule
-    Tag & Min Temp & Max Temp & Zusammenfassung \\ \midrule
-    Montag & 11\textcelsius & 22\textcelsius & Ein klarer Tag mit viel Sonnenschein.  
-    Allerdings wird die starke Brise die Temperaturen senken. \\ \midrule
-    Dienstag & 9\textcelsius & 19\textcelsius & In vielen nördlichen Regionen wolkig mit Regen. \\ \midrule
-    Mittwoch & 10\textcelsius & 21\textcelsius & Am Morgen wird es noch regnen. Am Nachmittag wird 
-    der Regen nachlassen und am Abend kommt die Sonne raus.\\
-    \bottomrule
-\end{tabular}
-\caption{\label{tab:wetter}Wettervorhersage für die nächsten drei Tage}
-\end{table}
-
-\section{Manuelle Korrekturen}
-
-Zwar ist \LaTeX\ ein sehr leistungsfähiges Satzprogramm mit einem ausgezeichneten Formelsatz und einer sehr guten Satzqualität, doch können auch hier manuelle Korrekturen im Layout notwendig sein. Auf die Besonderheit, dass \LaTeX\ Bilder und Tabellen im Dokument nach typografischen Gesichtspunkten selbständig platziert, wurde bereits hingewiesen (siehe Abschnitt \ref{sec:gleitumgebungen}). Damit vermeidet \LaTeX\ halbleere Seiten oder zu kurze Absätze. Diese Automatik kann für Ihre wissenschaftliche Arbeit jedoch teilweise zu unbefriedigenden Ergebnissen führen, beispielsweise weil die Abbildungen auf die Folgeseite verschoben werden oder die Darstellungen im Vergleich zum Text zu viel Platz einnehmen.   
-
-Darüberhinaus kann es auch auf Zeilenebene zu „Ausreißern“ kommen, bei denen der Text in den Rand hineinragt. Das Problem kann in der Regel durch Umformulierungen oder das manuelle Einfügen von Trennstrichen behoben werden. In jedem Fall müssen Sie Ihre Arbeit vor der Abgabe auf fehlerhafte Umbrüche  und Worttrennungen oder unschöne Positionierungen überprüfen.
-
-
-
-\chapter{Data}
-
-Grundsätzlich gibt es zwei Möglichkeiten, ein Literaturverzeichnis mit \LaTeX\ zu erstellen: Entweder Sie erstellen es manuell, oder Sie arbeiten mit einem Paket wie biblatex und dem hilfsprogramm \texttt{biber}.
-
-\section{Manuelles Literaturverzeichnis}
-Das manuell erstellte Literaturverzeichnis eignet sich insbesondere bei kleineren Arbeiten, die mit zehn bis zwanzig Quellen auskommen. Diese Vorgehensweise bietet den Vorteil, dass Sie ganz individuell auf spezielle Vorgaben Ihres Betreuers eingehen können, ohne sich aufwendig in das doch sehr umfangreiche biblatex einarbeiten zu müssen. Insbesondere stehen Sie nicht vor der Herausforderung, das auf den angloamerikanischen Sprachraum zugeschnittene Paket an die deutsche Zitierweise anpassen zu müssen. Wichtig ist, dass Sie den Überblick behalten, und einerseits \emph{alle zitierten}  Quellen im Literaturverzeichnis aufführen, andererseits aber auch \emph{keine Quellen angeben}, die Sie \emph{nicht} im Fließtext verwenden. Bei der Überarbeitung ist es also wichtig, mit der nötigen Sorgfalt vorzugehen und alle Einträge nochmals zu überprüfen.\\
-Wenn Sie sich für diese Option entscheiden, verwenden Sie bitte das Dokument \texttt{bibliographie.tex}, in das Sie alle Einträge alphabetisch sortiert aufnehmen. 
-
-\section{Arbeiten mit biblatex}
- 
-Das umfangreiche biblatex bietet den entscheidenen Vorteil, dass es \LaTeX\  um eine persönliche Literaturdatenbank erweitert, in der sämtliche bibliographische Angaben in einem einheitlichen Format in einer separaten Datei (hier \texttt{literatur.bib}) abgelegt werden.\footnote{biblatex (in Kombination mit biber) wird ausdrücklich empfohlen, da es eine Erweiterung von \hologo{BibTeX} darstellt und deutlich flexibler in der Anwendung ist.} Diese können dann in jedem neuen \LaTeX-Dokument mit Hilfe eines Verweisschlüssels (siehe unten) aufgerufen werden. Sobald Sie also einen Artikel hinzufügen oder einen anderen wieder entfernen, wird das Literaturverzeichnis automatisch aktualisiert. Im Gegenzug ist hierfür eine teilweise sehr umfangreiche Einarbeitung erforderlich. Wenn Sie sich für diese Option entscheiden, sei Ihnen das \href{https://texdoc.org/pkg/biblatex}{\textcolor{blue}{\texttt{Handbuch}}} zu biblatex ans Herz gelegt, in dem Sie alle Schritte erklärt finden. Eine übersichtliche Anleitung finden Sie zudem auch bei \href{http://www.nagel-net.de/Latex/DOKU/DTK-4_2008-biblatex-Teil2.pdf}{\color{blue}\texttt{Dominik Wassenhoven}}. Grob vereinfacht dargestellt, gehen Sie folgendermaßen vor:\\
-
-\begin{enumerate}
-\item Suchen Sie den gewünschten Artikel und importieren Sie die Literaturangaben in das Dokument \texttt{literatur.bib}. Die meisten Datenbanken und Bibliotheken bieten mittlerweile Literatureinträge im \hologo{BibTeX}-Format an. Ansonsten müssen Sie den Artikel händisch in das Dokument \texttt{literatur.bib} eingeben. Je nach Art der Quelle (z.B. Monografie, Sammelband, Fachartikel) sind dafür unterschiedliche Pflichtangaben notwendig. Näheres hierzu lesen Sie bitte im 	\href{https://texdoc.org/pkg/biblatex}{\color{blue}Handbuch} nach. Ein typischer Eintrag sieht wie folgt aus: 
-\begin{verbatim}
-@ARTICLE{card2001,
-  author = {David Card},
-  title = {Estimating the return to schooling: 
-	Progress on some persistent econometric problems},
-  journal = {Econometrica},
-  year = {2001},
-  volume = {69},
-  pages = {1127--1160},
-  number = {5},
-  publisher = {Wiley Online Library}}
-\end{verbatim}
-
-\item Haben Sie Ihr Dokument \texttt{literatur.bib} mit den Literaturangaben erstellt, können Sie mit dem \verb|\cite|-Befehl auf einzelne Quellen verweisen. Dazu benötigen Sie den Verweisschlüssel, den Sie den jeweiligen Literaturangaben entnehmen können (erste Angabe nach der Literaturgattung). Grundsätzlich haben alle Zitierbefehle folgende Syntax: \begin{verbatim} \command[Präfix][Suffix]{Verweisschlüssel}.\end{verbatim} Als Präfix können Sie Hinweise wie „vgl.“ oder „siehe“ einfügen; im Suffix können Seitenangaben stehen. Der Befehl lautet dann beispielsweise: \begin{verbatim} Wie schon \cite{card2001} anmerkt ...  \end{verbatim} Im Ausgabedokument erhalten Sie dann: Wie schon \cite{card2001} anmerkt ...\\
-
-\item Wollen Sie eine Seitenangabe hinzufügen, geschieht dies im Suffix in eckigen Klammern. Der Befehl \begin{verbatim} \cite[1140]{card2001} \end{verbatim} führt im Ausgabedokument also zu: \cite[1140]{card2001}. Die Angabe „f.“ oder „ff.“ erreichen Sie durch \verb|\psq| bzw. \verb|\psqq|, wobei grundsätzlich empfohlen wird, bei mehr als zwei zitierten Seiten den Seitenbereich immer möglichst konkret anzugeben. Statt \cite[1140 \psqq]{card2001} sollten Sie also lieber das Ende des zitieren Bereichs angeben: \cite[1140-1143]{card2001}.\\
-
-\item Mit dem Befehl \begin{verbatim} \parencite[1140]{card2001} \end{verbatim} ist es möglich, den Literaturverweis in runde Klammern zu setzen. Dies ist vor allem hilfreich, wenn Sie mehrmals auf den gleichen Artikel Bezug nehmen. Im Ergebnis erscheint dann also \parencite [vgl.][1140]{card2001}.\\
-
-\item Wenn Sie auf mehr als einen Artikel verweisen  möchte, stehen Ihnen die Befehle \begin{verbatim} \cites[2758]{carneiro2011}[445]{angrist1996} \end{verbatim}  bzw. \begin{verbatim} \parencites[2758]{carneiro2011}[445]{angrist1996} \end{verbatim} zur Verfügung. Das Ergebnis sieht in zweitem Fall dann so aus: Wie die Autoren zu Recht bemängeln, ist eine dynamische Anpassung des Modells nicht möglich \parencites [2758]{carneiro2011}[445]{angrist1996}. 
-
-\item Zuletzt gibt es den Befehl \begin{verbatim} \textcite[1140]{card2001} \end{verbatim} für Bezüge im Fließtext. Hier heißt es dann: \textcite[1140]{card2001} gibt zu bedenken, dass... \\
-
-\item Bitte beachten Sie folgende Hinweise:
-\begin{compactitem}
-		\item Um alle Literaturangaben und -verweise in das pdf-Ausgabedokument zu übernehmen, muss das Dokument nicht nur von \LaTeX, sondern auch vom Bibliografieprogramm \hologo{BibTeX} oder \hologo{biber} verarbeitet werden.
-		\item Wie das Literaturverzeichnis und die Verweise im Text formatiert werden, bestimmt der verwendete Stil. Der Harvard-Zitation entspricht am besten der Stil \texttt{[style = authoryear]}, der bereits für Sie eingestellt ist. Falls nötig, können Sie diesen Stil selbstverständlich an die Vorgaben Ihres Betreuers anpassen.
-\end{compactitem}  
-\end{enumerate}
-
-
-\chapter{Results}
-
-\chapter{Conclusion}
 
  
 \backmatter

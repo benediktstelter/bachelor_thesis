@@ -3,6 +3,8 @@ library(readxl)
 library(Synth)
 library(SCtools)
 library(imputeTS)
+library(augsynth)
+
 
 
 percent <- function(x, digits = 2, format = "f", ...) {      # Create user-defined function
@@ -162,20 +164,29 @@ poland_lottery$gdpcapita20 <- as.numeric(poland_lottery$gdpcapita20)
 poland_lottery$popdensity19 <- as.numeric(poland_lottery$popdensity19)
 
 
+country <- c("Austria", "Czechia","Latvia","Slovakia","Bulgaria","Croatia",
+                  "Slovenia","Romania","Lithuania","Hungary","Estonia","Poland")
+entrydate <- c(1995,2004,2004,2004,2007,2013,2004,2007,2004,2004,2004,2004)
+
+eu_accession <- data.frame(country, entrydate)
+
+mrgeacc <- list(poland_lottery, eu_accession)
+poland_lottery <- mrgeacc %>% reduce(full_join, by='country')
+
 #Removing Austria
 first_dose_share <- first_dose_share[!grepl("Austria", first_dose_share$country), ]
 
 #"trstscinc20"
 
 #SCM
-dataprep.out <- dataprep(foo = first_dose_share, 
-         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20"),
+dataprep.out <- dataprep(foo = poland_lottery, 
+         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","entrydate"),
          predictors.op = "mean",
          dependent = "onedose", unit.variable = "countryid",
          time.variable = "date2", treatment.identifier = 10,
          controls.identifier = c(1,3,5:8),
          time.predictors.prior = c(18659:18772),
-         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18992),
+         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18930),
          unit.names.variable = "country")
 
 synth.out = synth(dataprep.out)
@@ -211,9 +222,9 @@ plot_placebos(
 # Let's pull out the data from the result, to make our own nicer plots in ggplot of course
 synth_data_out = data.frame(dataprep.out$Y0plot%*%synth.out$solution.w) 
 date = as.numeric(row.names(synth_data_out))
-plot.df = data.frame(twodoses=first_dose_share$twodoses[first_dose_share$countryid==10 & first_dose_share$date2 %in% date])
+plot.df = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df$synth = synth_data_out$w.weight
-plot.df$date <- first_dose_share$date[first_dose_share$countryid==10 & first_dose_share$date2 %in% date]
+plot.df$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
 
 
 SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,linetype="solid")) + geom_line(size=0.8) + 
@@ -229,7 +240,19 @@ SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,linetype="solid")) + geom_line(
 
 
 
+
+poland_lottery$treated <- c(rep(0,3787),rep(1,129),rep(0,92))
+
+#Try augsynth
+covsyn <- augsynth(twodoses ~ treated | gdpcapita20 + inflzvacc19 + popdensity19 + tertiary20 + elderly20 + entrydate,
+                   countryid, date2, poland_lottery,t_int = 18772,
+                   progfunc = "ridge", scm = T)
+
+summary(covsyn)
+
+plot(covsyn)
+
+
 # Let's put the two plots side-by-side.
 SCM_plot
-
 

@@ -11,6 +11,30 @@
 
 \documentclass{scrbook}
 
+\usepackage{tikz}
+
+\newcommand{\ExternalLink}{%
+    \tikz[x=1.2ex, y=1.2ex, baseline=-0.05ex]{% 
+        \begin{scope}[x=1ex, y=1ex]
+            \clip (-0.1,-0.1) 
+                --++ (-0, 1.2) 
+                --++ (0.6, 0) 
+                --++ (0, -0.6) 
+                --++ (0.6, 0) 
+                --++ (0, -1);
+            \path[draw, 
+                line width = 0.5, 
+                rounded corners=0.5] 
+                (0,0) rectangle (1,1);
+        \end{scope}
+        \path[draw, line width = 0.5] (0.5, 0.5) 
+            -- (1, 1);
+        \path[draw, line width = 0.5] (0.6, 1) 
+            -- (1, 1) -- (1, 0.6);
+        }
+    }
+
+
 %% Alle wichtigen Einstellungen sind in der Datei einstellungen.tex getätigt
 %% und können dort verändert werden.
 \input{settings.tex}
@@ -82,133 +106,316 @@ Symbol 3 & Erläuterung 3\\
  
 \mainmatter
 
-\chapter{Test}
-
-Das ist ein test
-
 \chapter{Introduction}
 
 \chapter{Background}
 
-Der Aufbau einer wissenschaftlichen Arbeit folgt in der Regel einer festen Struktur und beinhaltet immer ein Titelblatt, ein Inhaltsverzeichnis, den Haupttext, ein Literaturverzeichnis sowie die ehrenwörtliche Erklärung. Optional können Abkürzungs-, Symbol-, Tabellen- und Abbildungsverzeichnisse sowie ein Anhang (bzw. mehrere Anhänge) hinzukommen. Die einzelnen Elemente werden im Folgenden kurz erläutert.
-
-\section{Characterization of the policy}
-Das Titelblatt wurde für Bachelorarbeiten entsprechend den Richtlinien der Abteilung VWL gestaltet. Bitte fügen Sie die fehlenden Angaben in das Dokument \texttt{titel.tex} ein. Abweichungen davon sind möglich. Allerdings sollten die aufgeführten Informationen auch bei einer anderen Gestaltung nicht fehlen. Für Seminararbeiten ist das Titelblatt sinngemäß abzuändern. Insbesondere ist der Titel des Seminars und des Dozenten anzugeben.
-
 \section{Literature review}
-Das Inhaltsverzeichnis aktualisiert sich automatisch. Dafür ist bei \LaTeX\ ein zweimaliges Setzen erforderlich – man muss das Programm \LaTeX\ also mindestens zweimal aufrufen.
 
-Im Gegensatz zum Inhaltsverzeichnis sind  Abbildungs- und Tabellenverzeichnis nicht für jede Arbeit notwendig. Sie sind dann sinnvoll, wenn Sie mit vielen Abbildungen und Tabellen arbeiten. In diesem Fall sind Abbildungen und Tabellen getrennt voneinander durchzunummerieren (geschieht automatisch). Beide Verzeichnisse werden von \LaTeX\ automatisch aktualisiert, sofern Sie bei jeder Abbildung und jeder Grafik eine entspsprechende Beschriftung angeben (siehe hierzu Abschnitt \ref{sec:gleitumgebungen}).
+\subsection{Incentives in public health}
 
-Wie das Abbildungs- und Tabellenverzeichnis sind Abkürzungs- und Symbolverzeichnis keine Pflicht. In das Abkürzungsverzeichnis nehmen Sie Abkürzungen auf, die nicht in der Alltagssprache Verwendung finden. Die Abkürzungen DDR, PC oder z.\,B. müssen also nicht aufgeführt werden. Ins Symbolverzeichnis nehmen Sie alle von Ihnen eingesetzten Symbole auf. Achten Sie in beiden Fällen darauf, die Abkürzungen und Symbole bei ihrer ersten Verwendung zu erklären. 
+Governments are facing public health challenges at every corner. But how
+can they motivate people to live healthier lives? Behavioural economics
+can offer several ways to influence the decisions of individuals,
+probably the least severe form are nudges.
 
+Nudging is a concept mainly brought to the public through the work of
+\textcite{thaler_nudge_2008}. They define a nudge as an intervention
+that ``alters people's behavior in a predictable way without forbidding
+any options or significantly changing their economic incentives''
+(p.~6). Nudging can be applied in various ways, it is however often
+connected to lifestyle topics, such as nutrition and diet. For example,
+in an experiment in Denmark \parencite{friis_comparison_2017}, the aim
+was to promote the consumption of vegetables in the setting of a
+self-serving buffet, which included salad and other dishes in large
+bowls. As a nudge, the food environment was changed by arranging green
+plants and herbs around the food bowls. In a second experiment, salad
+was pre-portioned into smaller take-away bowls. The results showed that
+the intake of energy from vegetables of the participants can be
+increased by pre-portioning the salad. Although many studies evaluating
+the impact of nudges find positive effects of the respective
+interventions, these results should be interpreted with caution, since a
+lot of studies, including \textcite{friis_comparison_2017}, were
+conducted in the lab and may therefore not be reproducible in a
+real-world setting \parencite{ledderer_nudging_2020}.
 
-Es folgt die eigentliche Arbeit, in der Sie die von Ihnen gewählte Forschungs\-frage beantworten. Dieser Teil gliedert sich mindestens in die drei Kapitel „Einleitung“, „Hauptteil“ und „Schluss“, wobei der Hauptteil in der Regel in mehrere Kapitel und Unterkapitel untergliedert ist. Für weitere Informationen zur inhaltlichen Gestaltung Ihrer wissenschaftlichen Arbeit lesen Sie bitte die „Tipps für wissenschaftliche Arbeiten“, die Sie auf der \href{https://www.vwl.uni-mannheim.de/studium/bachelorstudium/schreibberatung/weiterfuehrendes-material-und-vorlagen/}{\color{blue} Website der Schreibberatung} herunterladen bzw. online lesen können.
+Besides nudging, policymakers could try to change economic incentives.
+Governments have been using taxation as a means of influencing the
+behaviour of individuals for a long time, for example in alcohol and
+tobacco policy. Both in developed and developing country, it has been
+shown that raising prices leads to reduced consumption of tobacco
+(\cite{yeh_effects_2017}; \cite{immurana_effects_2021}).
 
-Im Literaturverzeichnis listen Sie sämtliche von Ihnen verwendete Quellen auf. Die Quellen sind nach dem Nachnamen des Autors alphabetisch zu sortieren. Bitte orientieren Sie sich an der Harvard-Zitation und seien Sie konsistent. Ausführliche Informationen hierzu finden Sie auch in den „Tipps für wissenschaftliche Arbeiten“.
+Beyond taxation, policymakers could also use other financial incentives
+to motivate changes of individual behaviour to tackle public health
+challenges, such as (small) cash payments or lotteries. There have been
+many studies evaluating such possible schemes, typically using
+randomised control trials. Several meta-analyses found that such
+incentives can be successful in inducing behaviour changes. For example,
+\textcite{giles_effectiveness_2014} evaluated 16 studies on issues such
+as smoking cessation, health screenings, physical activity and
+vaccinations. The authors found that financial incentives are more
+effective than no intervention at encouraging healthy behaviour. This
+finding is also confirmed by \textcite{mantzari_personal_2015}, who
+evaluated 34 studies and additionally concluded that this effect is
+stronger for the most deprived individuals, thereby possibly reducing
+health inequalities.
 
-In den Anhang fügen Sie ergänzende Informationen ein, auf die Sie im Hauptteil verweisen, die dort jedoch zu viel Platz einnehmen würden. In der Regel handelt es sich um Fragebögen, Tabellen, Statistiken, Datenauswertungen oder Transkripte von Interviews. Beachten Sie aber, dass alle für die Beantwortung Ihrer Forschungsfrage wesentlichen Informationen in den Hauptteil gehören. Sie dürfen in den Anhang also keinesfalls umfangreiche wichtige Textpassagen oder Abbildungen packen, um auf diese Weise Seitenbeschränkungen zu unterwandern.
+There is also some literature on lotteries as an incentive in public
+health, apart from COVID-19 vaccine policy.
+\textcite{bjorkman_nyqvist_incentivizing_2018} find that the
+introduction of a lottery program reduced HIV incidence in Lesotho.
+Lotteries can also successfully increase cycling and walking activity
+(\cite{ciccone_using_2021}; \cite{patel_randomized_2018}) and
+participation in chlamydia screenings \parencite{niza_vouchers_2014}.
 
-Mit der Erklärung versichern Sie, Ihre wissenschaftliche Arbeit selbständig verfasst und alle verwendeten Quellen angegeben zu haben. Eine Täuschung kann zum Entzug Ihres Bachelortitels führen. Die Erklärung muss im Wortlaut belassen, auf den abzuliefernden Exemplaren von Hand unterschrieben und mit dem Datum versehen werden.
+\subsection{Incentives to increase COVID-19 vaccination rates}
+
+In march 2020, when the COVID-19 pandemic struck the world, it was not
+foreseeable that vaccines would be available in just about nine months.
+When they were available and hailed as the possible end of the pandemic,
+it may not have been clear that rolling out vaccines was so difficult.
+In countries around the world, there was a considerable amount of
+vaccine hesitancy. Dealing with this hesitancy has led policymakers and
+researchers to thinking about how to increase vaccination rates, by
+means of vaccination mandates and passports, nudges, cash and non-cash
+prizes and lotteries.
+
+A very widely used tool, especially in Europe and the US, were
+vaccination passports. The access to social gatherings/places
+(e.g.~restaurants, bars, clubs, stadiums), international travel and
+quarantine regulations were subject to vaccination against COVID-19.
+Besides ethical concerns, for example potential disqualification of
+minorities from social life because of a historically higher distrust in
+government \parencite{gostin_digital_2021}, the evidence on the
+effectiveness of such regulations is mixed. A synthetic control analysis
+of six countries found that COVID passports were successful in
+increasing daily vaccinations in countries with lower than average
+vaccination rates. In more average countries (Germany and Denmark), such
+regulations were less successful \parencite{mills_effect_2022}. These
+cross-country comparisons should however be treated with caution, since
+there are large variations across countries when it comes to the extent
+of the use of COVID passports. While a comparison of Poland (very
+restricted use of COVID passport) and Lithuania (wide use of COVID
+passport) suggests a positive effect of passports on vaccination rates
+\parencite{walkowiak_covid-19_2021}, it has to be noted that COVID
+passport may also have negative effects on vaccine uptake, since
+frustration about reduced autonomy might lower willingness to get
+vaccinated \parencite{porat_vaccine_2021}.
+
+Besides the carrot-and-stick approach, governments have also used
+smaller nudges and financial incentives, such as cash payments and
+non-cash rewards to increase COVID-19 vaccination rates. Probably the
+most influential study to date on cash payments and nudges was carried
+out in Sweden \parencite{campos-mercade_monetary_2021}. Using a
+randomised control trial, the authors find that even ``small'' cash
+payments of around 24 US dollars can significantly increase vaccination
+rates, while small nudges could not increase vaccination rates. While
+some studies also suggest a measurable positive effect of cash payments
+on vaccination rates (\cite{wong_guaranteed_2022};
+\cite{kluver_incentives_2021}; \cite{kim_vaccination_2021-1}), there is
+also evidence against this effect. In another study, the results
+indicated that neither behavioural nudges (text messages) nor cash
+payments could increase vaccination rates among the hesitant citizens
+\parencite{jacobson_can_2022}. \textcite{sprengholz_money_2021} also
+find that cash incentives do not increase the willingness to be
+vaccinated.
+
+There is also a vast literature specifically on COVID-19 vaccine
+lotteries, also evaluating real-world lotteries.
+\textcite{dube_exploring_2022} analyse the effectiveness of a vaccine
+lottery in Québec (Canada) and find a relatively small impact on
+vaccination rates. A survey in Australia found that the vaccine lottery
+there was successful in increasing willingness to be vaccinated
+\parencite{jun_association_2022}. The majority of studies on COVID-19
+vaccine lotteries however dealt with lotteries in US states. Studies on
+vaccine lotteries in Louisiana and Massachusetts found different
+effects. Whereas the lottery in Louisiana increased vaccine uptake
+\parencite{wang_moving_2023}, a vaccine lottery in Massachusetts did not
+significantly increase vaccination rates although prizes were higher
+\parencite{kim_did_2023}. There are also several papers investigating
+multiple state COVID-19 lotteries at once. All of these papers find that
+most, but not all of the lottery programs were successful in increasing
+vaccine uptake (\cite{robertson_are_2021};
+\cite{acharya_implementation_2021}; \cite{fuller_assessing_2022}).
+
+A specific focus can be observed with respect to Ohio. There is a quite
+large number of studies evaluating the ``Ohio Vax-A-Million'' lottery,
+which was the first COVID-19 vaccine lottery in the US. In total, a
+majority of the reviewed literature casts a positive light on the
+efficacy of the lottery. While \textcite{mallow_covid-19_2022} find a
+positive effect of the lottery on vaccination rates, another study
+cannot support this view \parencite{walkey_lottery-based_2021}. There
+have also been four studies evaluating the lottery using the SCM. These
+studies construct a synthetic Ohio out of a donor pool of other US
+states. Three of these studies find small positive effects of the
+lottery of vaccine uptake (\cite{brehm_ohio_2022};
+\cite{barber_conditional_2022}; \cite{sehgal_impact_2021}) and one does
+not find a robust effect \parencite{lang_did_2022}.
+
+So far, there has been one study dealing with the vaccine lottery
+analysed in this thesis. \textcite{kuznetsova_effectiveness_2022}
+shortly evaluate different vaccine incentives across Europe, including
+the Polish policy. By applying an interrupted time series analysis based
+on an ARIMA approach, the authors suggest a slight positive effect of
+this lottery. There has however not been a study dealing in detail with
+the Polish lottery yet.
+
+\subsection{Theoretical background}
+
+Possibly to add
+
+\section{Institutional background}
+
+\noindent The empirical analysis will be based on a vaccination
+incentive scheme implemented in Poland from July 1, 2021 to September
+30, 2021. The policy had two main elements: A lottery for all adult
+vaccinated people in Poland
+\parencite{service_of_the_republic_of_poland_national_2021} and a
+lottery-like monetary incentive scheme for municipalities
+\parencite{service_of_the_republic_of_poland_competitions_2021}. The
+main price of the lottery was a cash prize of one million
+zloty\footnote{At the time of announcement on 25/05/2021, this was equal to around 220 000€, with an exchange rate of around 0.22 PLN to EUR},
+but it also included smaller monthly, weekly and daily cash prices and
+non-cash prizes with a total volume of 140 million zloty. As part of the
+monetary incentive scheme for municipalities, the municipality with the
+highest percentage of the vaccinated in the country received two million
+zloty. 500 other municipalities could receive 100.000 zloty each.
 
 \chapter{Methods and data}
 
-\section{Formatvorlagen}
-Anders als Word arbeitet \LaTeX\ nicht mit Formatvorlagen. Als WYSIWYM-Programm (What you see is what you mean) sind Layout und Inhalt bei \LaTeX\ strikt getrennt. Im Gegensatz hierzu handelt es sich bei Word um ein WYSIWYG-Programm (What you see is what you get), sodass Sie Änderungen im Format direkt am Bildschirm sehen können.
-In der vorliegenden Vorlage sind zentrale Eigenschaften wie Schriftgrößen oder Abstände bereits definiert. Alle Einstellungen und Pakete werden in der Datei \texttt{einstellungen.tex} geladen. Dort können Sie selbstverständlich Änderungen vornehmen, oder benötigte Pakete ergänzen. Es sei allerdings nochmals davor gewarnt, allzu viel am Layout herumzubasteln, da dies meistens zu "`Verschlimmbesserungen"' führt. 
+\section{Synthetic control method}
 
-\section{Gliederungsebenen}
-Um Ihren Text zu gliedern, stehen Ihnen die Befehle \verb|\section|, \verb|\subsection| und \verb|\subsubsection| zur Verfügung. In aller Regel sollten diese drei Gliederungsebenen ausreichen. Notfalls können Sie auf die Befehle \verb|\paragraph| und \verb|\subparagraph| zurückgreifen. Damit im Inhaltsverzeichnis mehr als zwei Gliederungsebenen erscheinen, können Sie die Gliederungstiefe mit Hilfe des Befehls \begin {verbatim} \setcounter{tocdepth}{1} \end{verbatim} anpassen. 
+The synthetic control method is a relatively new method in causal
+inference. It was first established by \textcite{abadie_economic_2003},
+further developed by \textcite{abadie_synthetic_2010} and summarized in
+\textcite{abadie_using_2021}. It has been applied widely in economics,
+but also other fields such as political science. Its specific case of
+application are comparative case studies (write more about CCS). For
+example, it has been used to evaluate the effects of European
+integration \parencite{campos_institutional_2019} or the effect of
+natural disasters on economic growth
+\parencite{cavallo_catastrophic_2013}. The very basic idea is to create
+a synthetic control unit, to then estimate the average treatment effect
+(ATE) of a policy/intervention.
 
-\section{Einfügen von Elementen}
-\label{sec:gleitumgebungen}
+\subsection*{Requirements}
 
-\subsection{Abbildungen}
-Um Bilder einfügen zu können, wird das Paket \texttt{graphicx}  benötigt. Dieses ist bereits in die Vorlage eingebunden. Grundsätzlich gibt es unzählige Möglichkeiten,  Bilder in \LaTeX{} einzufügen. Es sei an dieser Stelle daher nur ein Beispiel gegeben und auf eine Internetrecherche oder entsprechende \LaTeX-Handbücher verwiesen. Einen guten Einstieg finden Sie bei \href{https://mirrors.ctan.org/info/l2picfaq/german/l2picfaq.pdf}{\color{blue} Dominik Bischoff}.\footnote{Die verlinkte Einführung ist mitlerweile etwas in die Jahre gekommen und schließt neuere Entwicklungen wie \hologo{XeLaTeX} oder \hologo{LuaLaTeX} leider nicht mit ein.} 
-Beachten Sie bitte, dass Sie alle Abbildungen mit dem Befehl \verb|\caption| beschriften. Dieser Titel wird automatisch ins Abbildungsverzeichnis übernommen. Abbildung  beispielsweise zeigt das \LaTeX-Logo und dient hier der Illustration.
+There are some important requirements that need to be fulfilled, in
+order to obtain a good synthetic control. The first one is that the
+evaluated policy/intervention has a sufficiently large effect. When the
+effect of an intervention is too small, it may not be possible to
+distinguish this effect from other shocks to the outcome variable.
 
+The second one is that there exists a suitable comparison/control group.
+Countries that are also subject so similar interventions or other shocks
+to the outcome variable in the given time frame should be excluded from
+the donor pool. What this means for the analysis in this thesis is
+outlined in section 3.1. Furthermore, we should try to select countries
+that are not too different from the treated country for the donor pool,
+to prevent interpolation bias(cite or write about interpolation bias).
+In this analysis, the donor pool is therefore restricted to eastern
+European countries.
 
-\subsection{Links}
-In diesem Abschnitt sehen Sie ein Beispiel für das Einbinden von Links auf eine externe Website:
+Another important requirement is that there is no anticipation effect,
+so that citizens do not anticipate the enactment of a policy. We
+therefore already start our intervention at the time of announcement
+(25/05/2021), since there could otherwise be an anticipation effect and
+it does not make a difference at which time people are getting
+vaccinated for the participation in the lottery.
 
-\begin{center}
-	\href{http://en.wikibooks.org/wiki/LaTeX/Tables}{\color{blue} http://en.wikibooks.org/wiki/LaTeX/Tables}
-\end{center}
- 
-\subsection{Tabellen}
-Komplexer ist das Erstellen von Tabellen. Auch hier sei auf hervorragende Anleitungen im Internet verwiesen, wie sie unter anderem \href{https://www.tug.org/pracjourn/2007-1/mori/mori.pdf}{\color{blue} Lapo Mori} geschrieben hat. Als Beispiel dient die Wettervorhersage für drei Tage, welche Sie Tabelle~\ref{tab:wetter} entnehmen können. Denken Sie auch hier an die Beschriftung mittels \verb|\caption|, die automatisch im Tabellenverzeichnis erscheint. Übrigens fügt \LaTeX\ Tabellen dort ein, wo sie am besten ins Layout passen. Prinzipiell ist es möglich, Tabellen zu fixieren und im Text zu positionieren. Mit diesen Korrekturen sollten Sie allerdings warten, bis Sie die gesamte Arbeit abgeschlossen haben.
+Lastly, it is crucial that we do not have any spillover effects on
+untreated units. This requirement should however be fulfilled in the
+case of Poland's vaccine lottery. The fulfillment of these
+assumptions/requirements will be further discussed in section 5.
 
-\begin{table}
-\centering
-\begin{tabular}{ lll p{5cm} }
-    \toprule
-    Tag & Min Temp & Max Temp & Zusammenfassung \\ \midrule
-    Montag & 11\textcelsius & 22\textcelsius & Ein klarer Tag mit viel Sonnenschein.  
-    Allerdings wird die starke Brise die Temperaturen senken. \\ \midrule
-    Dienstag & 9\textcelsius & 19\textcelsius & In vielen nördlichen Regionen wolkig mit Regen. \\ \midrule
-    Mittwoch & 10\textcelsius & 21\textcelsius & Am Morgen wird es noch regnen. Am Nachmittag wird 
-    der Regen nachlassen und am Abend kommt die Sonne raus.\\
-    \bottomrule
-\end{tabular}
-\caption{\label{tab:wetter}Wettervorhersage für die nächsten drei Tage}
-\end{table}
+\subsection*{Formal definition}
 
-\section{Manuelle Korrekturen}
+What we observe is some outcome variable \(Y_{jt}\) for \(J + 1\) units
+from \(t=1\) to \(T\). The first unit (\(j = 1\)) is the treated unit
+while all other units are untreated units. The intervention (in this
+analysis the announcement of the lottery) occurs at \(T_{0}+1\), meaning
+that there are \(T_{0}\) pre-intervention time periods. We also observe
+\(k\) predictors, which include the pre-intervention outcome variable
+and additional covariates: \(X_{1j},...,X_{kj}\). These can be
+summarised by the vectors \(\mathbf{X}_{j}=(X_{1j},X_{2j},...,X_{kj})'\)
+for units \(j=1,...,J + 1\). It therefore follows that the
+\((k\times J)\) matrix
+\(\mathbf{X}_{0}=(\mathbf{X}_{2},\mathbf{X}_{3},...,\mathbf{X}_{J + 1})\)
+captures all the predictors of the untreated
+units\footnote{\(\mathbf{X}_0=
+\begin{bmatrix}
+X_{12} & X_{13} & \dots & X_{1J+1}\\
+X_{22} & X_{23} & \dots & X_{2J+1}\\
+\vdots & \vdots & \ddots & \vdots\\
+X_{k2} & X_{k3} & \dots & X_{kJ + 1}
+\end{bmatrix}\)}.
 
-Zwar ist \LaTeX\ ein sehr leistungsfähiges Satzprogramm mit einem ausgezeichneten Formelsatz und einer sehr guten Satzqualität, doch können auch hier manuelle Korrekturen im Layout notwendig sein. Auf die Besonderheit, dass \LaTeX\ Bilder und Tabellen im Dokument nach typografischen Gesichtspunkten selbständig platziert, wurde bereits hingewiesen (siehe Abschnitt \ref{sec:gleitumgebungen}). Damit vermeidet \LaTeX\ halbleere Seiten oder zu kurze Absätze. Diese Automatik kann für Ihre wissenschaftliche Arbeit jedoch teilweise zu unbefriedigenden Ergebnissen führen, beispielsweise weil die Abbildungen auf die Folgeseite verschoben werden oder die Darstellungen im Vergleich zum Text zu viel Platz einnehmen.   
+(Potentially write about matching and assumptions). The causal effect is
+defined as the difference between the potential outcome of the treated
+unit with intervention, which can be defined as \(Y_{1t}^{I}\), and its
+potential outcome without the intervention, \(Y_{1t}^{N}\):
+\begin{equation}
+\tau_{1t}=Y_{1t}^{I}-Y_{1t}^{N}\; \; \text{for}\; \; t>T_{0}
+\end{equation} By definition, the outcome with intervention is known and
+the outcome without intervention is hypothetical for \(t>T_{0}\) for the
+treated unit. Therefore, to estimate the causal effect, it is sufficient
+to estimate \(Y_{1t}^{N}\). How can this problem be solved? By
+\textcite{abadie_economic_2003}, the SCM proposes to use a weighted
+average of donor pool units as a synthetic control. The synthetic
+control is therefore defined as: \begin{equation}
+\hat{Y}_{1t}^{N}=\sum_{j=2}^{J+1} w_{j}Y_{jt}
+\end{equation} The weights \(\mathbf{W}=(w_{2},w_{3},...,w_{J+1})'\) are
+chosen, such that the synthetic control matches as closely as possible
+the pre-intervention path of the outcome variable for the treated unit.
+Therefore the weights have to be chosen so that they minimize this
+difference. The optimal weights
+\(\mathbf{W}^{\star}=(w_{2}^{\star},w_{3}^{\star},...,w_{J+1}^{\star})'\)
+solve: \begin{equation}
+\mathbf{W}=\text{arg}\; \min_{\mathbf{w}:w_{j}\in[0,1],\sum_{j=2}^{J+1} w_{j}=1}\vert\vert\mathbf{X}_{0}\mathbf{W}-\mathbf{X}_{1}\vert\vert
+\end{equation}
 
-Darüberhinaus kann es auch auf Zeilenebene zu „Ausreißern“ kommen, bei denen der Text in den Rand hineinragt. Das Problem kann in der Regel durch Umformulierungen oder das manuelle Einfügen von Trennstrichen behoben werden. In jedem Fall müssen Sie Ihre Arbeit vor der Abgabe auf fehlerhafte Umbrüche  und Worttrennungen oder unschöne Positionierungen überprüfen.
+This is subject to the weights being non-negative and summing up to one,
+an important assumption in the classic SCM. This assumption can be
+relaxed to allow for non-negative weights, in this thesis we will
+however keep it. We can therefore simply estimate the average treatment
+effect from (3.1) using these weights: \begin{equation}
+\hat{\tau}_{1t}=Y_{1t}^{I}-\sum_{j=2}^{J+1} w_{j}^{\star}Y_{jt}\; \; \text{for}\; \; t>T_{0}
+\end{equation}
 
+\subsection*{Inference}
 
+The main idea of inference in synthetic control is using permutation
+through the use of placebo effects. A synthetic control unit is
+constructed for all the untreated countries in the control group, as if
+there was a treatment for these countries. If the magnitude of the
+effect for the actually treated unit is extreme compared to the placebo
+effective, the effect can be regarded as significant. This may however
+not always work great, since it might be hard to get a good
+pre-treatment fit for all units in the donor pool. A possiblity of
+enhancement is a test statistic which measures the ratio of the
+post-intervention fit relative to the pre-intervention fit
+\(R_{j}(t_{1},t{2})\), which is defined as the root squared mean
+prediction error of the synthetic control. From there it is possible to
+compute \(r_{j}\), which measures the quality of the fit in the
+post-intervention compared to pre-intervention. It is then also possible
+to find a p-value for the permuted test: \begin{equation}
+p=\frac{1}{J+1}\sum_{j=1}^{J+1}I_{+}(r_{j}-r_{1})
+\end{equation} where \(I_{+}(\cdot)\) is an indicator function that
+returns one for non-negative arguments and zero otherwise.
 
-\chapter{Data}
+\section{Data}
 
-Grundsätzlich gibt es zwei Möglichkeiten, ein Literaturverzeichnis mit \LaTeX\ zu erstellen: Entweder Sie erstellen es manuell, oder Sie arbeiten mit einem Paket wie biblatex und dem hilfsprogramm \texttt{biber}.
-
-\section{Manuelles Literaturverzeichnis}
-Das manuell erstellte Literaturverzeichnis eignet sich insbesondere bei kleineren Arbeiten, die mit zehn bis zwanzig Quellen auskommen. Diese Vorgehensweise bietet den Vorteil, dass Sie ganz individuell auf spezielle Vorgaben Ihres Betreuers eingehen können, ohne sich aufwendig in das doch sehr umfangreiche biblatex einarbeiten zu müssen. Insbesondere stehen Sie nicht vor der Herausforderung, das auf den angloamerikanischen Sprachraum zugeschnittene Paket an die deutsche Zitierweise anpassen zu müssen. Wichtig ist, dass Sie den Überblick behalten, und einerseits \emph{alle zitierten}  Quellen im Literaturverzeichnis aufführen, andererseits aber auch \emph{keine Quellen angeben}, die Sie \emph{nicht} im Fließtext verwenden. Bei der Überarbeitung ist es also wichtig, mit der nötigen Sorgfalt vorzugehen und alle Einträge nochmals zu überprüfen.\\
-Wenn Sie sich für diese Option entscheiden, verwenden Sie bitte das Dokument \texttt{bibliographie.tex}, in das Sie alle Einträge alphabetisch sortiert aufnehmen. 
-
-\section{Arbeiten mit biblatex}
- 
-Das umfangreiche biblatex bietet den entscheidenen Vorteil, dass es \LaTeX\  um eine persönliche Literaturdatenbank erweitert, in der sämtliche bibliographische Angaben in einem einheitlichen Format in einer separaten Datei (hier \texttt{literatur.bib}) abgelegt werden.\footnote{biblatex (in Kombination mit biber) wird ausdrücklich empfohlen, da es eine Erweiterung von \hologo{BibTeX} darstellt und deutlich flexibler in der Anwendung ist.} Diese können dann in jedem neuen \LaTeX-Dokument mit Hilfe eines Verweisschlüssels (siehe unten) aufgerufen werden. Sobald Sie also einen Artikel hinzufügen oder einen anderen wieder entfernen, wird das Literaturverzeichnis automatisch aktualisiert. Im Gegenzug ist hierfür eine teilweise sehr umfangreiche Einarbeitung erforderlich. Wenn Sie sich für diese Option entscheiden, sei Ihnen das \href{https://texdoc.org/pkg/biblatex}{\textcolor{blue}{\texttt{Handbuch}}} zu biblatex ans Herz gelegt, in dem Sie alle Schritte erklärt finden. Eine übersichtliche Anleitung finden Sie zudem auch bei \href{http://www.nagel-net.de/Latex/DOKU/DTK-4_2008-biblatex-Teil2.pdf}{\color{blue}\texttt{Dominik Wassenhoven}}. Grob vereinfacht dargestellt, gehen Sie folgendermaßen vor:\\
-
-\begin{enumerate}
-\item Suchen Sie den gewünschten Artikel und importieren Sie die Literaturangaben in das Dokument \texttt{literatur.bib}. Die meisten Datenbanken und Bibliotheken bieten mittlerweile Literatureinträge im \hologo{BibTeX}-Format an. Ansonsten müssen Sie den Artikel händisch in das Dokument \texttt{literatur.bib} eingeben. Je nach Art der Quelle (z.B. Monografie, Sammelband, Fachartikel) sind dafür unterschiedliche Pflichtangaben notwendig. Näheres hierzu lesen Sie bitte im 	\href{https://texdoc.org/pkg/biblatex}{\color{blue}Handbuch} nach. Ein typischer Eintrag sieht wie folgt aus: 
-\begin{verbatim}
-@ARTICLE{card2001,
-  author = {David Card},
-  title = {Estimating the return to schooling: 
-	Progress on some persistent econometric problems},
-  journal = {Econometrica},
-  year = {2001},
-  volume = {69},
-  pages = {1127--1160},
-  number = {5},
-  publisher = {Wiley Online Library}}
-\end{verbatim}
-
-\item Haben Sie Ihr Dokument \texttt{literatur.bib} mit den Literaturangaben erstellt, können Sie mit dem \verb|\cite|-Befehl auf einzelne Quellen verweisen. Dazu benötigen Sie den Verweisschlüssel, den Sie den jeweiligen Literaturangaben entnehmen können (erste Angabe nach der Literaturgattung). Grundsätzlich haben alle Zitierbefehle folgende Syntax: \begin{verbatim} \command[Präfix][Suffix]{Verweisschlüssel}.\end{verbatim} Als Präfix können Sie Hinweise wie „vgl.“ oder „siehe“ einfügen; im Suffix können Seitenangaben stehen. Der Befehl lautet dann beispielsweise: \begin{verbatim} Wie schon \cite{card2001} anmerkt ...  \end{verbatim} Im Ausgabedokument erhalten Sie dann: Wie schon \cite{card2001} anmerkt ...\\
-
-\item Wollen Sie eine Seitenangabe hinzufügen, geschieht dies im Suffix in eckigen Klammern. Der Befehl \begin{verbatim} \cite[1140]{card2001} \end{verbatim} führt im Ausgabedokument also zu: \cite[1140]{card2001}. Die Angabe „f.“ oder „ff.“ erreichen Sie durch \verb|\psq| bzw. \verb|\psqq|, wobei grundsätzlich empfohlen wird, bei mehr als zwei zitierten Seiten den Seitenbereich immer möglichst konkret anzugeben. Statt \cite[1140 \psqq]{card2001} sollten Sie also lieber das Ende des zitieren Bereichs angeben: \cite[1140-1143]{card2001}.\\
-
-\item Mit dem Befehl \begin{verbatim} \parencite[1140]{card2001} \end{verbatim} ist es möglich, den Literaturverweis in runde Klammern zu setzen. Dies ist vor allem hilfreich, wenn Sie mehrmals auf den gleichen Artikel Bezug nehmen. Im Ergebnis erscheint dann also \parencite [vgl.][1140]{card2001}.\\
-
-\item Wenn Sie auf mehr als einen Artikel verweisen  möchte, stehen Ihnen die Befehle \begin{verbatim} \cites[2758]{carneiro2011}[445]{angrist1996} \end{verbatim}  bzw. \begin{verbatim} \parencites[2758]{carneiro2011}[445]{angrist1996} \end{verbatim} zur Verfügung. Das Ergebnis sieht in zweitem Fall dann so aus: Wie die Autoren zu Recht bemängeln, ist eine dynamische Anpassung des Modells nicht möglich \parencites [2758]{carneiro2011}[445]{angrist1996}. 
-
-\item Zuletzt gibt es den Befehl \begin{verbatim} \textcite[1140]{card2001} \end{verbatim} für Bezüge im Fließtext. Hier heißt es dann: \textcite[1140]{card2001} gibt zu bedenken, dass... \\
-
-\item Bitte beachten Sie folgende Hinweise:
-\begin{compactitem}
-		\item Um alle Literaturangaben und -verweise in das pdf-Ausgabedokument zu übernehmen, muss das Dokument nicht nur von \LaTeX, sondern auch vom Bibliografieprogramm \hologo{BibTeX} oder \hologo{biber} verarbeitet werden.
-		\item Wie das Literaturverzeichnis und die Verweise im Text formatiert werden, bestimmt der verwendete Stil. Der Harvard-Zitation entspricht am besten der Stil \texttt{[style = authoryear]}, der bereits für Sie eingestellt ist. Falls nötig, können Sie diesen Stil selbstverständlich an die Vorgaben Ihres Betreuers anpassen.
-\end{compactitem}  
-\end{enumerate}
-
+The data analysis has been carried out in R using the tidysynth package.
+The data and R scripts can be found in the corresponding
+\href{https://github.com/benediktstelter/bachelor_thesis.git}{GitHub repository \ExternalLink}\hspace{-0.1cm}.
 
 \chapter{Results}
 
+\chapter{Discussion}
+
 \chapter{Conclusion}
+
 
  
 \backmatter

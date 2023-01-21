@@ -19,7 +19,7 @@ figsintext : yes
 
 geometry: margin=1in
 # References
-bibliography: ../literatur.bib
+bibliography: ../thesis.bib
 biblio-style: apa #Select from https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
 biblio-title: "References"
 
@@ -37,10 +37,144 @@ header-includes:
 ---
 
 
+\chapter{Introduction}
 
-\chapter{Test}
-Das ist ein test
+\chapter{Background}
 
+
+
+\section{Literature review}
+
+\subsection{Incentives in public health}
+Governments are facing public health challenges at every corner. But how can they motivate people to live healthier lives? 
+Behavioural economics can offer several ways to influence the decisions of individuals, probably the least severe form are nudges.
+
+
+Nudging is a concept mainly brought to the public through the work of \textcite{thaler_nudge_2008}. They define a nudge as an intervention that "alters people’s behavior in a predictable way without forbidding any options or significantly changing their economic incentives" (p. 6). Nudging can be applied in various ways, it is however often connected to lifestyle topics, such as nutrition and diet. For example, in an experiment in Denmark \parencite{friis_comparison_2017}, the aim was to promote the consumption of vegetables in the setting of a self-serving buffet, which included salad and other dishes in large bowls. As a nudge, the food environment was changed by arranging green plants and herbs around the food bowls. In a second experiment, salad was pre-portioned into smaller take-away bowls. The results showed that the intake of energy from vegetables of the participants can be increased by pre-portioning the salad.
+Although many studies evaluating the impact of nudges find positive effects of the respective interventions, these results should be interpreted with caution, since a lot of studies, including \textcite{friis_comparison_2017}, were conducted in the lab and may therefore not be reproducible in a real-world setting \parencite{ledderer_nudging_2020}.
+
+
+Besides nudging, policymakers could try to change economic incentives. Governments have been using taxation as a means of influencing the behaviour of individuals for a long time, for example in alcohol and tobacco policy. Both in developed and developing country, it has been shown that raising prices leads to reduced consumption of tobacco (\cite{yeh_effects_2017}; \cite{immurana_effects_2021}). 
+
+
+Beyond taxation, policymakers could also use other financial incentives to motivate changes of individual behaviour to tackle public health challenges, such as (small) cash payments or lotteries. There have been many studies evaluating such possible schemes, typically using randomised control trials. Several meta-analyses found that such incentives can be successful in inducing behaviour changes. For example, \textcite{giles_effectiveness_2014} evaluated 16 studies on issues such as smoking cessation, health screenings, physical activity and vaccinations. The authors found that financial incentives are more effective than no intervention at encouraging healthy behaviour. This finding is also confirmed by \textcite{mantzari_personal_2015}, who evaluated 34 studies and additionally concluded that this effect is stronger for the most deprived individuals, thereby possibly reducing health inequalities.
+
+
+There is also some literature on lotteries as an incentive in public health, apart from COVID-19 vaccine policy. \textcite{bjorkman_nyqvist_incentivizing_2018} find that the introduction of a lottery program reduced HIV incidence in Lesotho. Lotteries can also successfully increase cycling and walking activity (\cite{ciccone_using_2021}; \cite{patel_randomized_2018}) and  participation in chlamydia screenings \parencite{niza_vouchers_2014}.
+
+
+\subsection{Incentives to increase COVID-19 vaccination rates}
+
+In march 2020, when the COVID-19 pandemic struck the world, it was not foreseeable that vaccines would be available in just about nine months. When they were available and hailed as the possible end of the pandemic, it may not have been clear that rolling out vaccines was so difficult. In countries around the world, there was a considerable amount of vaccine hesitancy. Dealing with this hesitancy has led policymakers and researchers to thinking about how to increase vaccination rates, by means of vaccination mandates and passports, nudges, cash and non-cash prizes and lotteries.
+
+
+
+A very widely used tool, especially in Europe and the US, were vaccination passports. The access to social gatherings/places (e.g. restaurants, bars, clubs, stadiums), international travel and quarantine regulations were subject to vaccination against COVID-19. Besides ethical concerns, for example potential disqualification of minorities from social life because of a historically higher distrust in government \parencite{gostin_digital_2021}, the evidence on the effectiveness of such regulations is mixed. A synthetic control analysis of six countries found that COVID passports were successful in increasing daily vaccinations in countries with lower than average vaccination rates. In more average countries (Germany and Denmark), such regulations were less successful \parencite{mills_effect_2022}. These cross-country comparisons should however be treated with caution, since there are large variations across countries when it comes to the extent of the use of COVID passports. 
+While a comparison of Poland (very restricted use of COVID passport) and Lithuania (wide use of COVID passport) suggests a positive effect of passports on vaccination rates \parencite{walkowiak_covid-19_2021}, it has to be noted that COVID passport may also have negative effects on vaccine uptake, since frustration about reduced autonomy might lower willingness to get vaccinated \parencite{porat_vaccine_2021}.
+
+
+Besides the carrot-and-stick approach, governments have also used smaller nudges and financial incentives, such as cash payments and non-cash rewards to increase COVID-19 vaccination rates.
+Probably the most influential study to date on cash payments and nudges was carried out in Sweden \parencite{campos-mercade_monetary_2021}. Using a randomised control trial, the authors find that even "small" cash payments of around 24 US dollars can significantly increase vaccination rates, while small nudges could not increase vaccination rates. While some studies also suggest a measurable positive effect of cash payments on vaccination rates (\cite{wong_guaranteed_2022}; \cite{kluver_incentives_2021}; \cite{kim_vaccination_2021-1}), there is also evidence against this effect. In another study, the results indicated that neither behavioural nudges (text messages) nor cash payments could increase vaccination rates among the hesitant citizens \parencite{jacobson_can_2022}. \textcite{sprengholz_money_2021} also find that cash incentives do not increase the willingness to be vaccinated.
+
+
+
+There is also a vast literature specifically on COVID-19 vaccine lotteries, also evaluating real-world lotteries. \textcite{dube_exploring_2022} analyse the effectiveness of a vaccine lottery in Québec (Canada) and find a relatively small impact on vaccination rates. A survey in Australia found that the vaccine lottery there was successful in increasing willingness to be vaccinated \parencite{jun_association_2022}. The majority of studies on COVID-19 vaccine lotteries however dealt with lotteries in US states. Studies on vaccine lotteries in Louisiana and Massachusetts found different effects. Whereas the lottery in Louisiana increased vaccine uptake \parencite{wang_moving_2023}, a vaccine lottery in Massachusetts did not significantly increase vaccination rates although prizes were higher \parencite{kim_did_2023}. There are also several papers investigating multiple state COVID-19 lotteries at once. All of these papers find that most, but not all of the lottery programs were successful in increasing vaccine uptake (\cite{robertson_are_2021}; \cite{acharya_implementation_2021}; \cite{fuller_assessing_2022}). 
+
+
+
+A specific focus can be observed with respect to Ohio. There is a quite large number of studies evaluating the "Ohio Vax-A-Million" lottery, which was the first COVID-19 vaccine lottery in the US. In total, a majority of the reviewed literature casts a positive light on the efficacy of the lottery. While \textcite{mallow_covid-19_2022} find a positive effect of the lottery on vaccination rates, another study cannot support this view \parencite{walkey_lottery-based_2021}.
+There have also been four studies evaluating the lottery using the SCM. These studies construct a synthetic Ohio out of a donor pool of other US states. Three of these studies find small positive effects of the lottery of vaccine uptake (\cite{brehm_ohio_2022}; \cite{barber_conditional_2022}; \cite{sehgal_impact_2021}) and one does not find a robust effect \parencite{lang_did_2022}.
+
+
+So far, there has been one study dealing with the vaccine lottery analysed in this thesis. \textcite{kuznetsova_effectiveness_2022} shortly evaluate different vaccine incentives across Europe, including the Polish policy. By applying an interrupted time series analysis based on an ARIMA approach, the authors suggest a slight positive effect of this lottery. There has however not been a study dealing in detail with the Polish lottery yet.
+
+
+\subsection{Theoretical background}
+ Possibly to add
+
+\section{Institutional background}
+\noindent The empirical analysis will be based on a vaccination incentive scheme implemented in Poland from July 1, 2021 to September 30, 2021. The policy had two main elements: A lottery for all adult vaccinated people in Poland \parencite{service_of_the_republic_of_poland_national_2021} and a lottery-like monetary incentive scheme for municipalities \parencite{service_of_the_republic_of_poland_competitions_2021}. The main price of the lottery was a cash prize of one million zloty\footnote{At the time of announcement on 25/05/2021, this was equal to around 220 000€, with an exchange rate of around 0.22 PLN to EUR}, but it also included smaller monthly, weekly and daily cash prices and non-cash prizes with a total volume of 140 million zloty. As part of the monetary incentive scheme for municipalities, the municipality with the highest percentage of the vaccinated in the country received two million zloty. 500 other municipalities could receive 100.000 zloty each. 
+
+
+
+
+
+\chapter{Methods and data}
+
+
+\section{Synthetic control method}
+
+
+The synthetic control method is a relatively new method in causal inference. It was first established by \textcite{abadie_economic_2003}, further developed by \textcite{abadie_synthetic_2010} and summarized in \textcite{abadie_using_2021}. It has been applied widely in economics, but also other fields such as political science. Its specific case of application are comparative case studies (write more about CCS). For example, it has been used to evaluate the effects of European integration \parencite{campos_institutional_2019} or the effect of natural disasters on economic growth \parencite{cavallo_catastrophic_2013}. The very basic idea is to create a synthetic control unit, to then estimate the average treatment effect (ATE) of a policy/intervention. 
+
+
+\subsection*{Requirements}
+
+There are some important requirements that need to be fulfilled, in order to obtain a good synthetic control.
+The first one is that the evaluated policy/intervention has a sufficiently large effect. When the effect of an intervention is too small, it may not be possible to distinguish this effect from other shocks to the outcome variable.
+
+The second one is that there exists a suitable comparison/control group. Countries that are also subject so similar interventions or other shocks to the outcome variable in the given time frame should be excluded from the donor pool. What this means for the analysis in this thesis is outlined in section 3.1. Furthermore, we should try to select countries that are not too different from the treated country for the donor pool, to prevent interpolation bias(cite or write about interpolation bias). In this analysis, the donor pool is therefore restricted to eastern European countries.
+
+Another important requirement is that there is no anticipation effect, so that citizens do not anticipate the enactment of a policy. We therefore already start our intervention at the time of announcement (25/05/2021), since there could otherwise be an anticipation effect and it does not make a difference at which time people are getting vaccinated for the participation in the lottery.
+
+Lastly, it is crucial that we do not have any spillover effects on untreated units. This requirement should however be fulfilled in the case of Poland's vaccine lottery.
+The fulfillment of these assumptions/requirements will be further discussed in section 5.
+
+
+\subsection*{Formal definition}
+
+What we observe is some outcome variable \(Y_{jt}\) for \(J + 1\) units from \(t=1\) to \(T\). The first unit (\(j = 1\)) is the treated unit while all other units are untreated units. The intervention (in this analysis the announcement of the lottery) occurs at \(T_{0}+1\), meaning that there are \(T_{0}\) pre-intervention time periods. We also observe \(k\) predictors, which include the pre-intervention outcome variable and additional covariates: \(X_{1j},...,X_{kj}\). These can be summarised by the vectors \(\mathbf{X}_{j}=(X_{1j},X_{2j},...,X_{kj})'\) for units \(j=1,...,J + 1\). It therefore follows that the \((k\times J)\) matrix \(\mathbf{X}_{0}=(\mathbf{X}_{2},\mathbf{X}_{3},...,\mathbf{X}_{J + 1})\) captures all the predictors of the untreated units\footnote{\(\mathbf{X}_0=
+\begin{bmatrix}
+X_{12} & X_{13} & \dots & X_{1J+1}\\
+X_{22} & X_{23} & \dots & X_{2J+1}\\
+\vdots & \vdots & \ddots & \vdots\\
+X_{k2} & X_{k3} & \dots & X_{kJ + 1}
+\end{bmatrix}\)}.
+
+
+(Potentially write about matching and assumptions). The causal effect is defined as the difference between the potential outcome of the treated unit with intervention, which can be defined as $Y_{1t}^{I}$, and its potential outcome without the intervention, \(Y_{1t}^{N}\):
+\begin{equation}
+\tau_{1t}=Y_{1t}^{I}-Y_{1t}^{N}\; \; \text{for}\; \; t>T_{0}
+\end{equation}
+By definition, the outcome with intervention is known and the outcome without intervention is hypothetical for \(t>T_{0}\) for the treated unit. Therefore, to estimate the causal effect, it is sufficient to estimate \(Y_{1t}^{N}\). How can this problem be solved? By \textcite{abadie_economic_2003}, the SCM proposes to use a weighted average of donor pool units as a synthetic control. The synthetic control is therefore defined as:
+\begin{equation}
+\hat{Y}_{1t}^{N}=\sum_{j=2}^{J+1} w_{j}Y_{jt}
+\end{equation}
+The weights \(\mathbf{W}=(w_{2},w_{3},...,w_{J+1})'\) are chosen, such that the synthetic control matches as closely as possible the pre-intervention path of the outcome variable for the treated unit. Therefore the weights have to be chosen so that they minimize this difference. The optimal weights \(\mathbf{W}^{\star}=(w_{2}^{\star},w_{3}^{\star},...,w_{J+1}^{\star})'\) solve:
+\begin{equation}
+\mathbf{W}=\text{arg}\; \min_{\mathbf{w}:w_{j}\in[0,1],\sum_{j=2}^{J+1} w_{j}=1}\vert\vert\mathbf{X}_{0}\mathbf{W}-\mathbf{X}_{1}\vert\vert
+\end{equation}
+
+This is subject to the weights being non-negative and summing up to one, an important assumption in the classic SCM. This assumption can be relaxed to allow for non-negative weights, in this thesis we will however keep it. We can therefore simply estimate the average treatment effect from (3.1) using these weights:
+\begin{equation}
+\hat{\tau}_{1t}=Y_{1t}^{I}-\sum_{j=2}^{J+1} w_{j}^{\star}Y_{jt}\; \; \text{for}\; \; t>T_{0}
+\end{equation}
+
+
+
+\subsection*{Inference}
+
+The main idea of inference in synthetic control is using permutation through the use of placebo effects. A synthetic control unit is constructed for all the untreated countries in the control group, as if there was a treatment for these countries. If the magnitude of the effect for the actually treated unit is extreme compared to the placebo effective, the effect can be regarded as significant. This may however not always work great, since it might be hard to get a good pre-treatment fit for all units in the donor pool. 
+A possiblity of enhancement is a test statistic which measures the ratio of the post-intervention fit relative to the pre-intervention fit \(R_{j}(t_{1},t{2})\), which is defined as the root squared mean prediction error of the synthetic control. From there it is possible to compute \(r_{j}\), which measures the quality of the fit in the post-intervention compared to pre-intervention. It is then also possible to find a p-value for the permuted test:
+\begin{equation}
+p=\frac{1}{J+1}\sum_{j=1}^{J+1}I_{+}(r_{j}-r_{1})
+\end{equation}
+where \(I_{+}(\cdot)\) is an indicator function that returns one for non-negative arguments and zero otherwise.
+
+
+\section{Data}
+
+The data analysis has been carried out in R using the tidysynth package. The data and R scripts can be found in the corresponding \href{https://github.com/benediktstelter/bachelor_thesis.git}{GitHub repository \ExternalLink}\hspace{-0.1cm}.
+
+\chapter{Results}
+
+
+\chapter{Discussion}
+
+
+\chapter{Conclusion}
+
+ 
 
 
 
