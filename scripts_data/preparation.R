@@ -2,14 +2,18 @@ library(tidyverse)
 library(readxl)
 library(Synth)
 library(SCtools)
-library(imputeTS)
 library(augsynth)
 
 
 
-percent <- function(x, digits = 2, format = "f", ...) {      # Create user-defined function
-  paste0(formatC(x * 100, format = format, digits = digits, ...))
-}
+library(extrafont) 
+
+# link www.fontsquirrel.com/fonts/latin-modern-roman
+
+# execute once to add fonts:
+library(showtext)
+font_add(family = "Latin Modern Roman 10", regular = "lmroman10-regular-webfont.ttf")
+showtext_auto()
 
 
 #GDP
@@ -79,8 +83,12 @@ predictors$countryid <- c(1:13)
 
 #Vaccination datset
 vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+vaccine$date <- as.Date(vaccine$date)
 donor_countries <- "Bulgaria|Czechia|Estonia|Greece|Croatia|Latvia|Lithuania|Hungary|Austria|Poland|Romania|Slovenia|Slovakia"
 donor_pool <- vaccine[grep(donor_countries, vaccine$location), ]
+
+
+#Plotting vaccinations in Poland (descriptive)
 
 
 #Isolating for vaccinated per hundred
@@ -97,12 +105,8 @@ poland_lottery$people_fully_vaccinated_per_hundred <- as.numeric(sub("%", "",pol
 names(poland_lottery)[names(poland_lottery) == "people_fully_vaccinated_per_hundred"] <- "twodoses"
 
 
-#Dropping Croatia, Slovakia, Bulgaria and Greece (no data and intervention)
-drop_list <- "Greece"
-poland_lottery <- poland_lottery[!grepl(drop_list, poland_lottery$country), ]
-
-#Remove 2020 and 2022
-poland_lottery <- poland_lottery[!grepl("2022|2020", poland_lottery$date), ]
+#Remove 2020, 2022 and 2023
+poland_lottery <- poland_lottery[!grepl("2023|2022|2020", poland_lottery$date), ]
 
 #experiment:
 setwd("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data")
@@ -110,6 +114,22 @@ source("kalman.R")
 
 poland <- poland_lottery[grep("Poland", poland_lottery$country), ]
 poland <- na_interpolation(poland)
+
+
+##Plot poland (descriptive part)
+source("ggplot_theme.R")
+Pol_desc_plot <- ggplot(poland,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
+  geom_line(size=1, colour="#527ca4") + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
+  zew_plotstyle() + theme(legend.position = "none")
+
+#+
+ # scale_x_date(date_breaks = "1 month", date_minor_breaks = "1 week",
+  #             date_labels = "%B")
+
+Pol_desc_plot
+
 remaining <- poland_lottery[!grepl("Poland", poland_lottery$country), ]
 
 
@@ -164,29 +184,27 @@ poland_lottery$gdpcapita20 <- as.numeric(poland_lottery$gdpcapita20)
 poland_lottery$popdensity19 <- as.numeric(poland_lottery$popdensity19)
 
 
-country <- c("Austria", "Czechia","Latvia","Slovakia","Bulgaria","Croatia",
+country <- c("Austria", "Czechia", "Greece", "Latvia","Slovakia","Bulgaria","Croatia",
                   "Slovenia","Romania","Lithuania","Hungary","Estonia","Poland")
-entrydate <- c(1995,2004,2004,2004,2007,2013,2004,2007,2004,2004,2004,2004)
+entrydate <- c(1995,2004,1981,2004,2004,2007,2013,2004,2007,2004,2004,2004,2004)
 
 eu_accession <- data.frame(country, entrydate)
 
 mrgeacc <- list(poland_lottery, eu_accession)
 poland_lottery <- mrgeacc %>% reduce(full_join, by='country')
 
-#Removing Austria
-first_dose_share <- first_dose_share[!grepl("Austria", first_dose_share$country), ]
 
 #"trstscinc20"
 
 #SCM
 dataprep.out <- dataprep(foo = poland_lottery, 
-         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","entrydate"),
+         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20","entrydate"),
          predictors.op = "mean",
-         dependent = "onedose", unit.variable = "countryid",
+         dependent = "twodoses", unit.variable = "countryid",
          time.variable = "date2", treatment.identifier = 10,
-         controls.identifier = c(1,3,5:8),
+         controls.identifier = c(1,2,3,6,12,13),
          time.predictors.prior = c(18659:18772),
-         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18930),
+         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
          unit.names.variable = "country")
 
 synth.out = synth(dataprep.out)
@@ -207,6 +225,22 @@ gaps.plot(synth.res = synth.out,
           Ylab = c("gap in real per-capita GDP (1986 USD, thousand)"),
           Xlab = c("year"))
 
+gap <- dataprep.out$Y1plot - (dataprep.out$Y0plot %*% synth.out$solution.w)
+plotgap.df = data.frame(gap)
+plotgap.df$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+ggplot(plotgap.df)
+Pol_gap_plot <- ggplot(plotgap.df,aes(y=gap,x=date,group=1,linetype="solid")
+)+ geom_line(size=1, colour="#527ca4") + zew_plotstyle() + ylim(-0.08, 0.08) +
+  geom_hline(yintercept = 0, color = "black", size = 1) + 
+  theme(axis.line.x = element_line(colour = "grey70", size = 0.2, linetype = 3)) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1)
+  
+
+Pol_gap_plot
+
 tdf <- generate.placebos(dataprep.out,synth.out, Sigf.ipop = 2)
 ## Test how extreme was the observed treatment effect given the placebos:
 ratio <- mspe.test(tdf)
@@ -220,6 +254,7 @@ plot_placebos(
 
 
 # Let's pull out the data from the result, to make our own nicer plots in ggplot of course
+
 synth_data_out = data.frame(dataprep.out$Y0plot%*%synth.out$solution.w) 
 date = as.numeric(row.names(synth_data_out))
 plot.df = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
@@ -239,20 +274,55 @@ SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,linetype="solid")) + geom_line(
         legend.background = element_rect(fill = "white", color = "black", size = 1))
 
 
+install.packages("ggtext",dependencies = TRUE)
 
-
-poland_lottery$treated <- c(rep(0,3787),rep(1,129),rep(0,92))
-
-#Try augsynth
-covsyn <- augsynth(twodoses ~ treated | gdpcapita20 + inflzvacc19 + popdensity19 + tertiary20 + elderly20 + entrydate,
-                   countryid, date2, poland_lottery,t_int = 18772,
-                   progfunc = "ridge", scm = T)
-
-summary(covsyn)
-
-plot(covsyn)
-
-
-# Let's put the two plots side-by-side.
+SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
+  scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
+  zew_plotstyle() +
+  theme(legend.position = c(0.85, 0.45),
+        legend.background = element_rect(fill = "white", color = "black", size = 1),
+        axis.title.y = element_blank()) +
+  labs(caption = "The two dashed lines refer to the announcement (25/05) and the end (30/09) of the lottery.")
 SCM_plot
 
+
+c(0.85, 0.45)
+
+
+dataprep.out2 <- dataprep(foo = poland_lottery, 
+                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20","entrydate"),
+                          predictors.op = "mean",
+                          dependent = "onedose", unit.variable = "countryid",
+                          time.variable = "date2", treatment.identifier = 10,
+                          controls.identifier = c(1,2,3,6,12,13),
+                          time.predictors.prior = c(18659:18772),
+                          time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                          unit.names.variable = "country")
+
+synth.out2 = synth(dataprep.out2)
+
+
+synth_data_out2 = data.frame(dataprep.out2$Y0plot%*%synth.out2$solution.w) 
+date = as.numeric(row.names(synth_data_out2))
+plot.df2 = data.frame(onedose=poland_lottery$onedose[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df2$synth = synth_data_out2$w.weight
+plot.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+SCM_plot2 <- ggplot(plot.df2,aes(y=onedose,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
+  zew_plotstyle() +
+  theme(legend.position = c(0.85, 0.45),
+        legend.background = element_rect(fill = "white", color = "black", size = 1),
+        axis.title.y = element_blank()) +
+  labs(caption = "The two dashed lines refer to the announcement (25/05) and the end (30/09) of the lottery.")
+SCM_plot2

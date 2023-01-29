@@ -11,7 +11,19 @@
 
 \documentclass{scrbook}
 
+$if(highlighting-macros)$
+$highlighting-macros$
+$endif$
+
 \usepackage{tikz}
+
+\usepackage{array,makecell}
+\usepackage{caption}
+
+
+\usepackage{tabularx}
+    \renewcommand\tabularxcolumn[1]{m{#1}}
+    \newcolumntype{C}{>{\centering\arraybackslash}X}
 
 \newcommand{\ExternalLink}{%
     \tikz[x=1.2ex, y=1.2ex, baseline=-0.05ex]{% 
@@ -33,6 +45,12 @@
             -- (1, 1) -- (1, 0.6);
         }
     }
+
+
+\usepackage{booktabs, caption, makecell}
+\renewcommand\theadfont{\bfseries}
+\usepackage{threeparttable}
+
 
 
 %% Alle wichtigen Einstellungen sind in der Datei einstellungen.tex getätigt

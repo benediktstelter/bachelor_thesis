@@ -1,7 +1,7 @@
 ##### "Fancy" theme for plots, customization after using function
 ##### (see: https://ggplot2.tidyverse.org/reference/theme.html)
 zew_plotstyle <- function() {
-  font <- "Calibri"
+  font <- "Latin Modern Roman 10"
   
   ggplot2::theme(
     text=element_text(family = font),

@@ -4,6 +4,8 @@ library(readxl)
 library(Synth)
 library(SCtools)
 
+install.packages("stargazer")
+library(stargazer)
 
 
 #Import covid case dataset
@@ -113,7 +115,7 @@ source("kalman.R")
 
 ##Impute values for Poland
 poland <- poland_lottery[grep("Poland", poland_lottery$country), ]
-poland <- na_interpolation(poland)
+poland <- na_kalman(poland)
 remaining <- poland_lottery[!grepl("Poland", poland_lottery$country), ]
 
 ##Impute values for Estonia
@@ -171,3 +173,9 @@ poland_lottery$date <- as.Date(poland_lottery$date)
 poland_lottery$date2 <- as.numeric(poland_lottery$date)
 poland_lottery$gdpcapita20 <- as.numeric(poland_lottery$gdpcapita20)
 poland_lottery$popdensity19 <- as.numeric(poland_lottery$popdensity19)
+
+
+table <- summary(poland_lottery)
+table
+stargazer(synth.tables$tab.w)
+synth.tables$tab.w
