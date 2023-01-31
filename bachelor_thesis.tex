@@ -705,6 +705,67 @@ findings of the permutation based inference are therefore in line with
 the prediction intervals and do not suggest a statistically significant
 effect of the lottery on vaccination rates (fully vaccinated).
 
+\begin{figure}[h]
+\caption{Placebo plot: Poland and control countries}
+
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-4-1} \end{center}
+\end{figure}
+
+\subsection*{Robustness checks}
+
+Next, we will assess the robustness of our synthetic control. One option
+is to change the time of the intervention. As discussed earlier, there
+are two possible intervention points: The announcement and the start of
+the lottery, with the announcement being the more sensible option. In
+order to see how robust our synthetic control is, we will no use July 1,
+the start of the lottery as the intervention point. As can be seen from
+the upper panel of figure 4.4, changing the time of intervention from
+25/05/2021 to 01/07/2021 has no visible effect on the synthetic control,
+with only very minor changes in the chosen weights. Importantly, the lag
+after the announcement of the lottery is clearly visible with both of
+these setups, with no lag after July 1.
+
+\begin{figure}[h]
+\caption{Poland and synthetic Poland with different intervention times}
+
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-5-1} \end{center}
+
+
+
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-5-2} \end{center}
+\end{figure}
+
+Another way of changing the time of intervention is backdating, meaning
+that the synthetic control is estimated using an arbitrary earlier
+intervention time. If the synthetic control is robust, we expect no
+drastic changes from the baseline result in figure 4.1. We therefore
+construct a new synthetic control, with a ``fictional'' intervention
+time one month earlier (April 25) than the actual investigation time. As
+observable in the lower panel of figure 4.4, the changes are also not
+too large, with the new synthetic control still tracking the path of
+actual Poland until the actual intervention occurs relatively well. We
+therefore conclude that this synthetic control is indeed robust to
+changes to the time of intervention. This finding also confirms that we
+do not suffer from an anticipation effect.
+
+Another possible robustness check is to leave out certain predictors or
+countries. With a relatively low number of predictors and donor pool
+countries, the effects of such a robustness check could potentially be
+larger in this setting. Figure 4.5 presents the result of a
+leave-one-out analysis of synthetic poland, leaving out all of
+predictors once, while keeping the others in. The synthetic control is
+not very robust, with predictors being especially important to the
+robustness of the synthetic control, while the three other predictors
+only take on a minor weight and therefore are not as important to the
+robustness of the synthetic control. Overall, the result is not
+surprising, since only a total of 6 predictors are used.
+
+\begin{figure}[h]
+\caption{Leave-one-out synthetic controls of Poland}
+
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
+\end{figure}
+
 \chapter{Discussion}
 
 \chapter{Conclusion}

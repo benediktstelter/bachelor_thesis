@@ -219,7 +219,7 @@ poland_lottery <- mrgeacc %>% reduce(full_join, by='country')
 
 #SCM
 dataprep.out <- dataprep(foo = poland_lottery, 
-         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20","entrydate"),
+         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
          predictors.op = "mean",
          dependent = "twodoses", unit.variable = "countryid",
          time.variable = "date2", treatment.identifier = 10,
@@ -256,6 +256,188 @@ date = as.numeric(row.names(synth_data_out2))
 plot.df2 = data.frame(onedose=poland_lottery$onedose[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df2$synth = synth_data_out2$w.weight
 plot.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+tdf <- generate.placebos(dataprep.out,synth.out, Sigf.ipop = 2)
+
+year <- cont <- id <- Y1 <- synthetic.Y1 <- NULL
+n<-tdf$n
+t1 <- unique(tdf$df$year)[which(tdf$df$year == tdf$t1) - 1]
+tr<-tdf$tr
+names.and.numbers<-tdf$names.and.numbers
+treated.name<-as.character(tdf$treated.name)
+df.plot<-NULL
+
+for(i in 1:n){
+  a<-cbind(tdf$df$year,tdf$df[,i],tdf$df[,n+i],i)
+  df.plot<-rbind(df.plot, a)
+}
+df.plot<-data.frame(df.plot)
+df.plot$gap <- df.plot$V3-df.plot$V2
+colnames(df.plot)<-c('date2','cont','tr','id','gap')
+datedfplot <- rep(seq(as.Date("2021-02-01"),as.Date("2021-11-29"),1),6)
+df.plot$date <- datedfplot
+
+#SCM at start of lottery
+dataprep.out.tc <- dataprep(foo = poland_lottery, 
+         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+         predictors.op = "mean",
+         dependent = "twodoses", unit.variable = "countryid",
+         time.variable = "date2", treatment.identifier = 10,
+         controls.identifier = c(1,2,3,6,12,13),
+         time.predictors.prior = c(18659:18808),
+         time.optimize.ssr = c(18659:18808), time.plot = c(18659:18960),
+         unit.names.variable = "country")
+
+synth.out.tc = synth(dataprep.out.tc)
+
+synth_data_out.tc = data.frame(dataprep.out.tc$Y0plot%*%synth.out.tc$solution.w) 
+date = as.numeric(row.names(synth_data_out.tc))
+plot.df.tc = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.tc$synth = synth_data_out.tc$w.weight
+plot.df.tc$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#SCM one month prior
+dataprep.out.tcb <- dataprep(foo = poland_lottery, 
+         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+         predictors.op = "mean",
+         dependent = "twodoses", unit.variable = "countryid",
+         time.variable = "date2", treatment.identifier = 10,
+         controls.identifier = c(1,2,3,6,12,13),
+         time.predictors.prior = c(18659:18741),
+         time.optimize.ssr = c(18659:18741), time.plot = c(18659:18960),
+         unit.names.variable = "country")
+
+synth.out.tcb = synth(dataprep.out.tcb)
+
+synth_data_out.tcb = data.frame(dataprep.out.tcb$Y0plot%*%synth.out.tcb$solution.w) 
+date = as.numeric(row.names(synth_data_out.tcb))
+plot.df.tcb = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.tcb$synth = synth_data_out.tcb$w.weight
+plot.df.tcb$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#Leave one out analysis
+#GDP
+dataprep.out.gdp <- dataprep(foo = poland_lottery, 
+                         predictors = c("inflzvacc19","popdensity19","tertiary20","trstscinc20","elderly20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,3,6,12,13),
+                         time.predictors.prior = c(18659:18772),
+                         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                         unit.names.variable = "country")
+
+synth.out.gdp = synth(dataprep.out.gdp)
+
+synth_data_out.gdp = data.frame(dataprep.out.gdp$Y0plot%*%synth.out.gdp$solution.w) 
+date = as.numeric(row.names(synth_data_out.gdp))
+plot.df.gdp = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.gdp$synth = synth_data_out.gdp$w.weight
+plot.df.gdp$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#influenza
+dataprep.out.infz <- dataprep(foo = poland_lottery, 
+                            predictors = c("gdpcapita20","popdensity19","tertiary20","trstscinc20","elderly20"),
+                            predictors.op = "mean",
+                            dependent = "twodoses", unit.variable = "countryid",
+                            time.variable = "date2", treatment.identifier = 10,
+                            controls.identifier = c(1,2,3,6,12,13),
+                            time.predictors.prior = c(18659:18772),
+                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            unit.names.variable = "country")
+
+synth.out.infz = synth(dataprep.out.infz)
+
+synth_data_out.infz = data.frame(dataprep.out.infz$Y0plot%*%synth.out.infz$solution.w) 
+date = as.numeric(row.names(synth_data_out.infz))
+plot.df.infz = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.infz$synth = synth_data_out.infz$w.weight
+plot.df.infz$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#popdensity
+dataprep.out.pop <- dataprep(foo = poland_lottery, 
+                            predictors = c("gdpcapita20","inflzvacc19","tertiary20","trstscinc20","elderly20"),
+                            predictors.op = "mean",
+                            dependent = "twodoses", unit.variable = "countryid",
+                            time.variable = "date2", treatment.identifier = 10,
+                            controls.identifier = c(1,2,3,6,12,13),
+                            time.predictors.prior = c(18659:18772),
+                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            unit.names.variable = "country")
+
+synth.out.pop = synth(dataprep.out.pop)
+
+synth_data_out.pop = data.frame(dataprep.out.pop$Y0plot%*%synth.out.pop$solution.w) 
+date = as.numeric(row.names(synth_data_out.pop))
+plot.df.pop = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.pop$synth = synth_data_out.pop$w.weight
+plot.df.pop$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#tertiary
+dataprep.out.tert <- dataprep(foo = poland_lottery, 
+                            predictors = c("gdpcapita20","inflzvacc19","popdensity19","trstscinc20","elderly20"),
+                            predictors.op = "mean",
+                            dependent = "twodoses", unit.variable = "countryid",
+                            time.variable = "date2", treatment.identifier = 10,
+                            controls.identifier = c(1,2,3,6,12,13),
+                            time.predictors.prior = c(18659:18772),
+                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            unit.names.variable = "country")
+
+synth.out.tert = synth(dataprep.out.tert)
+
+synth_data_out.tert = data.frame(dataprep.out.tert$Y0plot%*%synth.out.tert$solution.w) 
+date = as.numeric(row.names(synth_data_out.tert))
+plot.df.tert = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.tert$synth = synth_data_out.tert$w.weight
+plot.df.tert$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#trstscinc
+dataprep.out.trst <- dataprep(foo = poland_lottery, 
+                            predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20"),
+                            predictors.op = "mean",
+                            dependent = "twodoses", unit.variable = "countryid",
+                            time.variable = "date2", treatment.identifier = 10,
+                            controls.identifier = c(1,2,3,6,12,13),
+                            time.predictors.prior = c(18659:18772),
+                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            unit.names.variable = "country")
+
+synth.out.trst = synth(dataprep.out.trst)
+
+synth_data_out.trst = data.frame(dataprep.out.trst$Y0plot%*%synth.out.trst$solution.w) 
+date = as.numeric(row.names(synth_data_out.trst))
+plot.df.trst = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.trst$synth = synth_data_out.trst$w.weight
+plot.df.trst$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+#elderly
+dataprep.out.eld <- dataprep(foo = poland_lottery, 
+                            predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","trstscinc20"),
+                            predictors.op = "mean",
+                            dependent = "twodoses", unit.variable = "countryid",
+                            time.variable = "date2", treatment.identifier = 10,
+                            controls.identifier = c(1,2,3,6,12,13),
+                            time.predictors.prior = c(18659:18772),
+                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            unit.names.variable = "country")
+
+synth.out.eld = synth(dataprep.out.eld)
+
+synth_data_out.eld = data.frame(dataprep.out.eld$Y0plot%*%synth.out.eld$solution.w) 
+date = as.numeric(row.names(synth_data_out.eld))
+plot.df.eld = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.eld$synth = synth_data_out.eld$w.weight
+plot.df.eld$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
 
 
 ```
@@ -568,9 +750,110 @@ We therefore applied the synthetic control method, as described in section 3.2. 
 
 Employing the permutation based inference techniques discussed in section 4.1, also shows no signs of a significant effect. Figure ... presents the placebo study. As can be seen, the magnitude of the effect of Poland is not comparably high and does not stand out. This finding also confirmed quantitatively. Using the discussed test procedure, a p-value of around 0.5 is obtained. Therefore, the hypothesis that the lottery had no effect in increasing vaccination rates cannot be rejected, at any known/relevant significance level. The findings of the permutation based inference are therefore in line with the prediction intervals and do not suggest a statistically significant effect of the lottery on vaccination rates (fully vaccinated). 
 
+\begin{figure}[h]
+\caption{Placebo plot: Poland and control countries}
+```{r fig.asp = 0.6, fig.showtext=TRUE, fig.width = 5.8, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+
+p.gaps <- ggplot(df.plot,mapping=aes(x=date, y=gap))+
+geom_line(mapping=aes(group=id, color='2'),size=0.8)+
+geom_line(plotgap.df, mapping = aes(color='1'),size=0.8)+ 
+geom_hline(yintercept = 0, color = "black", size = 1) + 
+geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+ylim(-0.5, 0.3) +
+xlab(expression(bold(paste("Date in 2021")))) +
+scale_color_manual(name="Countries",
+                   values = c( '1' = '#9c2424', '2' = '#c7a92f'),
+                   labels = c(tdf$treated.name, 'Controls')) +
+zew_plotstyle() + theme(axis.title.y = element_blank(),
+                        axis.line.x = element_line(colour = "grey70", size = 0.2, linetype = 3),
+                        legend.position = c(0.15, 0.25),
+                        legend.background = element_rect(fill = "white", color = "black", size = 1),) +
+  labs(caption = "The figure shows the gaps between the actual and synthetic units for Poland as well as all of the control \n units. The synthetic controls of the control units are placebos (constructed as if there was a treatment).")
 
 
+p.gaps
 
+```
+\end{figure}
+
+\subsection*{Robustness checks}
+
+
+Next, we will assess the robustness of our synthetic control. One option is to change the time of the intervention. As discussed earlier, there are two possible intervention points: The announcement and the start of the lottery, with the announcement being the more sensible option. In order to see how robust our synthetic control is, we will no use July 1, the start of the lottery as the intervention point. As can be seen from the upper panel of figure 4.4, changing the time of intervention from 25/05/2021 to 01/07/2021 has no visible effect on the synthetic control, with only very minor changes in the chosen weights. Importantly, the lag after the announcement of the lottery is clearly visible with both of these setups, with no lag after July 1.
+
+\begin{figure}[h]
+\caption{Poland and synthetic Poland with different intervention times}
+```{r fig.asp = 0.45, fig.showtext=TRUE, fig.width = 5.8, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+SCM_plot.tc <- ggplot(plot.df.tc,aes(y=twodoses,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  geom_vline(xintercept=18808,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
+  scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
+  zew_plotstyle() +
+  theme(legend.position = c(0.85, 0.45),
+        legend.background = element_rect(fill = "white", color = "black", size = 1),
+        axis.title.y = element_blank(),axis.title.x = element_blank()) +
+  annotate(geom="text", x=as.Date("2021-04-01"), y=0.4, label="The time of intervention is \nchanged to July 1",
+           color="black", family= "Latin Modern Roman 10") +
+  annotate("segment", x = as.Date("2021-05-31"), xend = as.Date("2021-06-25"), y = 0.4, 
+           yend = 0.4, colour = "black", size = 0.2, arrow = arrow(angle = 25, 
+           length = unit(.25,"cm")))
+SCM_plot.tc
+
+SCM_plot.tcb <- ggplot(plot.df.tcb,aes(y=twodoses,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  geom_vline(xintercept=18741,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
+  scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
+  zew_plotstyle() +
+  theme(legend.position = 'none',
+        legend.background = element_rect(fill = "white", color = "black", size = 1),
+        axis.title.y = element_blank()) +
+  annotate(geom="text", x=as.Date("2021-08-01"), y=0.1, label="The time of intervention is \nchanged to April 25",
+           color="black", family= "Latin Modern Roman 10") +
+  annotate("segment", x = as.Date("2021-05-31"), xend = as.Date("2021-04-29"), y = 0.1, 
+           yend = 0.1, colour = "black", size = 0.2, arrow = arrow(angle = 25, 
+                                                                   length = unit(.25,"cm")))
+SCM_plot.tcb
+
+```
+\end{figure}
+
+Another way of changing the time of intervention is backdating, meaning that the synthetic control is estimated using an arbitrary earlier intervention time. If the synthetic control is robust, we expect no drastic changes from the baseline result in figure 4.1. We therefore construct a new synthetic control, with a "fictional" intervention time one month earlier (April 25) than the actual investigation time. As observable in the lower panel of figure 4.4, the changes are also not too large, with the new synthetic control still tracking the path of actual Poland until the actual intervention occurs relatively well. We therefore conclude that this synthetic control is indeed robust to changes to the time of intervention. This finding also confirms that we do not suffer from an anticipation effect.
+
+
+Another possible robustness check is to leave out certain predictors or countries. With a relatively low number of predictors and donor pool countries, the effects of such a robustness check could potentially be larger in this setting. Figure 4.5 presents the result of a leave-one-out analysis of synthetic poland, leaving out all of predictors once, while keeping the others in. The synthetic control is not very robust, with predictors being especially important to the robustness of the synthetic control, while the three other predictors only take on a minor weight and therefore are not as important to the robustness of the synthetic control. Overall, the result is not surprising, since only a total of 6 predictors are used.
+
+
+\begin{figure}[h]
+\caption{Leave-one-out synthetic controls of Poland}
+```{r fig.asp = 0.45, fig.showtext=TRUE, fig.width = 5.8, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+loo.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_line(linetype="solid",size=0.8) +
+  geom_line(plot.df.gdp, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.infz, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.pop, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.tert, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.eld, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.trst, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +
+  scale_color_manual(name="Countries",
+                     values = c( "Poland" = "#527ca4" , "Synthetic Poland"="#b4be28",
+                                 "Leave-one-out" = 'grey')) +
+  zew_plotstyle() + theme(axis.title.y = element_blank(),
+                          legend.position = c(0.85, 0.35),
+                          legend.background = element_rect(fill = "white", color = "black", size = 1),)
+
+loo.plot
+```
+\end{figure}
 
 
 \chapter{Discussion}
