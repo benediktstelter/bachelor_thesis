@@ -19,7 +19,6 @@ figsintext : yes
 
 geometry: margin=1in
 # References
-bibliography: ../thesis.bib
 biblio-style: apa #Select from https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
 biblio-title: "References"
 
@@ -224,8 +223,8 @@ dataprep.out <- dataprep(foo = poland_lottery,
          dependent = "twodoses", unit.variable = "countryid",
          time.variable = "date2", treatment.identifier = 10,
          controls.identifier = c(1,2,3,6,12,13),
-         time.predictors.prior = c(18659:18772),
-         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+         time.predictors.prior = c(18659:18771),
+         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
          unit.names.variable = "country")
 
 synth.out = synth(dataprep.out)
@@ -244,8 +243,8 @@ dataprep.out2 <- dataprep(foo = poland_lottery,
          dependent = "onedose", unit.variable = "countryid",
          time.variable = "date2", treatment.identifier = 10,
          controls.identifier = c(1,2,3,6,12,13),
-         time.predictors.prior = c(18659:18772),
-         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+         time.predictors.prior = c(18659:18771),
+         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
          unit.names.variable = "country")
 
 synth.out2 = synth(dataprep.out2)
@@ -274,7 +273,7 @@ for(i in 1:n){
 df.plot<-data.frame(df.plot)
 df.plot$gap <- df.plot$V3-df.plot$V2
 colnames(df.plot)<-c('date2','cont','tr','id','gap')
-datedfplot <- rep(seq(as.Date("2021-02-01"),as.Date("2021-11-29"),1),6)
+datedfplot <- rep(seq(as.Date("2021-02-01"),as.Date("2021-11-30"),1),6)
 df.plot$date <- datedfplot
 
 #SCM at start of lottery
@@ -285,7 +284,7 @@ dataprep.out.tc <- dataprep(foo = poland_lottery,
          time.variable = "date2", treatment.identifier = 10,
          controls.identifier = c(1,2,3,6,12,13),
          time.predictors.prior = c(18659:18808),
-         time.optimize.ssr = c(18659:18808), time.plot = c(18659:18960),
+         time.optimize.ssr = c(18659:18808), time.plot = c(18659:18961),
          unit.names.variable = "country")
 
 synth.out.tc = synth(dataprep.out.tc)
@@ -305,7 +304,7 @@ dataprep.out.tcb <- dataprep(foo = poland_lottery,
          time.variable = "date2", treatment.identifier = 10,
          controls.identifier = c(1,2,3,6,12,13),
          time.predictors.prior = c(18659:18741),
-         time.optimize.ssr = c(18659:18741), time.plot = c(18659:18960),
+         time.optimize.ssr = c(18659:18741), time.plot = c(18659:18961),
          unit.names.variable = "country")
 
 synth.out.tcb = synth(dataprep.out.tcb)
@@ -325,8 +324,8 @@ dataprep.out.gdp <- dataprep(foo = poland_lottery,
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
                          controls.identifier = c(1,2,3,6,12,13),
-                         time.predictors.prior = c(18659:18772),
-                         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                          unit.names.variable = "country")
 
 synth.out.gdp = synth(dataprep.out.gdp)
@@ -345,8 +344,8 @@ dataprep.out.infz <- dataprep(foo = poland_lottery,
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
                             controls.identifier = c(1,2,3,6,12,13),
-                            time.predictors.prior = c(18659:18772),
-                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            time.predictors.prior = c(18659:18771),
+                            time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                             unit.names.variable = "country")
 
 synth.out.infz = synth(dataprep.out.infz)
@@ -365,8 +364,8 @@ dataprep.out.pop <- dataprep(foo = poland_lottery,
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
                             controls.identifier = c(1,2,3,6,12,13),
-                            time.predictors.prior = c(18659:18772),
-                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            time.predictors.prior = c(18659:18771),
+                            time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                             unit.names.variable = "country")
 
 synth.out.pop = synth(dataprep.out.pop)
@@ -385,8 +384,8 @@ dataprep.out.tert <- dataprep(foo = poland_lottery,
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
                             controls.identifier = c(1,2,3,6,12,13),
-                            time.predictors.prior = c(18659:18772),
-                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            time.predictors.prior = c(18659:18771),
+                            time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                             unit.names.variable = "country")
 
 synth.out.tert = synth(dataprep.out.tert)
@@ -405,8 +404,8 @@ dataprep.out.trst <- dataprep(foo = poland_lottery,
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
                             controls.identifier = c(1,2,3,6,12,13),
-                            time.predictors.prior = c(18659:18772),
-                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            time.predictors.prior = c(18659:18771),
+                            time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                             unit.names.variable = "country")
 
 synth.out.trst = synth(dataprep.out.trst)
@@ -425,8 +424,8 @@ dataprep.out.eld <- dataprep(foo = poland_lottery,
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
                             controls.identifier = c(1,2,3,6,12,13),
-                            time.predictors.prior = c(18659:18772),
-                            time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                            time.predictors.prior = c(18659:18771),
+                            time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                             unit.names.variable = "country")
 
 synth.out.eld = synth(dataprep.out.eld)
@@ -505,7 +504,7 @@ So far, there has been one study dealing with the vaccine lottery analysed in th
 \section{Institutional background}
 
 
-The COVID-19 policies in Poland (especially with respect to vaccines) can be considered as relatively "relaxed". Poland did not widely use the EU COVID passport with respect to social life (citation here). Instead, it was only used for travelling/entry into the country. Vaccination rates in Poland have been low compared to some western European countries, including neighbour Germany. In the context of eastern Europe, vaccination rates have however not been exceptionally low. Many eastern European countries also refrained from a large-scale use of COVID passport. Therefore, to increase vaccination rates, the only remaining options are campaigns/nudges and providing incentives.
+The COVID-19 policies in Poland (especially with respect to vaccines) can be considered as relatively "relaxed". Poland did not widely use the EU COVID passport with respect to social life (citation here). Instead, it was only used for travelling/entry into the country. Vaccination rates in Poland have been low compared to some western European countries, including neighbour Germany. In the context of eastern Europe, vaccination rates have however not been exceptionally low. Many eastern European countries experienced relatively low vaccination rates and a hesitancy to get vaccinated within their respective population. In the media, a general distrust into the government and a lack of educational campaigns \parencite{noauthor_polands_2021}  and a chaotic and conflicting communication by the government \parencite{wanat_polands_2021} have been cited as potential reasons of the low vaccine uptake in Poland. Many other eastern European countries also refrained from a large-scale use of COVID passports and the carrot-and-stick approach in general. Therefore, to increase vaccination rates, the only remaining options are campaigns/nudges and providing incentives. This has actually been implemented in several ways, e.g. Slovakia and Bulgaria also adopted lotteries at some point and Lithuania (?) provided cash incentives.
 
 
 \renewcommand*{\arraystretch}{1.5}
@@ -531,14 +530,13 @@ Main & \(2*1,000,000\) PLN & 6 middle class vehicles \\
 \renewcommand*{\arraystretch}{1}
 
 
-The empirical analysis will be based on a vaccine lottery implemented in Poland from July 1, 2021 to September 30, 2021. It was announced on May 25, 2021. The policy had two main elements: A lottery for all adult fully vaccinated people (two doses) in Poland \parencite{service_of_the_republic_of_poland_national_2021} and a lottery-like monetary incentive scheme for municipalities \parencite{service_of_the_republic_of_poland_competitions_2021}. The main price of the lottery was a cash prize of 2 * one million zloty\footnote{At the time of announcement on 25/05/2021, this was equal to around 220,000€, with an exchange rate of around 0.22 PLN to EUR}, but it also included smaller monthly, weekly and daily cash prizes and non-cash prizes (cars and electric scooters) with a total volume of 140 million zloty, as depicted in table 2.1. 
+The empirical analysis will be based on a vaccine lottery implemented in Poland from July 1, 2021 to September 30, 2021. It was announced on May 25 , 2021 \parencite{charlish_poland_2021}. The policy had two main elements: A lottery for all adult fully vaccinated people (two doses) in Poland \parencite{service_of_the_republic_of_poland_national_2021} and a lottery-like monetary incentive scheme for municipalities \parencite{service_of_the_republic_of_poland_competitions_2021}. The main price of the lottery was a cash prize of 2 * one million zloty\footnote{At the time of announcement on 25/05/2021, this was equal to around 220,000€, with an exchange rate of around 0.22 PLN to EUR}, but it also included smaller monthly, weekly and daily cash prizes and non-cash prizes (cars and electric scooters) with a total volume of 140 million zloty, as depicted in table 2.1. Citizens were able to enter the lottery both online and by phone. It was organized by the state-owned polish lottery company \textit{Totalizator Sportowy}, which also operates other popular lotteries in Poland.
 
 Poland's lottery can be seen as a mixture of different brands of lotteries. Especially in the US, state governments have focused on lotteries with high rewards and relatively low winning probabilities (e.g. Ohio, Massachusetts with prizes of one million USD). A completely different concept would be the use of relatively low prizes (e.g. below 1000 USD) with relatively high winning probabilities (citation/example here). The Polish policy included both relatively small prizes (instant prizes) but also quite large prizes (main/final draw), thereby combining the best of both worlds.
 
 As part of the monetary incentive scheme for municipalities, the municipality with the highest percentage of the vaccinated in the country received two million zloty. Three other municipalities who had the highest percentage of the vaccinated in their comparison group\footnote{There were three groups: Municipalities with a population of up to 30,000, cities with a population of 30,000 - 100,000 and large cities with a population above 100,000.} received one million zloty each. The 500 quickest other municipalities reaching a vaccination rate of 67\%  won 100.000 zloty each. 
 
-One obvious question with respect to the synthetic control is the time of intervention. Although the actual lottery started on July 1, we will choose the time of announcement as the point of intervention, since the time of being fully vaccinated does not matter for the entry into the lottery. If the lottery has an effect, we will expect it to be observable from the time of announcement. On the other hand, if we were to set the intervention time at July 1, we would have the problem of an anticipation effect, impacting the credibility of the synthetic control negatively. This will be further discussed in chapter 3.1. As a robustness check for the result we obtain, we will however also estimate a synthetic control using July 1 as the time of intervention.
-
+One obvious question with respect to the synthetic control is the time of intervention. Although the actual lottery started on July 1, we will choose the time of announcement as the point of intervention, since the time of being fully vaccinated is not relevant for the entry into the lottery. If the lottery has an effect, we will expect it to be observable from the time of announcement. On the other hand, if we were to set the intervention time at July 1, we might have the problem of a so-called anticipation effect, impacting the credibility of the synthetic control negatively. This will be further discussed in chapter 3.1. As a robustness check for the result we obtain, we will however also estimate a synthetic control using July 1 as the time of intervention.
 
 
 
@@ -555,13 +553,13 @@ The synthetic control method is a relatively new method in causal inference. It 
 \subsection*{Requirements}
 
 There are some important requirements that need to be fulfilled, in order to obtain a valid and interpretable synthetic control. These have been outlined in detail by \textcite{abadie_using_2021} along with the formal definition and the inference.
-The first one is that the evaluated policy/intervention has a sufficiently large effect. When the effect of an intervention is too small, it may not be possible to distinguish this effect from other shocks to the outcome variable.
+The first one is that the evaluated policy/intervention has a sufficiently large effect. When the effect of an intervention is too small, it may not be possible to distinguish this effect from other shocks to the outcome variable. Additionally, the volatility of the outcome variable should not be too high, to prevent over-fitting.
 
-The second one is that there exists a suitable comparison/control group. Countries that are also subject so similar interventions or other shocks to the outcome variable in the given time frame should be excluded from the donor pool. What this means for the analysis in this thesis is outlined in section 3.1. Furthermore, we should try to select countries that are not too different from the treated country for the donor pool, to prevent interpolation bias(cite or write about interpolation bias). In this analysis, the donor pool is therefore restricted to eastern European countries.
+The second one is that there exists a suitable comparison/control group. Countries that are also subject so similar interventions or other shocks to the outcome variable in the given time frame should be excluded from the donor pool. What this means for the analysis in this thesis is outlined in section 3.1. Furthermore, we should try to select countries that are not too different from the treated country for the donor pool, to prevent interpolation bias(cite or write about interpolation bias). 
 
-Another important requirement is that there is no anticipation effect, so that citizens do not anticipate the enactment of a policy. If there were an anticipation, we would expect our synthetic control to become biased and not useful for estimating the causal effect of the treatment.
+Another important requirement is that there is no anticipation effect, so that citizens do not anticipate the enactment of a policy. If there were an anticipation, we would expect our synthetic control to become biased and not useful for estimating the causal effect of the treatment. This should however not be expected as a problem in the Polish lottery application, since there is no possible reason for anticipation (there were no prior lotteries in Europe and no rumors about the lottery before the announcement (check again)). This will be picked up again in chapter 4, as a robustness check of the obtained synthetic control.
 
-Lastly, it is crucial that we do not have any spillover effects on untreated units. This requirement should however be fulfilled in the case of Poland's vaccine lottery.
+Lastly, it is crucial that we do not have any spillover effects on untreated units. If this were the case, the lottery in Poland would have effects on vaccination rates of donor pool countries. This requirement should however be fulfilled in this application, there is at least no possible theoretical argument for such a relationship.
 The fulfillment of these assumptions/requirements will be further discussed in section 5.
 
 
@@ -584,7 +582,7 @@ By definition, the outcome with intervention is known and the outcome without in
 \begin{equation}
 \hat{Y}_{1t}^{N}=\sum_{j=2}^{J+1} w_{j}Y_{jt}
 \end{equation}
-The weights \(\mathbf{W}=(w_{2},w_{3},...,w_{J+1})'\) are chosen, such that the synthetic control matches as closely as possible the pre-intervention path of the outcome variable for the treated unit. Therefore the weights have to be chosen so that they minimize this difference. The optimal weights \(\mathbf{W}^{\star}=(w_{2}^{\star},w_{3}^{\star},...,w_{J+1}^{\star})'\) solve:
+The weights \(\mathbf{W}=(w_{2},w_{3},...,w_{J+1})'\) are chosen, such that the synthetic control matches as closely as possible the pre-intervention path of the predictors of the outcome variable for the treated unit. Therefore the weights have to be chosen so that they minimize this difference. The optimal weights \(\mathbf{W}^{\star}=(w_{2}^{\star},w_{3}^{\star},...,w_{J+1}^{\star})'\) solve:
 \begin{equation}
 \mathbf{W}=\text{arg}\; \min_{\mathbf{w}:w_{j}\in[0,1],\sum_{j=2}^{J+1} w_{j}=1}\vert\vert\mathbf{X}_{0}\mathbf{W}-\mathbf{X}_{1}\vert\vert
 \end{equation}
@@ -599,26 +597,33 @@ This is subject to the weights being non-negative and summing up to one, an impo
 
 \subsection*{Inference}
 
-Based on Abadies works (possibly cite here), the most common way of inference in synthetic control is using permutation through the use of placebo effects. A synthetic control unit is constructed for all the untreated countries in the control group, as if there was a treatment for these countries. If the magnitude of the effect for the actually treated unit is extreme compared to the placebo effective, the effect can be regarded as significant. One possible problem of this concept might be that it could possibly be difficult to obtain a good pre-treatment fit for all units in the donor pool, especially with a relatively small donor pool. 
-A possibility of quantification is a test statistic which measures the ratio of the post-intervention fit relative to the pre-intervention fit \(R_{j}(t_{1},t{2})\), which is defined as the root squared mean prediction error of the synthetic control. From there it is possible to compute \(r_{j}\), which measures the quality of the fit in the post-intervention compared to pre-intervention. It is then also possible to find a p-value for the permuted test:
+Based on \textcite{abadie_synthetic_2010}, the most common way of inference in synthetic control is using permutation through the use of placebo effects. A synthetic control unit is constructed for all the untreated countries in the control group, as if there was a treatment for these countries. If the magnitude of the effect for the actually treated unit is extreme compared to the placebo effects, the effect can be regarded as significant. In order to do this analysis, the gaps between the synthetic control and the actual outcome can be plotted for all selected countries, in order to visually compare the size of the effects. One possible problem of this concept might be that it could possibly be difficult to obtain a good pre-treatment fit for all units in the donor pool, especially with a relatively small donor pool. Additionally, this way of constructing inference is in some sense "blurry", since it does not rely on quantitative measure. 
+
+A possibility of quantification is a test statistic which measures the ratio of the post-intervention fit relative to the pre-intervention fit (possibly cite 2010 abadie here). The root mean squared prediction error of the synthetic control is then defined as: 
+\begin{equation}
+R_{j}(t_{1},t_{2}) =(\frac{1}{t_{2}-t_{1}+1}\sum_{t=t_{1}}^{t_{2}}(Y_{jt}-\hat{Y}_{jt}^{N})^2)^\frac{1}{2}
+\end{equation}
+From there it is possible to compute \(r_{j}\), which measures the quality of the fit in the post-intervention period compared to pre-intervention and is given by the ratio of the post-intervention RMSPE and pre-intervention RMSPE:
+\begin{equation}
+r_{j}=\frac{R_{j}(T_{0}+1,T)}{R_{j}(1,T_{0})}
+\end{equation}
+It is then possible to compute a p-value for the permuted test:
 \begin{equation}
 p=\frac{1}{J+1}\sum_{j=1}^{J+1}I_{+}(r_{j}-r_{1})
 \end{equation}
 where \(I_{+}(\cdot)\) is an indicator function that returns one for non-negative arguments and zero otherwise.
-
-Recently, Cattaneo et al. (cite one of their papers here) have advanced inference in synthetic control. Explain basic idea behind their inference procedure here. This analysis will employ this method to construct prediction intervals as an additional inference method together with the permutation based inference proposed by \textcite{abadie_synthetic_2010}.
 
 
 \section{Data}
 
 First, we will estimate an RDD model to estimate the effect of the lottery on COVID-19 cases in Poland, similar to the analysis by \textcite{kuznetsova_effectiveness_2022}. For this, time series data on COVID-19 cases by "Our world in data" will be utilized. 
 
-In the main SCM analysis, the impact of the policy on the vaccination rates will be investigated. Data for the outcome variable vaccination rate (both one vaccination and fully vaccinated) is taken from a data set created by "Our world in data" \parencite{mathieu_global_2021}. This data set is a collection of vaccination rates and other information about vaccinations from all countries of the world, coming directly from the respective government/government agency. If the data is provided by the governments, it can give us a daily time-series of vaccination rates around the world. 
+In the main synthetic control analysis, the impact of the policy on the vaccination rates will be investigated. Data for the outcome variable vaccination rate (both one vaccination and fully vaccinated) is taken from a data set created by "Our world in data" \parencite{mathieu_global_2021}. This data set is a collection of vaccination rates and other information about vaccinations from all countries of the world, coming directly from the respective government/government agency. If the data is provided by the governments, it can give us a daily time-series of vaccination rates around the world. 
 
 
-One of the most important aspects in the application of SCM is the choice of the donor pool. As outlined in 3.1, the treated country should not be an outlier compared to the control countries. It is therefore sensible to select countries that are similar to Poland, both in general and with respect to vaccination rates. Therefore, twelve central/eastern European countries with sufficient data availability (AT, BG, CZ, EE, GR, LV, LT, HR, HU, RO, SI, SK) are initial candidates for the donor pool. From this list, several countries are dropped who experienced similar interventions or shocks to the vaccination rate in the given time frame. Greece (cash incentive of 150€ for young people), Czechia (holiday incentive), Austria (need to find a reason here), Lithuania (cash incentive + other incentives), Romania (cash and lottery incentive). Estonia, Czechia and Slovenia implemented some small incentive schemes for doctors and state employees, these are however not considered as a big enough shock to vaccination rates and Estonia, Czechia and Slovenia will not be dropped. Croatia and Hungary are removed because of too many missing values. The donor pool then consists of six countries: Bulgaria, Czechia, Estonia, Latvia, Slovakia and Slovenia. 
+One of the most important aspects in the application of SCM is the choice of the donor pool. As outlined in 3.1, the treated country should not be an outlier compared to the control countries. It is therefore sensible to select countries that are similar to Poland, both in general and with respect to vaccination rates. Therefore, twelve central/eastern European countries with sufficient data availability (AT, BG, CZ, EE, GR, LV, LT, HR, HU, RO, SI, SK) are initial candidates for the donor pool. From this list, several countries are dropped who experienced similar interventions or shocks to the vaccination rate in the given time frame. Greece (cash incentive of 150€ for young people), Czechia (holiday incentive), Austria (need to find a reason here), Lithuania (cash incentive + other incentives), Romania (cash and lottery incentive). Estonia, Czechia and Slovenia implemented some small incentive schemes for doctors and state employees, these are however not considered as a big enough shock to vaccination rates and Estonia, Czechia and Slovenia will not be dropped. Croatia and Hungary are removed because of too many missing values, since a sensible trend can not be constructed using interpolation. Slovakia (nochmal checken) only reported weekly values, a reasonable interpolation was however possible. The donor pool then consists of six countries: Bulgaria, Czechia, Estonia, Latvia, Slovakia and Slovenia. 
 
-There are however missing values for several countries. Sometimes these missing values follow a specific pattern (e.g. Poland: values are missing on Sundays) while there is no specific pattern for some other countries. Linear interpolation is used to replace the missing values, by drawing a straight line between the two adjacent data points (citation here). Other imputation techniques such as kalman smoothing\footnote{Here, kalman smoothing will shortly be explained} were also considered, but ultimately the differences between the different techniques are marginal in this specific case.
+There are however missing values for several countries. Sometimes these missing values follow a specific pattern (e.g. Poland: values are missing on Sundays) while there is no specific pattern for some other countries. Linear interpolation is used to replace the missing values, by drawing a straight line between the two adjacent data points (citation here). Other imputation techniques such as spline interpolation\footnote{Spline interpolation estimates missing values such that the curvature of the time series is minimized (need citation here).} were also considered. A last observation carried forward (LOCF) or a mean imputation do not make any sense in the setting of a vaccination rate, an increasing function. The differences between linear and spline interpolation are relatively minor in this specific application.
 
 \begin{table}[! htbp]\centering \caption{Predictors of selected countries}
 \label{table:summarystat}
@@ -627,18 +632,21 @@ There are however missing values for several countries. Sometimes these missing 
 \toprule\midrule
  & \thead{Poland}
  & \thead{Synthetic Poland} & \thead{Mean donor}\\ \midrule
-GDP per capita\tnote{a} & $12,810$ & $10,101.630$ & $12,081.670$ \\ 
-Influenza vaccination rate\tnote{b} & $0.104$ & $0.139$ & $0.182$ \\ 
-Population density\tnote{c} & $123.600$ & $73.798$ & $58.100$ \\ 
-Share with tertiary education\tnote{d} & $0.289$ & $0.277$ & $0.297$ \\
-Share of elderly\tnote{d} & $0.182$ & $0.207$ & $0.205$ \\ 
+GDP per capita\tnote{a} & $12,810$ & $15,642.287$ & $14,428.333$ \\ 
+Influenza vaccination rate\tnote{b} & $0.104$ & $0.133$ & $0.139$ \\ 
+Population density\tnote{c} & $123.600$ & $87.871$ & $79.667$ \\ 
+Share with tertiary education\tnote{d} & $0.289$ & $0.283$ & $0.286$ \\
+Share of elderly\tnote{d} & $0.182$ & $0.185$ & $0.198$ \\ 
+Trust in science\tnote{e} & $0.872$ & $0.895$ & $0.891$ \\ 
 \bottomrule
 \end{tabular}
 \begin{tablenotes}\footnotesize
 \item[a] in USD, 2020 (Eurostat)
-\item[b] 2019 (Eurostat)
+\item[b] among elderly (over 64), 2019 (Eurostat)
 \item[c] in persons per \(\text{km}^{2}\), 2019 (Eurostat)
-\item[d] 2020 (Eurostat)
+\item[d] over 64 years, 2020 (Eurostat)
+\item[e] 15 to 64 years, 2020 (Eurostat)
+\item[f] 2020 (Wellcome Global Monitor)
 \end{tablenotes}
 \end{threeparttable}
 \label{table2}
@@ -646,19 +654,18 @@ Share of elderly\tnote{d} & $0.182$ & $0.207$ & $0.205$ \\
 
 In order to find the best fit for the weights, additional predictors are used. The choice of these variables can be very important for the synthetic control. GDP per capita, the share of elderly (over 65), the share of people (15-64) with tertiary education, population density and the year of entry into the EU all adjust for general country specific differences, but partly also for differences in vaccine uptake. Income, age, education and the proximity to the nearest vaccination center (it is assumed that countries with higher population density have - on average - a closer proximity to vaccination centers) are all relevant determinants of COVID-19 vaccine uptake (\cite{viswanath_individual_2021}; need to check + possibly additional citation). The share of elderly vaccinated against Influenza and trust in science are possibly also important indicators of "vaccine openness". We would expect countries with higher Influenza vaccination rates (before the spread of COVID-19) also to have higher COVID-19 vaccination rates, since the population might generally be more open to the basic idea of vaccinations and that there might be a more sophisticated culture of health prevention (too unspecific). A similar reasoning applies to trust in science. When citizens generally place more confidence in scientists, they would also be more likely to be open to the idea of vaccinations. 
 
-Ideally, the use of a "political variable" would have been a good idea, since large differences in vaccine uptake exist across party preferences. This problem might be the most well-known in the US, but it also applies to other countries (citation here). When using other countries as a donor pool, it is however very difficult because of the large differences of party ideologies between countries. One idea would be to use the vote share for parties along the European parties/groups as in the European Parliament, firstly there are however quite large differences between parties within certain groups and secondly, elections and surveys are very volatile in many European countries compared to e.g. some US states (if left, need citations).
-
-
 \begin{table}[! htbp]\centering \caption{Composition of synthetic Poland}
 \label{table:weightssynth}
 \begin{threeparttable}
-\begin{tabular}{l c c c}
+\begin{tabular}{l c c c c c c c c c c}
 \toprule\midrule
-\thead{Country} & & & \thead{Weight}\\ \midrule
-Bulgaria & & & 0.460 \\ 
-Estonia & & & 0.001 \\ 
-Lithuania & & & 0.210 \\ 
-Hungary & & & 0.329 \\  
+\thead{Country} & & & & & & & & & & \thead{Weight}\\ \midrule
+Bulgaria & & & & & & & & & & 0.001 \\ 
+Czechia & & & & & & & & & & - \\
+Estonia & & & & & & & & & & - \\
+Latvia & & & & & & & & & & 0.269 \\ 
+Slovenia & & & & & & & & & & 0.248 \\ 
+Slovakia & & & & & & & & & & 0.482 \\  
 \bottomrule\addlinespace[1ex]
 \end{tabular}
 \end{threeparttable}
@@ -666,9 +673,12 @@ Hungary & & & 0.329 \\
 \end{table}
 
 
-\noindent The data analysis has been carried out in R using the \textit{tidysynth}, \textit{scpi} and \textit{SCtools} packages, generating synthetic Poland. Table 3.1 shows descriptive statistics of the predictors of Poland, synthetic Poland and the donor pool mean of the predictors. Table 3.2 presents the composition of synthetic Poland for the analysis of the share of fully vaccinated citizens with the respective unit weights. The data and R scripts can be found in the corresponding \href{https://github.com/benediktstelter/bachelor_thesis.git}{GitHub repository \ExternalLink}\footnote{See appendix for further information} \hspace{-0.1cm}.
+Ideally, the use of a "political variable" would have been a good idea, since large differences in vaccine uptake exist across party preferences. This problem might be the most well-known in the US, but it also applies to other countries (citation here). When using other countries as a donor pool, it is however very difficult because of the large differences of party ideologies between countries. One idea would be to use the vote share for parties along the European parties/groups as in the European Parliament, firstly there are however quite large differences between parties within certain groups and secondly, elections and surveys are very volatile in many European countries compared to e.g. some US states (if left, need citations). Also talk about trust in government here.
 
 
+
+
+\noindent The data analysis has been carried out in R using the \textit{tidysynth} and \textit{SCtools} packages, generating synthetic Poland. Table 3.1 shows descriptive statistics of the predictors of Poland, synthetic Poland and the donor pool mean of the predictors. Table 3.2 presents the composition of synthetic Poland for the analysis of the share of fully vaccinated citizens with the respective unit weights. The data and R scripts can be found in the corresponding \href{https://github.com/benediktstelter/bachelor_thesis.git}{GitHub repository \ExternalLink}\footnote{See appendix for further information} \hspace{-0.1cm}.
 
 
 

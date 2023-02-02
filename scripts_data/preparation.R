@@ -8,6 +8,14 @@ library(augsynth)
 
 library(extrafont) 
 
+#RDD analysis
+vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+vaccine$date <- as.Date(vaccine$date)
+rdd_pol <- vaccine[grep("Poland", vaccine$location), ]
+rdd_pol <- rdd_pol[, c(1:3,9) ]
+
+
+
 # link www.fontsquirrel.com/fonts/latin-modern-roman
 
 # execute once to add fonts:
@@ -202,8 +210,8 @@ dataprep.out <- dataprep(foo = poland_lottery,
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
                          controls.identifier = c(1,2,3,6,12,13),
-                         time.predictors.prior = c(18659:18772),
-                         time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                          unit.names.variable = "country")
 
 synth.out = synth(dataprep.out)
@@ -217,11 +225,12 @@ plot.df$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lotter
 path.plot(dataprep.res = dataprep.out, synth.res = synth.out,Xlab="Date",Ylab="Cumulative COVID-19 Cases",Main="Comparison of Synth vs. Actual Cum. COVID-19 Cases in Jena, Germany")
 
 # And we can add a vertical line where the treatment occurred.
-abline(v=18710,lty=2,col="red")
+abline(v=18771,lty=2,col="red")
 
 synth.tables <- synth.tab(
   dataprep.res = dataprep.out,
   synth.res = synth.out)
+print(synth.tables)
 
 gaps.plot(synth.res = synth.out,
           dataprep.res = dataprep.out,
