@@ -19,6 +19,7 @@ figsintext : yes
 
 geometry: margin=1in
 # References
+bibliography: thesis.bib
 biblio-style: apa #Select from https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
 biblio-title: "References"
 
@@ -565,12 +566,13 @@ The fulfillment of these assumptions/requirements will be further discussed in s
 
 \subsection*{Formal definition}
 
-What we observe is some outcome variable \(Y_{jt}\) for \(J + 1\) units from \(t=1\) to \(T\). The first unit (\(j = 1\)) is the treated unit for \(t>T_{0}\) while all other units are untreated units. The intervention (in this analysis the announcement of the lottery) occurs at \(T_{0}+1\), meaning that there are \(T_{0}\) pre-intervention time periods. We also observe \(k\) predictors, which include the pre-intervention outcome variable and additional covariates: \(X_{1j},...,X_{kj}\). These can be summarised by the vectors \(\mathbf{X}_{j}=(X_{1j},X_{2j},...,X_{kj})'\) for units \(j=1,...,J + 1\). It therefore follows that the \((k\times J)\) matrix \(\mathbf{X}_{0}=(\mathbf{X}_{2},\mathbf{X}_{3},...,\mathbf{X}_{J + 1})\) captures all the predictors of the untreated units\footnote{\(\mathbf{X}_0=
+What we observe is some outcome variable \(Y_{jt}\) for \(J + 1\) units from \(t=1\) to \(T\). The first unit (\(j = 1\)) is the treated unit for \(t>T_{0}\) while all other units are untreated units. The intervention (in this analysis the announcement of the lottery) occurs at \(T_{0}+1\), meaning that there are \(T_{0}\) pre-intervention time periods. We also observe \(k\) predictors, which include the pre-intervention observations of the outcome variable (\(Y_{j1},Y_{j2},...,Y_{jT_{0}}\)) and additional time invariant unit level characteristics \(\mathbf{Z}_{j}\) (covariates, as outlined in section 3.2). These \(k\) total predictors can be summarised by the vectors \(\mathbf{X}_{j}=(Y_{j1},Y_{j2},...,Y_{jT_{0}},\mathbf{Z}_{j}')'\) for units \(j=1,...,J + 1\). It therefore follows that the \((k\times J)\) matrix \(\mathbf{X}_{0}=(\mathbf{X}_{2},\mathbf{X}_{3},...,\mathbf{X}_{J + 1})\) captures all the predictors of the untreated units\footnote{\(\mathbf{X}_0=
 \begin{bmatrix}
-X_{12} & X_{13} & \dots & X_{1J+1}\\
-X_{22} & X_{23} & \dots & X_{2J+1}\\
+Y_{21} & Y_{31} & \dots & Y_{J+11}\\
+Y_{22} & Y_{32} & \dots & Y_{J+12}\\
 \vdots & \vdots & \ddots & \vdots\\
-X_{k2} & X_{k3} & \dots & X_{kJ + 1}
+Y_{2T_{0}} & Y_{3T_{0}} & \dots & Y_{J+1T_{0}}\\
+\mathbf{Z}_{2}' & \mathbf{Z}_{3}' & \dots & \mathbf{Z}_{J + 1}'
 \end{bmatrix}\)}.
 
 
@@ -578,17 +580,33 @@ The average treatment effect (causal effect) is defined as the difference betwee
 \begin{equation}
 \tau_{1t}=Y_{1t}^{I}-Y_{1t}^{N}\; \; \text{for}\; \; t>T_{0}
 \end{equation}
-By definition, the outcome with intervention is known and the outcome without intervention is hypothetical for \(t>T_{0}\) for the treated unit. Therefore, to estimate the causal effect, it is sufficient to estimate \(Y_{1t}^{N}\). How can this problem be solved? By \textcite{abadie_economic_2003}, the SCM proposes to use a weighted average of donor pool units as a synthetic control. The synthetic control is therefore defined as:
+By definition, the outcome with intervention is known and the outcome without intervention is hypothetical for \(t>T_{0}\) for the treated unit. Therefore, to estimate the causal effect, it is sufficient to estimate \(Y_{1t}^{N}\). How can this problem be solved? 
+
+The first straightforward idea might be to use a difference-and-difference with matching approach and choose the closest unit \(j^{*}\), the so-called best single control \parencite{doudchenko_balancing_2016}, which solves:
+\begin{equation}
+j^{*}=\text{arg}\; \min_{j>1}\vert\vert\mathbf{X}_{j}-\mathbf{X}_{1}\vert\vert
+\end{equation}
+Taking a difference then results in an estimator for the average treatment effect:
+\begin{equation}
+\hat{\tau}_{1t}=Y_{1t}^{I}-Y_{j^{*}t}
+\end{equation}
+Using a single control approach however does not seem like a desirable estimation technique. Firstly, in many cases (including the Polish lottery) a single control does not achieve a good pre-treatment fit, especially when cross-unit differences are relatively large. Secondly, a difference in difference approach requires the parallel trend assumption, which is very hard to justify. Parallel trend requires that in the absence of treatment, the difference between treatment and control group is constant over time (possibly cite here). In the application of the Polish vaccine lottery, this would mean that the difference in the vaccination rates of Poland and country \(j^{*}\), the closest unit pre-intervention, would be constant if there were no lottery. This does not seem realistic, since there are many different factors influencing vaccination rates in each country, thereby making changes in the difference relatively likely. 
+
+
+The synthetic control method developed by \textcite{abadie_economic_2003} proposes to use a weighted average of donor pool units as a synthetic control, thereby not experiencing the problems of a single control estimation (Synthetic control does not require parallel trend assumption). The synthetic control and the following estimator for the average treatment effect are therefore defined as:
 \begin{equation}
 \hat{Y}_{1t}^{N}=\sum_{j=2}^{J+1} w_{j}Y_{jt}
 \end{equation}
-The weights \(\mathbf{W}=(w_{2},w_{3},...,w_{J+1})'\) are chosen, such that the synthetic control matches as closely as possible the pre-intervention path of the predictors of the outcome variable for the treated unit. Therefore the weights have to be chosen so that they minimize this difference. The optimal weights \(\mathbf{W}^{\star}=(w_{2}^{\star},w_{3}^{\star},...,w_{J+1}^{\star})'\) solve:
 \begin{equation}
-\mathbf{W}=\text{arg}\; \min_{\mathbf{w}:w_{j}\in[0,1],\sum_{j=2}^{J+1} w_{j}=1}\vert\vert\mathbf{X}_{0}\mathbf{W}-\mathbf{X}_{1}\vert\vert
+\hat{\tau}_{1t}=Y_{1t}^{I}-\hat{Y}_{1t}^{N}
+\end{equation}
+The weights \(\mathbf{W}=(w_{2},w_{3},...,w_{J+1})'\) are chosen, such that the synthetic control matches as closely as possible the pre-intervention path of the predictors of the outcome variable for the treated unit (possibly cite). Therefore the weights have to be chosen so that they minimize this difference. The optimal weights \(\mathbf{W}^{\star}=(w_{2}^{\star},w_{3}^{\star},...,w_{J+1}^{\star})'\) solve:
+\begin{equation}
+\mathbf{W}^{*}=\text{arg}\; \min_{\mathbf{w}:w_{j}\in[0,1],\sum_{j=2}^{J+1} w_{j}=1}\vert\vert\mathbf{X}_{0}\mathbf{W}-\mathbf{X}_{1}\vert\vert
 \end{equation}
 
 (Potentially include factor model)
-This is subject to the weights being non-negative and summing up to one, an important assumption in the classic SCM. This assumption can be relaxed to allow for non-negative weights, in this thesis we will however keep it. We can therefore simply estimate the average treatment effect from (3.1) using these weights:
+This is subject to the weights being non-negative and summing up to one, an important assumption in the classic SCM. This assumption can be relaxed to allow for non-negative weights, in this thesis we will however keep it. We can therefore simply plug in these weights to obtain the estimated average treatment effect from (3.5):
 \begin{equation}
 \hat{\tau}_{1t}=Y_{1t}^{I}-\sum_{j=2}^{J+1} w_{j}^{\star}Y_{jt}\; \; \text{for}\; \; t>T_{0}
 \end{equation}
@@ -614,6 +632,14 @@ p=\frac{1}{J+1}\sum_{j=1}^{J+1}I_{+}(r_{j}-r_{1})
 where \(I_{+}(\cdot)\) is an indicator function that returns one for non-negative arguments and zero otherwise.
 
 
+\subsection*{Extensions}
+
+One possible extension, proposed by \textcite{doudchenko_balancing_2016}, is to allow for the weights of the synthetic control to be negative.
+
+
+Several extensions to to the classic SCM (outlined so far) have been proposed in the last years. \textcite{ben-michael_augmented_2021} have proposed an augmented synthetic control based on ridge regression, a regression technique which produces better results under multicollinearity (when predictor variables are correlated with each other). The augmented synthetic control is aimed at applications in which a sufficiently good pre-treatment fit cannot be achieved and a reduction of the following bias is desired.
+
+
 \section{Data}
 
 First, we will estimate an RDD model to estimate the effect of the lottery on COVID-19 cases in Poland, similar to the analysis by \textcite{kuznetsova_effectiveness_2022}. For this, time series data on COVID-19 cases by "Our world in data" will be utilized. 
@@ -621,7 +647,7 @@ First, we will estimate an RDD model to estimate the effect of the lottery on CO
 In the main synthetic control analysis, the impact of the policy on the vaccination rates will be investigated. Data for the outcome variable vaccination rate (both one vaccination and fully vaccinated) is taken from a data set created by "Our world in data" \parencite{mathieu_global_2021}. This data set is a collection of vaccination rates and other information about vaccinations from all countries of the world, coming directly from the respective government/government agency. If the data is provided by the governments, it can give us a daily time-series of vaccination rates around the world. 
 
 
-One of the most important aspects in the application of SCM is the choice of the donor pool. As outlined in 3.1, the treated country should not be an outlier compared to the control countries. It is therefore sensible to select countries that are similar to Poland, both in general and with respect to vaccination rates. Therefore, twelve central/eastern European countries with sufficient data availability (AT, BG, CZ, EE, GR, LV, LT, HR, HU, RO, SI, SK) are initial candidates for the donor pool. From this list, several countries are dropped who experienced similar interventions or shocks to the vaccination rate in the given time frame. Greece (cash incentive of 150€ for young people), Czechia (holiday incentive), Austria (need to find a reason here), Lithuania (cash incentive + other incentives), Romania (cash and lottery incentive). Estonia, Czechia and Slovenia implemented some small incentive schemes for doctors and state employees, these are however not considered as a big enough shock to vaccination rates and Estonia, Czechia and Slovenia will not be dropped. Croatia and Hungary are removed because of too many missing values, since a sensible trend can not be constructed using interpolation. Slovakia (nochmal checken) only reported weekly values, a reasonable interpolation was however possible. The donor pool then consists of six countries: Bulgaria, Czechia, Estonia, Latvia, Slovakia and Slovenia. 
+One of the most important aspects in the application of SCM is the choice of the donor pool. As outlined in 3.1, the treated country should not be an outlier compared to the control countries. It is therefore sensible to select countries that are similar to Poland, both in general and with respect to vaccination rates. Therefore, twelve central/eastern European countries with sufficient data availability (AT, BG, CZ, EE, GR, LV, LT, HR, HU, RO, SI, SK) are initial candidates for the donor pool. From this list, several countries are dropped who experienced similar interventions or shocks to the vaccination rate in the given time frame. Greece (cash incentive of 150€ for young people), Czechia (holiday incentive), Austria (need to find a reason here), Lithuania (cash incentive + other incentives), Romania (cash and lottery incentive). Estonia, Czechia and Slovenia implemented some small incentive schemes for doctors\footnote{Doctors were offered a cash incentive for a specific number of vaccinations} and state employees\footnote{Additional holiday}, these are however not considered as a big enough shock to vaccination rates and Estonia, Czechia and Slovenia will not be dropped. Croatia and Hungary are removed because of too many missing values, since a sensible trend can not be constructed using interpolation. Slovakia (nochmal checken) only reported weekly values, a reasonable interpolation was however possible. The donor pool then consists of six countries: Bulgaria, Czechia, Estonia, Latvia, Slovakia and Slovenia. 
 
 There are however missing values for several countries. Sometimes these missing values follow a specific pattern (e.g. Poland: values are missing on Sundays) while there is no specific pattern for some other countries. Linear interpolation is used to replace the missing values, by drawing a straight line between the two adjacent data points (citation here). Other imputation techniques such as spline interpolation\footnote{Spline interpolation estimates missing values such that the curvature of the time series is minimized (need citation here).} were also considered. A last observation carried forward (LOCF) or a mean imputation do not make any sense in the setting of a vaccination rate, an increasing function. The differences between linear and spline interpolation are relatively minor in this specific application.
 
@@ -673,12 +699,15 @@ Slovakia & & & & & & & & & & 0.482 \\
 \end{table}
 
 
-Ideally, the use of a "political variable" would have been a good idea, since large differences in vaccine uptake exist across party preferences. This problem might be the most well-known in the US, but it also applies to other countries (citation here). When using other countries as a donor pool, it is however very difficult because of the large differences of party ideologies between countries. One idea would be to use the vote share for parties along the European parties/groups as in the European Parliament, firstly there are however quite large differences between parties within certain groups and secondly, elections and surveys are very volatile in many European countries compared to e.g. some US states (if left, need citations). Also talk about trust in government here.
+Ideally, the use of a "political variable" would have been a good idea, since large differences in vaccine uptake exist across party preferences. This problem might be the most well-known in the US, but it also applies to other countries (citation here). When using other countries as a donor pool, it is however very difficult because of the large differences of party ideologies between countries. One idea would be to use the vote share for parties along the European parties/groups as in the European Parliament, firstly there are however quite large differences between parties within certain groups and secondly, elections and surveys are very volatile in many European countries compared to e.g. some US states (if left, need citations). 
+
+Another possible predictor which was considered is trust in government. The data on this is also available from the Wellcome Global Monitor. It is ultimately however not selected, for several reasons. Firstly, trust in government is often highly volatile. For example, if a very unpopular government is replaced by a new government, this might increase the trust into public sector dramatically in a very short time span. The problem of a comparably high volatility should be especially pronounced in a time of crisis like the COVID-19 pandemic, where temporarily very high/very low infection rates can lead to quick changes in public opinion. While there also exist deep-rooted cross-country differences in trust in government (e.g. possibly higher distrust in former soviet influenced countries compared to western countries (possibly need citation here)), the presence of the described volatility means that the variable trust in government will not be employed.
 
 
 
 
 \noindent The data analysis has been carried out in R using the \textit{tidysynth} and \textit{SCtools} packages, generating synthetic Poland. Table 3.1 shows descriptive statistics of the predictors of Poland, synthetic Poland and the donor pool mean of the predictors. Table 3.2 presents the composition of synthetic Poland for the analysis of the share of fully vaccinated citizens with the respective unit weights. The data and R scripts can be found in the corresponding \href{https://github.com/benediktstelter/bachelor_thesis.git}{GitHub repository \ExternalLink}\footnote{See appendix for further information} \hspace{-0.1cm}.
+
 
 
 
@@ -755,10 +784,9 @@ Pol_gap_plot
 ```
 \end{figure}
 
+We therefore applied the synthetic control method, as described in section 3.2. Figure 4.2 plots the vaccination rate (fully vaccinated) for both Poland and synthetic Poland. We observe a solid, but not perfect pre-treatment fit (too unspecific). After a short lag after the intervention (as expected), we can see a slow decoupling between Poland and its synthetic control. This difference continues increase to around 5 percentage points. As time progresses, the gap however tends to decrease again, and by the end of November (after the end of the lottery), the vaccination rates of Poland and synthetic Poland are back to the same level. Simply based on the plot, one interpretation could be that the lottery successfully induces some people who would have gotten vaccinated anyway to do this earlier, to take advantage of the incentive provided by the government. It however also suggests that the vaccine lottery was not particularly effective in reaching new people. It has to be noted that the more time has passed since the intervention, the synthetic control becomes more unreliable, as the prediction intervals in figure ... show. Therefore, the development in October and November should be interpreted with caution, but at first glance, it seems like the lottery was not successful in getting more people vaccinated, but only in getting people vaccinated earlier. 
 
-We therefore applied the synthetic control method, as described in section 3.2. Figure 4.2 plots the vaccination rate (fully vaccinated) for both Poland and synthetic Poland. We observe a solid, but not perfect pre-treatment fit (too unspecific). From the intervention, we can see a slow decoupling between Poland and its synthetic control. This difference continues increase to around 5 percentage points. As time progresses, the gap however tends to decrease again, and by the end of November (after the end of the lottery), the vaccination rates of Poland and synthetic Poland are back to the same level. Simply based on the plot, one interpretation could be that the lottery successfully induces some people who would have gotten vaccinated anyway to do this earlier, to take advantage of the incentive provided by the government. It however also suggests that the vaccine lottery was not particularly effective in reaching new people. It has to be noted that the more time has passed since the intervention, the synthetic control becomes more unreliable, as the prediction intervals in figure ... show. Therefore, the development in October and November should be interpreted with caution, but at first glance, it seems like the lottery was not successful in getting more people vaccinated, but only in getting people vaccinated earlier. 
-
-Employing the permutation based inference techniques discussed in section 4.1, also shows no signs of a significant effect. Figure ... presents the placebo study. As can be seen, the magnitude of the effect of Poland is not comparably high and does not stand out. This finding also confirmed quantitatively. Using the discussed test procedure, a p-value of around 0.5 is obtained. Therefore, the hypothesis that the lottery had no effect in increasing vaccination rates cannot be rejected, at any known/relevant significance level. The findings of the permutation based inference are therefore in line with the prediction intervals and do not suggest a statistically significant effect of the lottery on vaccination rates (fully vaccinated). 
+Employing the permutation based inference techniques discussed in section 4.1, also shows no signs of a significant effect. Figure ... presents the placebo study. As can be seen, the magnitude of the effect of Poland is not comparably high and does not stand out in any way. Actually, the effect of Poland is the least extreme of all of the selected units. This finding also confirmed quantitatively. Using the discussed test procedure, a \textit{p} value of 0.7143 is obtained. Therefore, the hypothesis that the lottery had no effect in increasing vaccination rates cannot be rejected, at any known/relevant significance level. 
 
 \begin{figure}[h]
 \caption{Placebo plot: Poland and control countries}
@@ -868,8 +896,40 @@ loo.plot
 
 \chapter{Discussion}
 
+What is the impact of vaccine lotteries on vaccination rates?
+The results of the analysis do not suggest a significant effect of the lottery on vaccination rates. One interpretation of the graph could be the fact that people who would have gotten vaccinated anyways decided to do this earlier to take advantage of the lottery.
+
+Besides many advantages, the synthetic control method itself also has some disadvantages and weaknesses \parencite{bouttell_synthetic_2018}. One advantage is that there is a lack of quantitative criteria for crucial requirements. As we have seen in section 3.1, the similarity of donor pool countries is a relevant criterion for a valid synthetic control, there is however no definition of what exactly means similarity. It is not uncommon that assumptions are hard to justify (e.g. instrumental variable approach (more specific)), but the argument of similarity can be made in many directions.
+Another possible problem in this respect is the judgement of the quality of the fit. There is no objective measure to evaluate the pre-treatment fit of a synthetic control, meaning that the evaluation is always subject to a possible bias of the researcher.
+
+
+There are several limitations of this application of the synthetic control method, making the estimated causal effect less valid.
+
+Firstly, the number of donor pool countries is relatively low. Therefore the number of combinations is obviously more limited compared to e.g. Ohio, where all other US States (minus states that experienced similar policies) can be selected for the donor pool. Similarly, in the analysis of Ohio's lottery, other (neighbouring) states are very similar to Ohio, both in general and with respect to vaccination rates. Although the donor pool countries in this thesis are not too different compared to Poland, cross-country differences are still larger than cross-state differences. Therefore the fit which is obtained from the constrained minimization is not perfect, albeit also not particularly bad.
+
+Secondly, a vaccine lottery might be too little of an intervention to be relevant for a synthetic control. After all, the effect that has been estimated for similar lotteries is often relatively low (e.g. \textcite{barber_conditional_2022}: 1.5\%). It might therefore be conceivable that the given policy in Poland is too little for a proper causal synthetic control analysis, since the effect of the intervention is not distinguishable from other relatively small shocks to the vaccination rate (e.g. some public figure speaking out against vaccination).
+
+Another possible limitation of this analysis are the imputed values. As explained in section 3.2, some countries in the donor pool had a lot of missing values, most importantly Slovakia, which only reported weekly values. Although the graphs resulting from the linear interpolation look reasonable, this might still have a negative effect on the credibility of the presented synthetic control.
+
+
+
+To summarize, it is therefore important to note that the causal interpretation of the given results should be done with caution, because of these outlined limitations. 
+
 
 \chapter{Conclusion}
+
+The COVID-19 pandemic has brought innovative policies into action. Among  them, vaccine lotteries.
+
+As we have seen, nudging and the use of economic incentives can be successful in inducing changes in individual health behaviour, for example by increasing physical activities. Lotteries and other incentives may have also contributed to increasing vaccination rates in the COVID-19 pandemic, for example in Ohio, whose vaccine lottery has been evaluated several times.
+
+In order to empirically assess the impact of vaccine lotteries on vaccination rates in this thesis, we examine a vaccine lottery implemented in Poland, from July 1, 2021 to September 30, 2021. The lottery consisted of cash and non-cash prizes of around 140 million PLN. To estimate the effect of this program on vaccination rates, the synthetic control method was selected. A synthetic Poland was constructed out of a donor pool of six other Eastern European countries.
+
+
+The main results show no signs of a statistically significant increase (\textit{p}-value: 0.7143) in the vaccination rate compared to the hypothetical scenario without the lottery on the long-term. It can however be observed that vaccination rates increase in the short-run, thereby possibly suggesting that people who would have gotten vaccinated anyways, may have chosen to do this earlier, as a result of the lottery.
+
+At the time of writing, there has been no study dealing in detail with this specific policy in Poland. This thesis therefore adds a new case study to the vast literature on COVID-19 vaccine lotteries, which has so far focused on such policies in the US.
+
+Are vaccine lotteries worth it? As discussed, the evidence on the effectiveness is mixed. When keeping in mind the costs of such a policy, it might even be a better idea to provide incentives at the local level, on a smaller scale. After all, a beer without a flaw, is sometimes better than a random draw.
 
  
 

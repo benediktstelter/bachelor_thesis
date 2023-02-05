@@ -11,9 +11,17 @@
 
 \documentclass{scrbook}
 
+\input{settings.tex}
+
+
 $if(highlighting-macros)$
 $highlighting-macros$
 $endif$
+
+
+
+\addbibresource{$bibliography$}
+
 
 \usepackage{tikz}
 
@@ -55,7 +63,6 @@ $endif$
 
 %% Alle wichtigen Einstellungen sind in der Datei einstellungen.tex getätigt
 %% und können dort verändert werden.
-\input{settings.tex}
 
 \begin{document}
 	
@@ -128,6 +135,7 @@ $body$
 
  
 \backmatter
+
 
  
 $if(bibliography)$
