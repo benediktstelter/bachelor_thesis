@@ -2,7 +2,7 @@
 title: "The impact of vaccine lotteries on COVID-19 vaccination rates: Evidence from Poland"
 author: "Benedikt Stelter"
 date: "17/03/2023"
-supervisor: "Prof. Achim Wambach, PhD / Sabrina Schubert"
+supervisor: "Prof. Achim Wambach, PhD"
 
 
 
@@ -439,6 +439,127 @@ plot.df.eld$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lo
 
 
 
+#Leave one out country plot
+
+dataprep.out.co1 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(2,3,6,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co1 = synth(dataprep.out.co1)
+
+synth_data_out.co1 = data.frame(dataprep.out.co1$Y0plot%*%synth.out.co1$solution.w) 
+date = as.numeric(row.names(synth_data_out.co1))
+plot.df.co1 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co1$synth = synth_data_out.co1$w.weight
+plot.df.co1$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+
+dataprep.out.co2 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,3,6,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co2 = synth(dataprep.out.co2)
+
+
+synth_data_out.co2 = data.frame(dataprep.out.co2$Y0plot%*%synth.out.co2$solution.w) 
+date = as.numeric(row.names(synth_data_out.co2))
+plot.df.co2 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co2$synth = synth_data_out.co2$w.weight
+plot.df.co2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+dataprep.out.co3 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,6,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co3 = synth(dataprep.out.co3)
+
+synth_data_out.co3 = data.frame(dataprep.out.co3$Y0plot%*%synth.out.co3$solution.w) 
+date = as.numeric(row.names(synth_data_out.co3))
+plot.df.co3 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co3$synth = synth_data_out.co3$w.weight
+plot.df.co3$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+
+dataprep.out.co6 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,3,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co6 = synth(dataprep.out.co6)
+
+
+synth_data_out.co6 = data.frame(dataprep.out.co6$Y0plot%*%synth.out.co6$solution.w) 
+date = as.numeric(row.names(synth_data_out.co6))
+plot.df.co6 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co6$synth = synth_data_out.co6$w.weight
+plot.df.co6$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+
+dataprep.out.co12 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,3,6,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co12 = synth(dataprep.out.co12)
+
+synth_data_out.co12 = data.frame(dataprep.out.co12$Y0plot%*%synth.out.co12$solution.w) 
+date = as.numeric(row.names(synth_data_out.co12))
+plot.df.co12 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co12$synth = synth_data_out.co12$w.weight
+plot.df.co12$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+dataprep.out.co13 <- dataprep(foo = poland_lottery, 
+                              predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                              predictors.op = "mean",
+                              dependent = "twodoses", unit.variable = "countryid",
+                              time.variable = "date2", treatment.identifier = 10,
+                              controls.identifier = c(1,2,3,6,12),
+                              time.predictors.prior = c(18659:18771),
+                              time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                              unit.names.variable = "country")
+
+synth.out.co13 = synth(dataprep.out.co13)
+
+
+synth_data_out.co13 = data.frame(dataprep.out.co13$Y0plot%*%synth.out.co13$solution.w) 
+date = as.numeric(row.names(synth_data_out.co13))
+plot.df.co13 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co13$synth = synth_data_out.co13$w.weight
+plot.df.co13$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
 
 ```
 
@@ -741,7 +862,7 @@ Pol_desc_plot
 
 
 \begin{figure}[h]
-\caption{Vaccination rates (fully vaccinated) and the gap between Poland and synthetic Poland}
+\caption{Synthetic control for the share of fully vaccinated in Poland}
 ```{r fig.asp = 0.45, fig.showtext=TRUE, fig.width = 5.8, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
 synth_data_out = data.frame(dataprep.out$Y0plot%*%synth.out$solution.w) 
 date = as.numeric(row.names(synth_data_out))
@@ -759,8 +880,10 @@ SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,color="Poland")) + geom_line(li
   scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
   zew_plotstyle() +
   theme(legend.position = c(0.85, 0.45),
+        plot.title = element_text(hjust = 0.5),
         legend.background = element_rect(fill = "white", color = "black", size = 1),
-        axis.title.y = element_blank(),axis.title.x = element_blank())
+        axis.title.y = element_blank(),axis.title.x = element_blank()) +
+  labs(title = "Panel A: Vaccination rates of Poland and Synthetic Poland")
 SCM_plot
 
 
@@ -774,10 +897,12 @@ Pol_gap_plot <- ggplot(plotgap.df,aes(y=gap,x=date,group=1,linetype="solid")
   xlab(expression(bold(paste("Date in 2021")))) +  
   geom_hline(yintercept = 0, color = "black", size = 1) + 
   theme(axis.line.x = element_line(colour = "grey70", size = 0.2, linetype = 3),
+        plot.title = element_text(hjust = 0.5),
         legend.position = "none", axis.title.y = element_blank()) +
   labs(caption = "The two dashed lines refer to the announcement (25/05) and the end (30/09) of the lottery.") +
   geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
-  geom_vline(xintercept=18900,color="black",linetype=2,size=1)
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) +
+  labs(title = "Panel B: Gap between Poland and Synthetic Poland")
 
 Pol_gap_plot
 
@@ -832,13 +957,14 @@ SCM_plot.tc <- ggplot(plot.df.tc,aes(y=twodoses,x=date,color="Poland")) + geom_l
   scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
   zew_plotstyle() +
   theme(legend.position = c(0.85, 0.45),
+        plot.title = element_text(hjust = 0.5),
         legend.background = element_rect(fill = "white", color = "black", size = 1),
         axis.title.y = element_blank(),axis.title.x = element_blank()) +
   annotate(geom="text", x=as.Date("2021-04-01"), y=0.4, label="The time of intervention is \nchanged to July 1",
            color="black", family= "Latin Modern Roman 10") +
   annotate("segment", x = as.Date("2021-05-31"), xend = as.Date("2021-06-25"), y = 0.4, 
            yend = 0.4, colour = "black", size = 0.2, arrow = arrow(angle = 25, 
-           length = unit(.25,"cm")))
+           length = unit(.25,"cm")))  + labs(title = "Panel A: Start of lottery as time of intervention")
 SCM_plot.tc
 
 SCM_plot.tcb <- ggplot(plot.df.tcb,aes(y=twodoses,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
@@ -850,22 +976,21 @@ SCM_plot.tcb <- ggplot(plot.df.tcb,aes(y=twodoses,x=date,color="Poland")) + geom
   scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
   zew_plotstyle() +
   theme(legend.position = 'none',
+        plot.title = element_text(hjust = 0.5),
         legend.background = element_rect(fill = "white", color = "black", size = 1),
         axis.title.y = element_blank()) +
   annotate(geom="text", x=as.Date("2021-08-01"), y=0.1, label="The time of intervention is \nchanged to April 25",
            color="black", family= "Latin Modern Roman 10") +
   annotate("segment", x = as.Date("2021-05-31"), xend = as.Date("2021-04-29"), y = 0.1, 
            yend = 0.1, colour = "black", size = 0.2, arrow = arrow(angle = 25, 
-                                                                   length = unit(.25,"cm")))
+                                                                   length = unit(.25,"cm"))) +
+  labs(title = "Panel B: One month prior to announcement as time of intervention")
 SCM_plot.tcb
 
 ```
 \end{figure}
 
 Another way of changing the time of intervention is backdating, meaning that the synthetic control is estimated using an arbitrary earlier intervention time. If the synthetic control is robust, we expect no drastic changes from the baseline result in figure 4.1. We therefore construct a new synthetic control, with a "fictional" intervention time one month earlier (April 25) than the actual investigation time. As observable in the lower panel of figure 4.4, the changes are also not too large, with the new synthetic control still tracking the path of actual Poland until the actual intervention occurs relatively well. We therefore conclude that this synthetic control is indeed robust to changes to the time of intervention. This finding also confirms that we do not suffer from an anticipation effect.
-
-
-Another possible robustness check is to leave out certain predictors or countries. With a relatively low number of predictors and donor pool countries, the effects of such a robustness check could potentially be larger in this setting. Figure 4.5 presents the result of a leave-one-out analysis of synthetic poland, leaving out all of predictors once, while keeping the others in. The synthetic control is not very robust, with predictors being especially important to the robustness of the synthetic control, while the three other predictors only take on a minor weight and therefore are not as important to the robustness of the synthetic control. Overall, the result is not surprising, since only a total of 6 predictors are used.
 
 
 \begin{figure}[h]
@@ -879,19 +1004,45 @@ loo.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_
   geom_line(plot.df.eld, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
   geom_line(plot.df.trst, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
   geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  ylim(0, 0.6) +
   geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
   geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
-  xlab(expression(bold(paste("Date in 2021")))) +
   scale_color_manual(name="Countries",
                      values = c( "Poland" = "#527ca4" , "Synthetic Poland"="#b4be28",
                                  "Leave-one-out" = 'grey')) +
   zew_plotstyle() + theme(axis.title.y = element_blank(),
-                          legend.position = c(0.85, 0.35),
-                          legend.background = element_rect(fill = "white", color = "black", size = 1),)
+                          axis.title.x = element_blank(),
+                          plot.title = element_text(hjust = 0.5),
+                          legend.position = c(0.85, 0.28),
+                          legend.background = element_rect(fill = "white", color = "black", size = 1),) + labs(title = "Panel A: Leave-one-out synthetic controls (Predictors)")
 
 loo.plot
+
+looc.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_line(linetype="solid",size=1) +
+  geom_line(plot.df.co1, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co2, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co3, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co6, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co12, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co13, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=1) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +
+  ylim(0, 0.6) +
+  scale_color_manual(name="Countries",
+                     values = c( "Poland" = "#527ca4" , "Synthetic Poland"="#b4be28",
+                                 'Leave-one-out' = 'grey')) +
+  zew_plotstyle() + theme(axis.title.y = element_blank(),
+                          plot.title = element_text(hjust = 0.5),
+                          legend.position = "none",
+                          legend.background = element_rect(fill = "white", color = "black", size = 1),) + labs(title = "Panel B: Leave-one-out synthetic control (Countries)")
+
+looc.plot
 ```
 \end{figure}
+
+Another possible robustness check is to leave out certain predictors or countries. With a relatively low number of predictors and donor pool countries, the effects of such a robustness check could potentially be larger in this setting. Figure 4.5 presents the result of a leave-one-out analysis of synthetic Poland, leaving out all of the predictors once, while keeping the others in, with the same with donor pool countries (solving the constrained minimization with only five countries). The synthetic control is not very robust with respect to the predictors, with three predictors being especially important to the robustness of the synthetic control, while the three other predictors only take on a minor weight and therefore are not as important to the robustness of the synthetic control. The same can be said with respect to the countries, where 3 countries received 3 larger weights in the original synthetic control. Therefore, leaving one out of these three countries also has a relatively large effect. Overall, the result is not surprising, since only a total of 6 predictors and 6 donor pool countries are used and the differences in the vaccination rates across donor pool countries are not to be underestimated.
 
 
 \chapter{Discussion}

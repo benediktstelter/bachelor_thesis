@@ -587,7 +587,7 @@ plot.df.eld$synth = synth_data_out.eld$w.weight
 plot.df.eld$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
 
 
-loo.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_line(linetype="solid",size=1) +
+loov.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_line(linetype="solid",size=1) +
   geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=1) +
   geom_line(plot.df.gdp, mapping=aes(x=date,y=synth,color='Leave-one-out Synthetic Poland'),size=0.6)+
   geom_line(plot.df.infz, mapping=aes(x=date,y=synth,color='Leave-one-out Synthetic Poland'),size=0.6)+
@@ -605,4 +605,148 @@ loo.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_
                           legend.position = c(0.85, 0.3),
                           legend.background = element_rect(fill = "white", color = "black", size = 1),)
 
-loo.plot
+loov.plot
+
+#LOO country plot
+
+dataprep.out.co1 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(2,3,6,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co1 = synth(dataprep.out.co1)
+
+synth_data_out.co1 = data.frame(dataprep.out.co1$Y0plot%*%synth.out.co1$solution.w) 
+date = as.numeric(row.names(synth_data_out.co1))
+plot.df.co1 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co1$synth = synth_data_out.co1$w.weight
+plot.df.co1$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+
+dataprep.out.co2 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,3,6,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co2 = synth(dataprep.out.co2)
+
+
+synth_data_out.co2 = data.frame(dataprep.out.co2$Y0plot%*%synth.out.co2$solution.w) 
+date = as.numeric(row.names(synth_data_out.co2))
+plot.df.co2 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co2$synth = synth_data_out.co2$w.weight
+plot.df.co2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+dataprep.out.co3 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,6,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co3 = synth(dataprep.out.co3)
+
+synth_data_out.co3 = data.frame(dataprep.out.co3$Y0plot%*%synth.out.co3$solution.w) 
+date = as.numeric(row.names(synth_data_out.co3))
+plot.df.co3 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co3$synth = synth_data_out.co3$w.weight
+plot.df.co3$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+
+dataprep.out.co6 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,3,12,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co6 = synth(dataprep.out.co6)
+
+
+synth_data_out.co6 = data.frame(dataprep.out.co6$Y0plot%*%synth.out.co6$solution.w) 
+date = as.numeric(row.names(synth_data_out.co6))
+plot.df.co6 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co6$synth = synth_data_out.co6$w.weight
+plot.df.co6$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+
+dataprep.out.co12 <- dataprep(foo = poland_lottery, 
+                         predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                         predictors.op = "mean",
+                         dependent = "twodoses", unit.variable = "countryid",
+                         time.variable = "date2", treatment.identifier = 10,
+                         controls.identifier = c(1,2,3,6,13),
+                         time.predictors.prior = c(18659:18771),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         unit.names.variable = "country")
+
+synth.out.co12 = synth(dataprep.out.co12)
+
+synth_data_out.co12 = data.frame(dataprep.out.co12$Y0plot%*%synth.out.co12$solution.w) 
+date = as.numeric(row.names(synth_data_out.co12))
+plot.df.co12 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co12$synth = synth_data_out.co12$w.weight
+plot.df.co12$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+dataprep.out.co13 <- dataprep(foo = poland_lottery, 
+                              predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                              predictors.op = "mean",
+                              dependent = "twodoses", unit.variable = "countryid",
+                              time.variable = "date2", treatment.identifier = 10,
+                              controls.identifier = c(1,2,3,6,12),
+                              time.predictors.prior = c(18659:18771),
+                              time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                              unit.names.variable = "country")
+
+synth.out.co13 = synth(dataprep.out.co13)
+
+
+synth_data_out.co13 = data.frame(dataprep.out.co13$Y0plot%*%synth.out.co13$solution.w) 
+date = as.numeric(row.names(synth_data_out.co13))
+plot.df.co13 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df.co13$synth = synth_data_out.co13$w.weight
+plot.df.co13$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+looc.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom_line(linetype="solid",size=1) +
+  geom_line(plot.df.co1, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co2, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co3, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co6, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co12, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(plot.df.co13, mapping=aes(x=date,y=synth,color='Leave-one-out'),size=0.6)+
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=1) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=1) + 
+  xlab(expression(bold(paste("Date in 2021")))) +
+  ylim(0, 0.65) +
+  scale_color_manual(name="Countries",
+                     values = c( "Poland" = "#527ca4" , "Synthetic Poland"="#b4be28",
+                                 'Leave-one-out' = 'grey')) +
+  zew_plotstyle() + theme(axis.title.y = element_blank(),
+                          plot.title = element_text(hjust = 0.5),
+                          legend.position = c(0.85, 0.3),
+                          legend.background = element_rect(fill = "white", color = "black", size = 1),) + labs(title = "Panel B: Leave-one-out synthetic control (Countries)")
+
+looc.plot

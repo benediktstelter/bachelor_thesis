@@ -84,7 +84,7 @@ rates: Evidence from Poland}\\[1.8cm]
 \vfill
 
 \noindent submitted to:\\
-Prof.~Achim Wambach, PhD / Sabrina Schubert\\[1cm]
+Prof.~Achim Wambach, PhD\\[1cm]
 submitted by:\\
 Benedikt Stelter\\[1cm]
 Student ID: 1731015\\
@@ -101,13 +101,11 @@ Mannheim, 17/03/2023
   \tableofcontents
 
 %% Abkürzungsverzeichnis
-\chapter*{Abkürzungsverzeichnis}\label{av}
-\addcontentsline{toc}{chapter}{Abkürzungsverzeichnis}
-\markboth{Abkürzungsverzeichnis}{Abkürzungsverzeichnis}
+\chapter*{List of Abbreviations}\label{av}
+\addcontentsline{toc}{chapter}{List of Abbreviations}
+\markboth{List of Abbreviations}{List of Abbreviations}
 \begin{tabular}{ll}
-ABC & Erläuterung 1 \\
-DEF & Erläuterung 2\\
-GHJ & Erläuterung 3\\
+SCM & Synthetic control method\\
 \end{tabular}
 
 %% Abbildungsverzeichnis
@@ -116,16 +114,7 @@ GHJ & Erläuterung 3\\
 %% Tabellenverzeichnis
 \listoftables
 
-%% Symbolverzeichnis
-\chapter*{Symbolverzeichnis}\label{sv}
-\addcontentsline{toc}{chapter}{Symbolverzeichnis}
-\markboth{Symbolverzeichnis}{Symbolverzeichnis}
-\begin{tabular}{ll}
-Symbol 1 & Erläuterung 1 \\
-Symbol 2 & Erläuterung 2\\
-Symbol 3 & Erläuterung 3\\
-\end{tabular}
- 
+
 \mainmatter
 
 \chapter{Introduction}
@@ -771,7 +760,7 @@ lotteries on vaccination rates is generally not very large, as outlined
 in section 2.1.
 
 \begin{figure}[h]
-\caption{Vaccination rates (fully vaccinated) and the gap between Poland and synthetic Poland}
+\caption{Synthetic control for the share of fully vaccinated in Poland}
 
 \begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-3-1} \end{center}
 
@@ -855,23 +844,34 @@ therefore conclude that this synthetic control is indeed robust to
 changes to the time of intervention. This finding also confirms that we
 do not suffer from an anticipation effect.
 
-Another possible robustness check is to leave out certain predictors or
-countries. With a relatively low number of predictors and donor pool
-countries, the effects of such a robustness check could potentially be
-larger in this setting. Figure 4.5 presents the result of a
-leave-one-out analysis of synthetic poland, leaving out all of
-predictors once, while keeping the others in. The synthetic control is
-not very robust, with predictors being especially important to the
-robustness of the synthetic control, while the three other predictors
-only take on a minor weight and therefore are not as important to the
-robustness of the synthetic control. Overall, the result is not
-surprising, since only a total of 6 predictors are used.
-
 \begin{figure}[h]
 \caption{Leave-one-out synthetic controls of Poland}
 
 \begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
+
+
+
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-2} \end{center}
 \end{figure}
+
+Another possible robustness check is to leave out certain predictors or
+countries. With a relatively low number of predictors and donor pool
+countries, the effects of such a robustness check could potentially be
+larger in this setting. Figure 4.5 presents the result of a
+leave-one-out analysis of synthetic Poland, leaving out all of the
+predictors once, while keeping the others in, with the same with donor
+pool countries (solving the constrained minimization with only five
+countries). The synthetic control is not very robust with respect to the
+predictors, with three predictors being especially important to the
+robustness of the synthetic control, while the three other predictors
+only take on a minor weight and therefore are not as important to the
+robustness of the synthetic control. The same can be said with respect
+to the countries, where 3 countries received 3 larger weights in the
+original synthetic control. Therefore, leaving one out of these three
+countries also has a relatively large effect. Overall, the result is not
+surprising, since only a total of 6 predictors and 6 donor pool
+countries are used and the differences in the vaccination rates across
+donor pool countries are not to be underestimated.
 
 \chapter{Discussion}
 
