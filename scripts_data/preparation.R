@@ -4,7 +4,14 @@ library(Synth)
 library(SCtools)
 library(augsynth)
 
+install.packages("AER")
+install.packages("car")
+install.packages("rdd")
+install.packages("rdd", repos=NULL, type="source")
 
+install.packages('rddtools')
+
+library(rdd)
 
 library(extrafont) 
 
@@ -13,6 +20,17 @@ vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master
 vaccine$date <- as.Date(vaccine$date)
 rdd_pol <- vaccine[grep("Poland", vaccine$location), ]
 rdd_pol <- rdd_pol[, c(1:3,9) ]
+rdd_pol$date <- as.Date(rdd_pol$date)
+rdd_pol <- subset(rdd_pol, date >= as.Date("2021-02-01") & date <= as.Date("2021-11-30"))
+
+Pol_daily <- ggplot(rdd_pol,aes(y=daily_vaccinations,x=date,group=1,linetype="solid")) + 
+  geom_line(size=1, colour="#527ca4") + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
+  zew_plotstyle() + theme(legend.position = "none")
+
+Pol_daily
+
 
 
 

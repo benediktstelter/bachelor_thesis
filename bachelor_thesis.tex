@@ -100,13 +100,6 @@ Mannheim, 17/03/2023
 
   \tableofcontents
 
-%% Abkürzungsverzeichnis
-\chapter*{List of Abbreviations}\label{av}
-\addcontentsline{toc}{chapter}{List of Abbreviations}
-\markboth{List of Abbreviations}{List of Abbreviations}
-\begin{tabular}{ll}
-SCM & Synthetic control method\\
-\end{tabular}
 
 %% Abbildungsverzeichnis
 \listoffigures
@@ -724,7 +717,7 @@ citation here)), the presence of the described volatility means that the
 variable trust in government will not be employed.
 
 \noindent The data analysis has been carried out in R using the
-\textit{tidysynth} and \textit{SCtools} packages, generating synthetic
+\textit{synth} and \textit{SCtools} packages, generating synthetic
 Poland. Table 3.1 shows descriptive statistics of the predictors of
 Poland, synthetic Poland and the donor pool mean of the predictors.
 Table 3.2 presents the composition of synthetic Poland for the analysis
@@ -881,7 +874,29 @@ lottery on vaccination rates. One interpretation of the graph could be
 the fact that people who would have gotten vaccinated anyways decided to
 do this earlier to take advantage of the lottery.
 
-Besides many advantages, the synthetic control method itself also has
+Applying the synthetic control method in comparative case studies offers
+many advantages \parencite{abadie_using_2021}. Firstly the fit of the
+synthetic control is very transparent. A graph of the actual unit and
+its synthetic control and a table such as table 3.1, which presents the
+predictors of actual and synthetic Poland clearly show the differences
+between the two units, allowing for a straightforward evaluation of
+whether the use of a synthetic control is appropriate in this
+application. Transparency is also an advantage with respect to the
+composition of the synthetic control unit. A clear list of the different
+weights provides the opportunity to assess the fulfillment of some of
+the requirements of the synthetic control, e.g.~the spillover effect.
+For example, the problem of a possible spillover effect could be
+disregarded, when the country this might apply to has a weight of 0 or
+very close to 0. Another advantage might be that only pre-intervention
+outcomes are used to construct the synthetic control unit. This means
+that it
+might\footnote{It is of course still possible to compare the results of different specifications and select the specification which is "preferred".}
+prevent researchers from changing the specifications of the synthetic
+control, for example donor pool countries or covariates, to achieve a
+certain result (e.g.~a significant result (\textit{p}-Hacking)), after
+initially constructing it.
+
+Besides these advantages, the synthetic control method itself also has
 some disadvantages and weaknesses \parencite{bouttell_synthetic_2018}.
 One advantage is that there is a lack of quantitative criteria for
 crucial requirements. As we have seen in section 3.1, the similarity of
@@ -905,30 +920,48 @@ similar policies) can be selected for the donor pool. Similarly, in the
 analysis of Ohio's lottery, other (neighbouring) states are very similar
 to Ohio, both in general and with respect to vaccination rates. Although
 the donor pool countries in this thesis are not too different compared
-to Poland, cross-country differences are still larger than cross-state
-differences. Therefore the fit which is obtained from the constrained
-minimization is not perfect, albeit also not particularly bad.
+to
+Poland\footnote{See table 3.1 for a comparison between Poland and the average of the donor pool},
+cross-country differences are still larger than cross-state differences.
+Therefore the fit which is obtained from the constrained minimization is
+not perfect, albeit also not particularly bad.
 
 Secondly, a vaccine lottery might be too little of an intervention to be
-relevant for a synthetic control. After all, the effect that has been
-estimated for similar lotteries is often relatively low
-(e.g.~\textcite{barber_conditional_2022}: 1.5\%). It might therefore be
-conceivable that the given policy in Poland is too little for a proper
-causal synthetic control analysis, since the effect of the intervention
-is not distinguishable from other relatively small shocks to the
-vaccination rate (e.g.~some public figure speaking out against
-vaccination).
+relevant for a synthetic control. After all, the effect on vaccination
+rates that has been estimated for similar lotteries is often relatively
+low (e.g.~\textcite{barber_conditional_2022}: 1.5\%). Poland's lottery
+offers more prizes, but a lower main prize than some lotteries in North
+America. It might therefore be conceivable that the effect of the given
+policy in Poland is too small for a causal synthetic control analysis,
+since the effect of the intervention is not distinguishable from other
+relatively small shocks to the vaccination rate (e.g.~some public figure
+speaking out against vaccination).
 
 Another possible limitation of this analysis are the imputed values. As
 explained in section 3.2, some countries in the donor pool had a lot of
 missing values, most importantly Slovakia, which only reported weekly
-values. Although the graphs resulting from the linear interpolation look
-reasonable, this might still have a negative effect on the credibility
-of the presented synthetic control.
+values and takes up the largest weight of Synthetic Poland. Although the
+graphs resulting from the linear interpolation look reasonable, this
+might still have a negative effect on the credibility of the presented
+synthetic control, as such differences can cause changes in the chosen
+weights of the synthetic control.
+
+There are however also requirements of the synthetic control which this
+application should clearly fulfill. Firstly, we do not observe a sign of
+an anticipation effect, as seen in chapter 4. Secondly, the possibility
+of spillover effects: We do not observe any spillover effects of this
+lottery. Since we removed countries who adopted similar incentive
+policies, no country in the donor pool has adopted such a policy with
+Poland as a role model. Additionally, since we have shown that the
+lottery did not strongly increase vaccination rates in Poland, we also
+do not expect a general positive example of Poland in terms of an
+increased vaccination rate on other Eastern European countries.
 
 To summarize, it is therefore important to note that the causal
 interpretation of the given results should be done with caution, because
-of these outlined limitations.
+of these outlined limitations. This specific application is however also
+not particularly bad and not one of the worst applications of the
+synthetic control method (change sentence).
 
 \chapter{Conclusion}
 
@@ -965,8 +998,8 @@ far focused on such policies in the US.
 Are vaccine lotteries worth it? As discussed, the evidence on the
 effectiveness is mixed. When keeping in mind the costs of such a policy,
 it might even be a better idea to provide incentives at the local level,
-on a smaller scale. After all, a beer without a flaw, is sometimes
-better than a random draw.
+on a smaller scale. After all, a beer without a flaw, is better than a
+random draw, a license for fishing, trumps a month of wishing.
 
 
  
