@@ -56,6 +56,7 @@
 \renewcommand\theadfont{\bfseries}
 \usepackage{threeparttable}
 
+\counterwithout{footnote}{chapter}
 
 
 %% Alle wichtigen Einstellungen sind in der Datei einstellungen.tex getätigt
@@ -84,7 +85,7 @@ rates: Evidence from Poland}\\[1.8cm]
 \vfill
 
 \noindent submitted to:\\
-Prof.~Achim Wambach, PhD\\[1cm]
+Prof.~Achim Wambach, PhD / Sabrina Schubert\\[1cm]
 submitted by:\\
 Benedikt Stelter\\[1cm]
 Student ID: 1731015\\
@@ -112,7 +113,54 @@ Mannheim, 17/03/2023
 
 \chapter{Introduction}
 
-\newpage\null\thispagestyle{empty}\newpage
+In March 2020, the world came to a sudden stop due to the spread of
+COVID-19. Surprisingly quick, the way out of this public health crisis
+came in the form of vaccines. Globally, the COVID-19 vaccine was one of
+the most important and hotly contested topics of 2021, demonstrated by
+Google
+Trends\footnote{see \url{https://trends.google.de/trends/yis/2021/GLOBAL/}},
+which places the COVID vaccine as the 3rd most searched (more specific)
+news story of the entire year. However, for various reasons, a
+reluctancy to get vaccinated has been observed across countries. From
+beer to bratwurst and fishing license to lotteries: Governments have
+faced the challenge to find (new) ways of incentivising their citizens,
+beyond the promise of increased freedom. A vaccine lottery, in the
+context of this thesis, refers to a lottery with cash or non-cash
+prizes, in which vaccinated people could participate at no additional
+cost, thereby acting as a possible reward for vaccination. The hope of
+policymakers was that this would lead to more people getting vaccinated,
+increasing the total vaccination rate of the population.
+
+This thesis therefore investigates the question: What is the effect of
+vaccine lotteries on the share of the population vaccinated against
+COVID-19? The empirical analysis using a vaccine lottery in Poland finds
+no evidence for a significant increase in the share of the population
+fully vaccinated against COVID-19. It however suggests that it might
+have incentivized some people who would have gotten vaccinated anyway to
+do this earlier, to take advantage of the lottery, thereby temporarily
+increasing the vaccination rate by around 6 percentage points.
+Definition of vaccine lottery.
+
+In order to to spur the slow-moving national vaccination campaign, the
+Polish government announced the lottery on May 25,
+2021\footnote{This was around five months after the authorisation of the first COVID-19 vaccines in the EU and the subsequent start of the Polish vaccination campaign.}.
+It was open from July 1, 2021 until September 30, 2021. The main price
+of the lottery was a cash price of one million PLN, but it also included
+smaller cash and non-cash prizes and a lottery-like incentive scheme for
+municipalities. The empirical analysis was conducted using the synthetic
+control method, a relatively new and popular method for comparative case
+studies. Out of a donor pool of 6 other Eastern European countries and
+using additional predictor variables, a synthetic control unit
+(``Synthetic Poland'') was constructed to evaluate the average treatment
+effect (causal effect) of the policy. Daily data on vaccination rates,
+published by the respective governments/government agencies and prepared
+by ``Our World in Data'' and additional data from Eurostat and the
+``Wellcome Global Monitor'' were exploited for the analysis.
+
+As will be seen, there is already a large literature on COVID-19 vaccine
+lotteries, especially in North America. So far, there has however been
+no study evaluating the Polish vaccine lottery in detail. This thesis
+therefore provides a new case study to the existing literature.
 
 \chapter{Background}
 
@@ -267,19 +315,30 @@ on an ARIMA approach, the authors suggest a slight positive effect of
 this lottery. There has however not been a study dealing in detail with
 the Polish lottery yet.
 
-\subsection{Theoretical background}
-
-Possibly to add
-
 \section{Institutional background}
 
 The COVID-19 policies in Poland (especially with respect to vaccines)
 can be considered as relatively ``relaxed''. Poland did not widely use
 the EU COVID passport with respect to social life (citation here).
-Instead, it was only used for travelling/entry into the country.
-Vaccination rates in Poland have been low compared to some western
-European countries, including neighbour Germany. In the context of
-eastern Europe, vaccination rates have however not been exceptionally
+Instead, it was only used for travelling/entry into the country. The
+Polish vaccination campaign started on December 27, 2020 with the
+vaccination of a nurse (citation for total vaccination campaign). Until
+September 2021 when two vaccines were no longer used, all of the
+vaccines approved by the EU (AstraZeneca, Pfizer/BioNTech, Moderna and
+Johnson \& Johnson) were used for vaccinations. Citizens who wanted to
+get vaccinated had to register and select their preferred vaccine prior
+to the vaccination. In May 2021, the waiting time between the first and
+the second dose (Johnson \& Johnson required only one dose) was set at
+five weeks. In the first weeks and months of the vaccination campaign,
+vaccines were only available for health care workers and senior
+citizens. By the start of May 2021 however, vaccines were widely
+available (cite here), but not enough citizens were willing to get
+jabbed. In a relatively short time, Poland therefore moved from a
+problem of scarcity to the problem of vaccination hesitancy.
+
+In general, vaccination rates in Poland have been low compared to some
+western European countries, including neighbour Germany. In the context
+of eastern Europe, vaccination rates have however not been exceptionally
 low. Many eastern European countries experienced relatively low
 vaccination rates and a hesitancy to get vaccinated within their
 respective population. In the media, a general distrust into the
@@ -363,7 +422,7 @@ synthetic control negatively. This will be further discussed in chapter
 also estimate a synthetic control using July 1 as the time of
 intervention.
 
-\chapter{Methods and data}
+\chapter{Method and data}
 
 \section{Synthetic control method}
 
@@ -423,13 +482,20 @@ were no prior lotteries in Europe and no rumors about the lottery before
 the announcement (check again)). This will be picked up again in chapter
 4, as a robustness check of the obtained synthetic control.
 
-Lastly, it is crucial that we do not have any spillover effects on
+Next, it is crucial that we do not have any spillover effects on
 untreated units. If this were the case, the lottery in Poland would have
 effects on vaccination rates of donor pool countries. This requirement
 should however be fulfilled in this application, there is at least no
-possible theoretical argument for such a relationship. The fulfillment
-of these assumptions/requirements will be further discussed in section
-5.
+possible theoretical argument for such a relationship.
+
+In terms of data, it is important that we have enough pre-intervention
+values of the outcome variable, so that the synthetic control can
+approximate these values well. A larger number of pre-intervention
+outcomes reduces the bias of the synthetic control, making it more valid
+(sounds weird).
+
+The fulfillment of these assumptions/requirements will be further
+discussed in section 5.
 
 \subsection*{Formal definition}
 
@@ -577,14 +643,14 @@ COVID-19 cases by ``Our world in data'' will be utilized.
 
 In the main synthetic control analysis, the impact of the policy on the
 vaccination rates will be investigated. Data for the outcome variable
-vaccination rate (both one vaccination and fully vaccinated) is taken
-from a data set created by ``Our world in data''
-\parencite{mathieu_global_2021}. This data set is a collection of
-vaccination rates and other information about vaccinations from all
-countries of the world, coming directly from the respective
-government/government agency. If the data is provided by the
-governments, it can give us a daily time-series of vaccination rates
-around the world.
+(\(Y_{jt}\)) vaccination rate (both one vaccination and fully
+vaccinated) is taken from a data set created by Our World in Data
+\parencite{mathieu_global_2021}. This very large data set is a
+collection of vaccination rates and other vaccination statistics from
+all countries of the world, coming directly from the respective
+government/government agency and summarized by Our World in Data. If the
+data is provided by the governments, it can give us a daily time-series
+of vaccination rates for every country of the world.
 
 One of the most important aspects in the application of SCM is the
 choice of the donor pool. As outlined in 3.1, the treated country should
@@ -619,8 +685,9 @@ by drawing a straight line between the two adjacent data points
 interpolation\footnote{Spline interpolation estimates missing values such that the curvature of the time series is minimized (need citation here).}
 were also considered. A last observation carried forward (LOCF) or a
 mean imputation do not make any sense in the setting of a vaccination
-rate, an increasing function. The differences between linear and spline
-interpolation are relatively minor in this specific application.
+rate, which is an increasing function. The differences between linear
+and spline interpolation are relatively minor in this specific
+application.
 
 \begin{table}[! htbp]\centering \caption{Predictors of selected countries}
 \label{table:summarystat}
@@ -649,19 +716,20 @@ Trust in science\tnote{e} & $0.872$ & $0.895$ & $0.891$ \\
 \label{table2}
 \end{table}
 
-In order to find the best fit for the weights, additional predictors are
-used. The choice of these variables can be very important for the
-synthetic control. GDP per capita, the share of elderly (over 65), the
-share of people (15-64) with tertiary education, population density and
-the year of entry into the EU all adjust for general country specific
-differences, but partly also for differences in vaccine uptake. Income,
-age, education and the proximity to the nearest vaccination center (it
-is assumed that countries with higher population density have - on
-average - a closer proximity to vaccination centers) are all relevant
-determinants of COVID-19 vaccine uptake
-(\cite{viswanath_individual_2021}; need to check + possibly additional
-citation). The share of elderly vaccinated against Influenza and trust
-in science are possibly also important indicators of ``vaccine
+In order to find the best fit for the weights, additional predictors
+(\(mathbf{Z}_{j}\)) are used. The choice of these variables is
+potentially very important in determining the optimal weights of the
+synthetic control unit, as seen in section 3.1. GDP per capita, the
+share of elderly (over 65), the share of people (15-64) with tertiary
+education, population density and the year of entry into the EU all
+adjust for general country specific differences, but partly also for
+differences in vaccine uptake. Income, age, education and the proximity
+to the nearest vaccination center (it is assumed that countries with
+higher population density have - on average - a closer proximity to
+vaccination centers) are all relevant determinants of COVID-19 vaccine
+uptake (\cite{viswanath_individual_2021}; need to check + possibly
+additional citation). The share of elderly vaccinated against Influenza
+and trust in science are possibly also important indicators of ``vaccine
 openness''. We would expect countries with higher Influenza vaccination
 rates (before the spread of COVID-19) also to have higher COVID-19
 vaccination rates, since the population might generally be more open to
@@ -690,16 +758,21 @@ Slovakia & & & & & & & & & & 0.482 \\
 \end{table}
 
 Ideally, the use of a ``political variable'' would have been a good
-idea, since large differences in vaccine uptake exist across party
-preferences. This problem might be the most well-known in the US, but it
-also applies to other countries (citation here). When using other
-countries as a donor pool, it is however very difficult because of the
-large differences of party ideologies between countries. One idea would
-be to use the vote share for parties along the European parties/groups
-as in the European Parliament, firstly there are however quite large
-differences between parties within certain groups and secondly,
-elections and surveys are very volatile in many European countries
-compared to e.g.~some US states (if left, need citations).
+idea, since differences in vaccine uptake exist across party
+preferences. This problem might be the most well-known in the US
+\parencite{ruiz_predictors_2021}, but it is also believed to be a
+relevant predictor of vaccine hesitancy (even before COVID-19) in Europe
+(\cite{schernhammer_correlates_2022}; \cite{kennedy_populist_2019}).
+When using other European countries as a donor pool, it is however very
+difficult to compare political beliefs across countries, mainly because
+of the large differences in party ideologies across countries. One idea
+would be to use the vote share for parties along the groups in the
+European Parliament, there are however several problems with that.
+Firstly, there are relatively large differences between parties within
+certain
+groups\footnote{For example, the Renew Europe group in the EP consists of liberal parties in a very broad sense, including both left-wing liberal parties and liberal-conservative parties.}
+and secondly, elections and surveys are very volatile in many European
+countries compared to e.g.~some US states (if left, need citations).
 
 Another possible predictor which was considered is trust in government.
 The data on this is also available from the Wellcome Global Monitor. It
@@ -714,7 +787,7 @@ opinion. While there also exist deep-rooted cross-country differences in
 trust in government (e.g.~possibly higher distrust in former soviet
 influenced countries compared to western countries (possibly need
 citation here)), the presence of the described volatility means that the
-variable trust in government will not be employed.
+variable trust in government will not be used.
 
 \noindent The data analysis has been carried out in R using the
 \textit{synth} and \textit{SCtools} packages, generating synthetic
@@ -784,15 +857,14 @@ seems like the lottery was not successful in getting more people
 vaccinated, but only in getting people vaccinated earlier.
 
 Employing the permutation based inference techniques discussed in
-section 4.1, also shows no signs of a significant effect. Figure
+section 4.1 also confirms the finding of no significant effect. Figure
 \ldots{} presents the placebo study. As can be seen, the magnitude of
 the effect of Poland is not comparably high and does not stand out in
 any way. Actually, the effect of Poland is the least extreme of all of
 the selected units. This finding also confirmed quantitatively. Using
-the discussed test procedure, a \textit{p} value of 0.7143 is obtained.
+the discussed test procedure, a \textit{p}-value of 0.7143 is obtained.
 Therefore, the hypothesis that the lottery had no effect in increasing
-vaccination rates cannot be rejected, at any known/relevant significance
-level.
+vaccination rates cannot be rejected.
 
 \begin{figure}[h]
 \caption{Placebo plot: Poland and control countries}
@@ -866,6 +938,12 @@ surprising, since only a total of 6 predictors and 6 donor pool
 countries are used and the differences in the vaccination rates across
 donor pool countries are not to be underestimated.
 
+The results of this analysis are also in line with a synthetic control
+analysis of the effect of the lottery on the vaccination rate in terms
+of the first dose only, showing no signs of a significant effect of the
+lottery, with a \textit{p}-value of xxxx. More details on this analysis
+can be found in the appendix.
+
 \chapter{Discussion}
 
 What is the impact of vaccine lotteries on vaccination rates? The
@@ -906,9 +984,9 @@ similarity. It is not uncommon that assumptions are hard to justify
 (e.g.~instrumental variable approach (more specific)), but the argument
 of similarity can be made in many directions. Another possible problem
 in this respect is the judgement of the quality of the fit. There is no
-objective measure to evaluate the pre-treatment fit of a synthetic
-control, meaning that the evaluation is always subject to a possible
-bias of the researcher.
+objective or quantitative measure to evaluate the pre-treatment fit of a
+synthetic control, meaning that the evaluation is always subject to a
+possible bias of the researcher.
 
 There are several limitations of this application of the synthetic
 control method, making the estimated causal effect less valid.
@@ -955,7 +1033,13 @@ policies, no country in the donor pool has adopted such a policy with
 Poland as a role model. Additionally, since we have shown that the
 lottery did not strongly increase vaccination rates in Poland, we also
 do not expect a general positive example of Poland in terms of an
-increased vaccination rate on other Eastern European countries.
+increased vaccination rate on other Eastern European countries. Lastly,
+the number of pre-intervention outcomes does not represent as problem.
+We start the optimization on February 1, 2021 and end it one day before
+the announcement, on May 24, 2021. Since daily data is used, we
+therefore have a total of 113 (?) pre-intervention values of the outcome
+variable, therefore meaning that a solid fit of the synthetic control
+can be obtained.
 
 To summarize, it is therefore important to note that the causal
 interpretation of the given results should be done with caution, because
