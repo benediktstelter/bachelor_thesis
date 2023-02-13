@@ -114,59 +114,80 @@ Mannheim, 17/03/2023
 \chapter{Introduction}
 
 In March 2020, the world came to a sudden stop due to the spread of
-COVID-19. Surprisingly quick, the way out of this public health crisis
-came in the form of vaccines. Globally, the COVID-19 vaccine was one of
-the most important and hotly contested topics of 2021, demonstrated by
-Google
-Trends\footnote{see \url{https://trends.google.de/trends/yis/2021/GLOBAL/}},
-which places the COVID vaccine as the 3rd most searched (more specific)
-news story of the entire year. However, for various reasons, a
-reluctancy to get vaccinated has been observed across countries. From
-beer to bratwurst and fishing license to lotteries: Governments have
-faced the challenge to find (new) ways of incentivising their citizens,
-beyond the promise of increased freedom. A vaccine lottery, in the
-context of this thesis, refers to a lottery with cash or non-cash
-prizes, in which vaccinated people could participate at no additional
-cost, thereby acting as a possible reward for vaccination. The hope of
-policymakers was that this would lead to more people getting vaccinated,
-increasing the total vaccination rate of the population.
+COVID-19. Governments took drastic and unprecedented steps to slow the
+spread of the virus: Shops were shut down, schools and universities were
+closed and millions of workers had to work from their home office or
+kitchen desk. Many of these measures to counteract COVID-19 had negative
+side effects: They destroyed billions of dollars of wealth, led to
+unemployment and strangled the mental health of many. Most importantly
+however, apart from all measures to stop its spread, the COVID-19
+pandemic itself cost the lives of millions of people around the world.
 
-This thesis therefore investigates the question: What is the effect of
-vaccine lotteries on the share of the population vaccinated against
-COVID-19? The empirical analysis using a vaccine lottery in Poland finds
-no evidence for a significant increase in the share of the population
-fully vaccinated against COVID-19. It however suggests that it might
-have incentivized some people who would have gotten vaccinated anyway to
-do this earlier, to take advantage of the lottery, thereby temporarily
+Just a year after the first COVID-19 cases appeared in China, the first
+vaccines against COVID-19 were approved. With them came the hope of a
+return to normality and a severe reduction of the death toll of the
+pandemic. At the beginning of the worldwide vaccination effort, the
+producers of the vaccines were clearly not able to meet the world demand
+at the necessary speed and scale. Therefore, a shortage of vaccines lead
+to rationing: Vaccines were only provided to the most vulnerable groups
+of the population, such as healthcare workers or the elderly. When
+vaccines became widely available, policymakers however had to learn that
+a considerable share of people were hesitant or unwilling to receive the
+shot. Globally, the COVID-19 vaccine was one of the most relevant and
+hotly contested topics of 2021, demonstrated by Google
+Trends\footnote{see \url{https://trends.google.de/trends/yis/2021/GLOBAL/}},
+which places the COVID vaccine as the 3rd most searched news story of
+the entire year.
+
+The problem of vaccine hesitancy led governments to think in
+new\footnote{As we will see, the idea of incentives and lotteries in public health is not entirely new.}
+ways again. From beer to bratwurst and fishing license to lotteries:
+Many different incentives were introduced on national and local levels,
+in order to persuade people of the COVID-19 vaccine. Lotteries might be
+especially interesting, since they include an element of uncertainty. A
+vaccine lottery, in the context of this thesis, refers to a lottery with
+cash or non-cash prizes, in which vaccinated people could participate at
+no additional cost, thereby acting as a possible reward for vaccination.
+Policymakers hoped that this would persuade additional people to get
+vaccinated, increasing the total vaccination rate of the population.
+
+This thesis will investigate the impact of such lotteries. It therefore
+tries to answer the question: What are the effects of vaccine lotteries
+on the share of the population vaccinated against COVID-19? The
+empirical analysis using a vaccine lottery in Poland finds no evidence
+for a significant increase in the share of the population fully
+vaccinated against COVID-19. It however suggests that it might have
+incentivized some people who would have gotten vaccinated anyway to do
+this earlier, to take advantage of the lottery, thereby temporarily
 increasing the vaccination rate by around 6 percentage points.
-Definition of vaccine lottery.
+
+As we will see in section 2.1, there is already a large literature on
+COVID-19 vaccine lotteries, especially in North America. So far, there
+has however been no study evaluating the Polish vaccine lottery in
+detail. This thesis therefore adds a new case study to the existing
+literature.
 
 In order to to spur the slow-moving national vaccination campaign, the
 Polish government announced the lottery on May 25,
 2021\footnote{This was around five months after the authorisation of the first COVID-19 vaccines in the EU and the subsequent start of the Polish vaccination campaign.}.
-It was open from July 1, 2021 until September 30, 2021. The main price
-of the lottery was a cash price of one million PLN, but it also included
+It was open from July 1, 2021 until September 30, 2021. The main prize
+of the lottery was a cash prize of one million PLN, but it also included
 smaller cash and non-cash prizes and a lottery-like incentive scheme for
 municipalities. The empirical analysis was conducted using the synthetic
-control method, a relatively new and popular method for comparative case
-studies. Out of a donor pool of 6 other Eastern European countries and
-using additional predictor variables, a synthetic control unit
-(``Synthetic Poland'') was constructed to evaluate the average treatment
-effect (causal effect) of the policy. Daily data on vaccination rates,
-published by the respective governments/government agencies and prepared
-by ``Our World in Data'' and additional data from Eurostat and the
-``Wellcome Global Monitor'' were exploited for the analysis.
-
-As will be seen, there is already a large literature on COVID-19 vaccine
-lotteries, especially in North America. So far, there has however been
-no study evaluating the Polish vaccine lottery in detail. This thesis
-therefore provides a new case study to the existing literature.
+control method based on \textcite{abadie_economic_2003}, a popular
+method for comparative case studies. Out of a donor pool of 6 other
+Eastern European countries and using additional predictor variables, a
+synthetic control unit (``Synthetic Poland'') was constructed to
+evaluate the (causal) effect of the policy. Daily data on vaccination
+rates, published by the respective governments/government agencies and
+prepared by Our World in Data and additional data from Eurostat and the
+Wellcome Global Monitor were exploited for the analysis.
 
 \chapter{Background}
 
 \section{Literature review}
 
-\subsection{Incentives in public health}
+\subsection*{Incentives in public health}
 
 Governments are facing public health challenges at every corner. But how
 can they motivate people to live healthier lives? Behavioural economics
@@ -223,7 +244,7 @@ Lotteries can also successfully increase cycling and walking activity
 (\cite{ciccone_using_2021}; \cite{patel_randomized_2018}) and
 participation in chlamydia screenings \parencite{niza_vouchers_2014}.
 
-\subsection{Incentives to increase COVID-19 vaccination rates}
+\subsection*{Incentives to increase COVID-19 vaccination rates}
 
 In march 2020, when the COVID-19 pandemic struck the world, it was not
 foreseeable that vaccines would be available in just about nine months.
@@ -429,23 +450,26 @@ intervention.
 The synthetic control method is a relatively new method in causal
 inference. It was first established by \textcite{abadie_economic_2003}
 in order to investigate the economic effects of terrorism in the basque
-country, further developed by \textcite{abadie_synthetic_2010} and
-summarized in \textcite{abadie_using_2021}. It has been applied widely
-in economics, but also in other (social) sciences such as political
-science. Its specific case of application are comparative case studies,
-where a specific case, e.g.~a policy or intervention of any form are
-compared to another case, for example without a similar policy (?). One
-idea in the context of comparative case studies is
-difference-in-difference. It might be straightforward to use matching to
-find the closest/most similar unit to the treated unit and take this as
-a control, allowing to estimate the average treatment effect of the
-policy by simply taking the difference (citation for matching). Finding
-a single unit which matches well might however in many cases be
-difficult, especially when making cross-country comparisons. The
-synthetic control method comes into play here and extends the
-difference-in-difference method. The very basic idea is to create a
-synthetic control unit as a combination of multiple control countries,
-to then estimate the average treatment effect (ATE) of the
+country and further developed by \textcite{abadie_synthetic_2010}.
+\textcite{abadie_using_2021} is a summary of these prior developments as
+well as the requirements and inference methods and can be regarded as
+the basis of this section.
+
+Synthetic control methodology has been applied widely in economics, but
+also in other (social) sciences such as political science. Its specific
+case of application are comparative case studies, where a specific case,
+e.g.~a policy or intervention of any form are compared to another case,
+for example without a similar policy (?). One idea in the context of
+comparative case studies is difference-in-difference. It might be
+straightforward to use matching to find the closest/most similar unit to
+the treated unit and take this as a control, allowing to estimate the
+average treatment effect of the policy by simply taking the difference
+(citation for matching). Finding a single unit which matches well might
+however in many cases be difficult, especially when making cross-country
+comparisons. The synthetic control method comes into play here and
+extends the difference-in-difference method. The very basic idea is to
+create a synthetic control unit as a combination of multiple control
+countries, to then estimate the average treatment effect (ATE) of the
 policy/intervention. For instance, it has been used to evaluate the
 effects of European integration \parencite{campos_institutional_2019} or
 the effect of natural disasters on economic growth
@@ -1045,7 +1069,15 @@ To summarize, it is therefore important to note that the causal
 interpretation of the given results should be done with caution, because
 of these outlined limitations. This specific application is however also
 not particularly bad and not one of the worst applications of the
-synthetic control method (change sentence).
+synthetic control method (change sentence). Lastly it has to be noted
+that this thesis presents only one case study. While the results do not
+suggest a significant effect of the lottery on the vaccination rate, the
+applicability of these results on (at first glance) comparable policies
+is limited, mainly because of differences in the design of lotteries and
+very large differences in initial vaccination rates and other country
+specific predictors. One should therefore not make an evaluation of
+vaccine lotteries based on one specific case study, but rather using the
+breadth of the literature, which has been outlined in section 2.1.
 
 \chapter{Conclusion}
 
@@ -1082,8 +1114,9 @@ far focused on such policies in the US.
 Are vaccine lotteries worth it? As discussed, the evidence on the
 effectiveness is mixed. When keeping in mind the costs of such a policy,
 it might even be a better idea to provide incentives at the local level,
-on a smaller scale. After all, a beer without a flaw, is better than a
-random draw, a license for fishing, trumps a month of wishing.
+on a smaller scale. Possibly, a beer without a flaw, is better than a
+random draw, bratwurst and other snacks, outclass the ``idiot tax'', a
+license for fishing, trumps a month of wishing.
 
 
  
