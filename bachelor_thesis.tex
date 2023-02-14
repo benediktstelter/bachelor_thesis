@@ -676,6 +676,18 @@ government/government agency and summarized by Our World in Data. If the
 data is provided by the governments, it can give us a daily time-series
 of vaccination rates for every country of the world.
 
+\begin{figure}[h]
+\caption{Share of population fully vaccinated in Poland}
+
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-2-1} \end{center}
+\end{figure}
+
+Figure 3.1 shows the resulting graph of the share of fully vaccinated in
+Poland. It can be seen that there was a period of relatively high daily
+vaccinations in which vaccination rates increased drastically. Before
+and after this period, the growth in the vaccination rate was however
+relatively slow.
+
 One of the most important aspects in the application of SCM is the
 choice of the donor pool. As outlined in 3.1, the treated country should
 not be an outlier compared to the control countries. It is therefore
@@ -825,38 +837,38 @@ weights. The data and R scripts can be found in the corresponding
 
 \chapter{Results}
 
-First of all, let us look at vaccination rates in Poland from a
-descriptive point of view. Figure 4.1 plots the vaccination rate (fully
-vaccinated) in Poland in 2021.
+To begin with, a regression discontinuity design has been employed to
+estimate the effect of the lottery on daily vaccinations, at the cutoff
+of May 25, 2021 (announcement of the lottery).
 
 \begin{figure}[h]
-\caption{Share of population fully vaccinated in Poland (in \%)}
+\caption{Regression discontinuity analysis of daily vaccinations in Poland}
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-2-1} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-3-1} \end{center}
 \end{figure}
 
-\noindent As other countries, Poland first dealt with a shortage of
-vaccines, leading to necessary rationing, having to favor older and
-chronically ill citizens first. Towards the summer, this shortage
-significantly loosened its grip. Although the growth rate in the
-vaccination rate increased significantly, for countries like Poland with
-a comparably high vaccine hesitancy, the problem turned from a vaccine
-shortage to a shortage of people willing to get vaccinated. Simply from
-looking at figure 4.1, we can not observe a sharp or outstanding change
-in the growth rate at the time of announcement or shortly
-after\footnote{We would expect that the it takes several weeks for any significant change to be visible, since getting fully vaccinated takes/took around six to eight weeks}.
-This is however also not expected, since the magnitude of the effect of
-lotteries on vaccination rates is generally not very large, as outlined
-in section 2.1.
+The effect was estimated parametrically, resulting in a polynomial fit.
+Figure 3.1 presents the results of the analysis. By comparing the
+intercepts at the cutoff, it can clearly be seen that the lottery did
+not significantly increase daily vaccinations, with the difference in
+the intercepts being nearly invisible. As the figure shows, the lottery
+was announced when daily vaccinations were close to their all time high,
+but the polish government thought that additional motivation was
+necessary. After the start of the lottery, there was a strong decrease
+in daily vaccinations. Obviously, it is not possible to make any
+conclusion about the causal effect based on such a correlation. Although
+this regression discontinuity analysis does not suggest a significant
+effect of the lottery, we need to take a closer look at vaccination
+rates, in order to make any plausible conclusion on them.
 
 \begin{figure}[h]
 \caption{Synthetic control for the share of fully vaccinated in Poland}
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-3-1} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-4-1} \end{center}
 
 
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-3-2} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-4-2} \end{center}
 \end{figure}
 
 We therefore applied the synthetic control method, as described in
@@ -893,7 +905,7 @@ vaccination rates cannot be rejected.
 \begin{figure}[h]
 \caption{Placebo plot: Poland and control countries}
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-4-1} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-5-1} \end{center}
 \end{figure}
 
 \subsection*{Robustness checks}
@@ -913,11 +925,11 @@ these setups, with no lag after July 1.
 \begin{figure}[h]
 \caption{Poland and synthetic Poland with different intervention times}
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-5-1} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
 
 
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-5-2} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-2} \end{center}
 \end{figure}
 
 Another way of changing the time of intervention is backdating, meaning
@@ -936,11 +948,11 @@ do not suffer from an anticipation effect.
 \begin{figure}[h]
 \caption{Leave-one-out synthetic controls of Poland}
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-1} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-7-1} \end{center}
 
 
 
-\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-6-2} \end{center}
+\begin{center}\includegraphics{bachelor_thesis_files/figure-latex/unnamed-chunk-7-2} \end{center}
 \end{figure}
 
 Another possible robustness check is to leave out certain predictors or
@@ -1101,10 +1113,12 @@ constructed out of a donor pool of six other Eastern European countries.
 
 The main results show no signs of a statistically significant increase
 (\textit{p}-value: 0.7143) in the vaccination rate compared to the
-hypothetical scenario without the lottery on the long-term. It can
-however be observed that vaccination rates increase in the short-run,
-thereby possibly suggesting that people who would have gotten vaccinated
-anyways, may have chosen to do this earlier, as a result of the lottery.
+hypothetical scenario without the lottery on the long-term. This result
+is also in line with a regression discontinuity analysis of daily
+vaccinations. It can however be observed that vaccination rates increase
+in the short-run, thereby possibly suggesting that people who would have
+gotten vaccinated anyways, may have chosen to do this earlier, as a
+result of the lottery.
 
 At the time of writing, there has been no study dealing in detail with
 this specific policy in Poland. This thesis therefore adds a new case

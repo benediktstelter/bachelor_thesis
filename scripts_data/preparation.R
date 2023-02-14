@@ -3,17 +3,33 @@ library(readxl)
 library(Synth)
 library(SCtools)
 library(augsynth)
+library(dbplyr)
+
+
+install.packages("scales")
+library(scales)
+
 
 install.packages("AER")
 install.packages("car")
 install.packages("rdd")
-install.packages("rdd", repos=NULL, type="source")
+install.packages("colorspace", repos=NULL, type="source")
 
 install.packages('rddtools')
+
+install.packages('rdrobust')
+library(rdrobust)
+
+install.packages("colorspace")
+
+.libPaths("colorspace")
+
 
 library(rdd)
 
 library(extrafont) 
+
+
 
 #RDD analysis
 vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
@@ -22,6 +38,48 @@ rdd_pol <- vaccine[grep("Poland", vaccine$location), ]
 rdd_pol <- rdd_pol[, c(1:3,9) ]
 rdd_pol$date <- as.Date(rdd_pol$date)
 rdd_pol <- subset(rdd_pol, date >= as.Date("2021-02-01") & date <= as.Date("2021-11-30"))
+rdd_pol$date2 <- as.numeric(rdd_pol$date)
+
+
+Y <- rdd_pol$daily_vaccinations
+X <- rdd_pol$date2
+
+plot_rd <- rdplot(Y, X, c = 18772)
+
+rdplot_mean_bin = plot_rd$vars_bins[,"rdplot_mean_bin"]
+rdplot_mean_y   = plot_rd$vars_bins[,"rdplot_mean_y"]
+y_hat           = plot_rd$vars_poly[,"rdplot_y"]
+x_plot          = plot_rd$vars_poly[,"rdplot_x"]
+rdplot_cil_bin =  plot_rd$vars_bins[,"rdplot_ci_l"]
+rdplot_cir_bin =  plot_rd$vars_bins[,"rdplot_ci_r"]
+rdplot_mean_bin=  plot_rd$vars_bins[,"rdplot_mean_bin"]
+y_hat_r=y_hat[x_plot>=c]
+y_hat_l=y_hat[x_plot<c]
+x_plot_r=x_plot[x_plot>=c]
+x_plot_l=x_plot[x_plot<c]
+
+
+rdplot_mean_bin_exp <- rdd_pol$date
+
+x_plot_exp=x_plot_r[c(TRUE,FALSE,FALSE)]
+
+rm()
+
+
+rdd_plot <- ggplot() + zew_plotstyle() +
+  geom_point(aes(x = rdplot_mean_bin, y = rdplot_mean_y), col = "#527ca4", na.rm = TRUE,size=0.8) +
+  geom_line(aes(x = x_plot, y = y_hat), col = "#9c2424", na.rm = TRUE, size=0.8) +
+  theme(legend.position = "None") +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  scale_x_continuous(breaks=c(18718,18809,18900),
+                   labels=c("Apr", "Jul", "Oct")) +
+  xlab(expression(bold(paste("Date in 2021")))) + theme(axis.title.y = element_blank()) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ',',
+                                                   decimal.mark = '.'),
+                     limits = c(0,350000))
+rdd_plot
+
+
 
 Pol_daily <- ggplot(rdd_pol,aes(y=daily_vaccinations,x=date,group=1,linetype="solid")) + 
   geom_line(size=1, colour="#527ca4") + 

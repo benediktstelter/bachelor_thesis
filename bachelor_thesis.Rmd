@@ -36,12 +36,41 @@ header-includes:
 
 ---
 
-```{r echo=FALSE, message=FALSE, warning=FALSE, results=FALSE}
+```{r echo=FALSE, message=FALSE, warning=FALSE, results=FALSE, fig.show='hide'}
 library(tidyverse)
 library(readxl)
 library(Synth)
 library(SCtools)
 library(augsynth)
+library(rdrobust)
+library(scales)
+library(dbplyr)
+
+
+
+#RDD analysis
+vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+vaccine$date <- as.Date(vaccine$date)
+rdd_pol <- vaccine[grep("Poland", vaccine$location), ]
+rdd_pol <- rdd_pol[, c(1:3,9) ]
+rdd_pol$date <- as.Date(rdd_pol$date)
+rdd_pol <- subset(rdd_pol, date >= as.Date("2021-02-01") & date <= as.Date("2021-11-30"))
+rdd_pol$date2 <- as.numeric(rdd_pol$date)
+
+
+Y <- rdd_pol$daily_vaccinations
+X <- rdd_pol$date2
+
+plot_rd <- rdplot(Y, X, c = 18772, ci = 95)
+
+rdplot_mean_bin = plot_rd$vars_bins[,"rdplot_mean_bin"]
+rdplot_mean_y   = plot_rd$vars_bins[,"rdplot_mean_y"]
+y_hat           = plot_rd$vars_poly[,"rdplot_y"]
+x_plot          = plot_rd$vars_poly[,"rdplot_x"]
+rdplot_cil_bin =  plot_rd$vars_bins[,"rdplot_ci_l"]
+rdplot_cir_bin =  plot_rd$vars_bins[,"rdplot_ci_r"]
+rdplot_mean_bin=  plot_rd$vars_bins[,"rdplot_mean_bin"]
+
 
 
 
@@ -789,6 +818,29 @@ First, we will estimate an RDD model to estimate the effect of the lottery on CO
 In the main synthetic control analysis, the impact of the policy on the vaccination rates will be investigated. Data for the outcome variable (\(Y_{jt}\)) vaccination rate (both one vaccination and fully vaccinated) is taken from a data set created by Our World in Data \parencite{mathieu_global_2021}. This very large data set is a collection of vaccination rates and other vaccination statistics from all countries of the world, coming directly from the respective government/government agency and summarized by Our World in Data. If the data is provided by the governments, it can give us a daily time-series of vaccination rates for every country of the world. 
 
 
+\begin{figure}[h]
+\caption{Share of population fully vaccinated in Poland}
+```{r fig.asp = 0.4, fig.showtext=TRUE, fig.width = 5.8    , echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+library(showtext)
+font_add(family = "Latin Modern Roman 10", regular = "lmroman10-regular-webfont.ttf")
+showtext_auto()
+
+poland.plot <- subset(poland.plot, date >= as.Date("2021-02-01") & date <= as.Date("2021-11-30"))
+
+
+Pol_desc_plot <- ggplot(poland.plot,aes(y=twodoses,x=date,group=1,linetype="solid")
+  )+ geom_line(size=1, colour="#527ca4") + 
+  xlab(expression(bold(paste("Date in 2021")))) +  
+  zew_plotstyle() + theme(legend.position = "none", axis.title.y = element_blank())
+
+Pol_desc_plot
+
+
+```
+\end{figure}
+
+Figure 3.1 shows the resulting graph of the share of fully vaccinated in Poland. It can be seen that there was a period of relatively high daily vaccinations in which vaccination rates increased drastically. Before and after this period, the growth in the vaccination rate was however relatively slow.
+
 One of the most important aspects in the application of SCM is the choice of the donor pool. As outlined in 3.1, the treated country should not be an outlier compared to the control countries. It is therefore sensible to select countries that are similar to Poland, both in general and with respect to vaccination rates. Therefore, twelve central/eastern European countries with sufficient data availability (AT, BG, CZ, EE, GR, LV, LT, HR, HU, RO, SI, SK) are initial candidates for the donor pool. From this list, several countries are dropped who experienced similar interventions or shocks to the vaccination rate in the given time frame. Greece (cash incentive of 150€ for young people), Czechia (holiday incentive), Austria (need to find a reason here), Lithuania (cash incentive + other incentives), Romania (cash and lottery incentive). Estonia, Czechia and Slovenia implemented some small incentive schemes for doctors\footnote{Doctors were offered a cash incentive for a specific number of vaccinations} and state employees\footnote{Additional holiday}, these are however not considered as a big enough shock to vaccination rates and Estonia, Czechia and Slovenia will not be dropped. Croatia and Hungary are removed because of too many missing values, since a sensible trend can not be constructed using interpolation. Slovakia (nochmal checken) only reported weekly values, a reasonable interpolation was however possible. The donor pool then consists of six countries: Bulgaria, Czechia, Estonia, Latvia, Slovakia and Slovenia. 
 
 There are however missing values for several countries. Sometimes these missing values follow a specific pattern (e.g. Poland: values are missing on Sundays) while there is no specific pattern for some other countries. Linear interpolation is used to replace the missing values, by drawing a straight line between the two adjacent data points (citation here). Other imputation techniques such as spline interpolation\footnote{Spline interpolation estimates missing values such that the curvature of the time series is minimized (need citation here).} were also considered. A last observation carried forward (LOCF) or a mean imputation do not make any sense in the setting of a vaccination rate, which is an increasing function. The differences between linear and spline interpolation are relatively minor in this specific application.
@@ -856,31 +908,30 @@ Another possible predictor which was considered is trust in government. The data
 
 \chapter{Results}
 
-First of all, let us look at vaccination rates in Poland from a descriptive point of view. Figure 4.1 plots the vaccination rate (fully vaccinated) in Poland in 2021. 
+To begin with, a regression discontinuity design has been employed to estimate the effect of the lottery on daily vaccinations, at the cutoff of May 25, 2021 (announcement of the lottery).
+
+
 \begin{figure}[h]
-\caption{Share of population fully vaccinated in Poland (in \%)}
-```{r fig.asp = 0.45, fig.showtext=TRUE, fig.width = 5.8    , echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
-library(showtext)
-font_add(family = "Latin Modern Roman 10", regular = "lmroman10-regular-webfont.ttf")
-showtext_auto()
-
-poland.plot <- subset(poland.plot, date >= as.Date("2021-02-01") & date <= as.Date("2021-11-30"))
-
-
-Pol_desc_plot <- ggplot(poland.plot,aes(y=twodoses,x=date,group=1,linetype="solid")
-  )+ geom_line(size=1, colour="#527ca4") + 
-  geom_vline(xintercept=2021-05-25,color="red",linetype=2,size=1.1) + 
-  geom_vline(xintercept=2021-09-30,color="red",linetype=2,size=1.1) + 
-  xlab(expression(bold(paste("Date in 2021")))) +  
-  zew_plotstyle() + theme(legend.position = "none", axis.title.y = element_blank())
-
-Pol_desc_plot
-
-
+\caption{Regression discontinuity analysis of daily vaccinations in Poland}
+```{r fig.asp = 0.6, fig.showtext=TRUE, fig.width = 5.8, echo=FALSE, message=FALSE, warning=FALSE, fig.align='center'}
+rdd_plot <- ggplot() + zew_plotstyle() +
+  geom_point(aes(x = rdplot_mean_bin, y = rdplot_mean_y), col = "#527ca4", na.rm = TRUE,size=0.8) +
+  geom_line(aes(x = x_plot, y = y_hat), col = "#9c2424", na.rm = TRUE, size=0.8) +
+  theme(legend.position = "None") +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
+  scale_x_continuous(breaks=c(18718,18809,18900),
+                   labels=c("Apr", "Jul", "Oct")) +
+  xlab(expression(bold(paste("Date in 2021")))) + theme(axis.title.y = element_blank()) +
+  scale_y_continuous(labels = scales::comma_format(big.mark = ',',
+                                                   decimal.mark = '.'),
+                     limits = c(0,350000)) +
+  labs(caption = "The cutoff is set at 25/05.")
+rdd_plot
 ```
 \end{figure}
 
-\noindent As other countries, Poland first dealt with a shortage of vaccines, leading to necessary rationing, having to favor older and chronically ill citizens first. Towards the summer, this shortage significantly loosened its grip. Although the growth rate in the vaccination rate increased significantly, for countries like Poland with a comparably high vaccine hesitancy, the problem turned from a vaccine shortage to a shortage of people willing to get vaccinated. Simply from looking at figure 4.1, we can not observe a sharp or outstanding change in the growth rate at the time of announcement or shortly after\footnote{We would expect that the it takes several weeks for any significant change to be visible, since getting fully vaccinated takes/took around six to eight weeks}. This is however also not expected, since the magnitude of the effect of lotteries on vaccination rates is generally not very large, as outlined in section 2.1. 
+The effect was estimated parametrically, resulting in a polynomial fit. Figure 3.1 presents the results of the analysis. By comparing the intercepts at the cutoff, it can clearly be seen that the lottery did not significantly increase daily vaccinations, with the difference in the intercepts being nearly invisible. As the figure shows, the lottery was announced when daily vaccinations were close to their all time high, but the polish government thought that additional motivation was necessary. After the start of the lottery, there was a strong decrease in daily vaccinations. Obviously, it is not possible to make any conclusion about the causal effect based on such a correlation. Although this regression discontinuity analysis does not suggest a significant effect of the lottery, we need to take a closer look at vaccination rates, in order to make any plausible conclusion on them.
+
 
 
 \begin{figure}[h]
@@ -931,7 +982,12 @@ Pol_gap_plot
 ```
 \end{figure}
 
+
+
 We therefore applied the synthetic control method, as described in section 3.2. Figure 4.2 plots the vaccination rate (fully vaccinated) for both Poland and synthetic Poland. We observe a solid, but not perfect pre-treatment fit (too unspecific). After a short lag after the intervention (as expected), we can see a slow decoupling between Poland and its synthetic control. This difference continues increase to around 5 percentage points. As time progresses, the gap however tends to decrease again, and by the end of November (after the end of the lottery), the vaccination rates of Poland and synthetic Poland are back to the same level. Simply based on the plot, one interpretation could be that the lottery successfully induces some people who would have gotten vaccinated anyway to do this earlier, to take advantage of the incentive provided by the government. It however also suggests that the vaccine lottery was not particularly effective in reaching new people. It has to be noted that the more time has passed since the intervention, the synthetic control becomes more unreliable, as the prediction intervals in figure ... show. Therefore, the development in October and November should be interpreted with caution, but at first glance, it seems like the lottery was not successful in getting more people vaccinated, but only in getting people vaccinated earlier. 
+
+
+
 
 Employing the permutation based inference techniques discussed in section 4.1 also confirms the finding of no significant effect. Figure ... presents the placebo study. As can be seen, the magnitude of the effect of Poland is not comparably high and does not stand out in any way. Actually, the effect of Poland is the least extreme of all of the selected units. This finding also confirmed quantitatively. Using the discussed test procedure, a \textit{p}-value of 0.7143 is obtained. Therefore, the hypothesis that the lottery had no effect in increasing vaccination rates cannot be rejected.
 
@@ -1108,7 +1164,7 @@ As we have seen, nudging and the use of economic incentives can be successful in
 In order to empirically assess the impact of vaccine lotteries on vaccination rates in this thesis, we examine a vaccine lottery implemented in Poland, from July 1, 2021 to September 30, 2021. The lottery consisted of cash and non-cash prizes of around 140 million PLN. To estimate the effect of this program on vaccination rates, the synthetic control method was selected. A synthetic Poland was constructed out of a donor pool of six other Eastern European countries.
 
 
-The main results show no signs of a statistically significant increase (\textit{p}-value: 0.7143) in the vaccination rate compared to the hypothetical scenario without the lottery on the long-term. It can however be observed that vaccination rates increase in the short-run, thereby possibly suggesting that people who would have gotten vaccinated anyways, may have chosen to do this earlier, as a result of the lottery.
+The main results show no signs of a statistically significant increase (\textit{p}-value: 0.7143) in the vaccination rate compared to the hypothetical scenario without the lottery on the long-term. This result is also in line with a regression discontinuity analysis of daily vaccinations. It can however be observed that vaccination rates increase in the short-run, thereby possibly suggesting that people who would have gotten vaccinated anyways, may have chosen to do this earlier, as a result of the lottery.
 
 At the time of writing, there has been no study dealing in detail with this specific policy in Poland. This thesis therefore adds a new case study to the vast literature on COVID-19 vaccine lotteries, which has so far focused on such policies in the US.
 
