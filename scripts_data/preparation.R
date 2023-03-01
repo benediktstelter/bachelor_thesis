@@ -37,14 +37,16 @@ vaccine$date <- as.Date(vaccine$date)
 rdd_pol <- vaccine[grep("Poland", vaccine$location), ]
 rdd_pol <- rdd_pol[, c(1:3,9) ]
 rdd_pol$date <- as.Date(rdd_pol$date)
-rdd_pol <- subset(rdd_pol, date >= as.Date("2021-02-01") & date <= as.Date("2021-11-30"))
+rdd_pol <- subset(rdd_pol, date >= as.Date("2021-02-01") & date <= as.Date("2021-09-30"))
 rdd_pol$date2 <- as.numeric(rdd_pol$date)
 
 
 Y <- rdd_pol$daily_vaccinations
 X <- rdd_pol$date2
 
-plot_rd <- rdplot(Y, X, c = 18772)
+plot_rd <- rdplot(Y, X, c = 18772, ci=95)
+testrd <- rdrobust(y=Y, x=X, c = 18772,p=4, kernel= "uniform")
+
 
 rdplot_mean_bin = plot_rd$vars_bins[,"rdplot_mean_bin"]
 rdplot_mean_y   = plot_rd$vars_bins[,"rdplot_mean_y"]
@@ -58,17 +60,18 @@ y_hat_l=y_hat[x_plot<c]
 x_plot_r=x_plot[x_plot>=c]
 x_plot_l=x_plot[x_plot<c]
 
+point_estimate <- 267396.17-307184.51
 
 rdplot_mean_bin_exp <- rdd_pol$date
 
 x_plot_exp=x_plot_r[c(TRUE,FALSE,FALSE)]
 
-rm()
-
+data=data_bins
 
 rdd_plot <- ggplot() + zew_plotstyle() +
   geom_point(aes(x = rdplot_mean_bin, y = rdplot_mean_y), col = "#527ca4", na.rm = TRUE,size=0.8) +
   geom_line(aes(x = x_plot, y = y_hat), col = "#9c2424", na.rm = TRUE, size=0.8) +
+  geom_errorbar(aes(x=rdplot_mean_bin, ymin=rdplot_cil_bin, ymax=rdplot_cir_bin), linetype = 1) +
   theme(legend.position = "None") +
   geom_vline(xintercept=18772,color="black",linetype=2,size=1) + 
   scale_x_continuous(breaks=c(18718,18809,18900),
@@ -76,9 +79,10 @@ rdd_plot <- ggplot() + zew_plotstyle() +
   xlab(expression(bold(paste("Date in 2021")))) + theme(axis.title.y = element_blank()) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ',',
                                                    decimal.mark = '.'),
-                     limits = c(0,350000))
+                     limits = c(0,400000))
 rdd_plot
 
+point_estimate <- 306039.71-307184.51
 
 
 Pol_daily <- ggplot(rdd_pol,aes(y=daily_vaccinations,x=date,group=1,linetype="solid")) + 
@@ -202,7 +206,7 @@ poland <- na_interpolation(poland)
 
 ##Plot poland (descriptive part)
 source("ggplot_theme.R")
-Pol_desc_plot <- ggplot(poland,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
+Pol_desc_plot <- ggplot(lithuania,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
   geom_line(size=1, colour="#527ca4") + 
   xlab(expression(bold(paste("Date in 2021")))) +  
   ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
@@ -285,9 +289,9 @@ dataprep.out <- dataprep(foo = poland_lottery,
                          predictors.op = "mean",
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
-                         controls.identifier = c(1,2,3,6,12,13),
+                         controls.identifier = c(1,2,3,6,7,12),
                          time.predictors.prior = c(18659:18771),
-                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
+                         time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
 
 synth.out = synth(dataprep.out)
@@ -314,6 +318,9 @@ gaps.plot(synth.res = synth.out,
           Xlab = c("year"))
 
 gap <- dataprep.out$Y1plot - (dataprep.out$Y0plot %*% synth.out$solution.w)
+gap.inspection <- round(gap, 4)
+min(gap.inspection)
+max(gap.inspection)
 plotgap.df = data.frame(gap)
 plotgap.df$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
 
@@ -329,7 +336,7 @@ Pol_gap_plot <- ggplot(plotgap.df,aes(y=gap,x=date,group=1,linetype="solid")
 
 Pol_gap_plot
 
-tdf <- generate.placebos(dataprep.out,synth.out, Sigf.ipop = 2)
+tdf <- generate.placebos(dataprep.out.tcb,synth.out.tcb, Sigf.ipop = 2)
 ## Test how extreme was the observed treatment effect given the placebos:
 ratio <- mspe.test(tdf)
 ratio$p.val
@@ -423,7 +430,9 @@ SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,color="Poland")) + geom_line(li
   theme(legend.position = c(0.85, 0.45),
         legend.background = element_rect(fill = "white", color = "black", size = 1),
         axis.title.y = element_blank()) +
-  labs(caption = "The two dashed lines refer to the announcement (25/05) and the end (30/09) of the lottery.")
+  labs(caption = "The two dashed lines refer to the announcement (25/05) and the end (30/09) of the lottery.") +
+  scale_x_date(date_breaks = "3 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
+
 SCM_plot
 
 
@@ -470,12 +479,17 @@ dataprep.out.tc <- dataprep(foo = poland_lottery,
                             predictors.op = "mean",
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
-                            controls.identifier = c(1,2,3,6,12,13),
+                            controls.identifier = c(1,2,3,6,7,12),
                             time.predictors.prior = c(18659:18808),
                             time.optimize.ssr = c(18659:18808), time.plot = c(18659:18960),
                             unit.names.variable = "country")
 
 synth.out.tc = synth(dataprep.out)
+
+synth.tables.tc <- synth.tab(
+  dataprep.res = dataprep.out.tc,
+  synth.res = synth.out.tc)
+print(synth.tables.tc)
 
 synth_data_out.tc = data.frame(dataprep.out.tc$Y0plot%*%synth.out.tc$solution.w) 
 date = as.numeric(row.names(synth_data_out.tc))
@@ -508,12 +522,17 @@ dataprep.out.tcb <- dataprep(foo = poland_lottery,
                              predictors.op = "mean",
                              dependent = "twodoses", unit.variable = "countryid",
                              time.variable = "date2", treatment.identifier = 10,
-                             controls.identifier = c(1,2,3,6,12,13),
-                             time.predictors.prior = c(18659:18710),
-                             time.optimize.ssr = c(18659:18710), time.plot = c(18659:18960),
+                             controls.identifier = c(1,2,3,6,7,12),
+                             time.predictors.prior = c(18659:18740),
+                             time.optimize.ssr = c(18659:18740), time.plot = c(18659:18960),
                              unit.names.variable = "country")
 
 synth.out.tcb = synth(dataprep.out.tcb)
+
+synth.tables.tcb <- synth.tab(
+  dataprep.res = dataprep.out.tcb,
+  synth.res = synth.out.tcb)
+print(synth.tables.tcb)
 
 synth_data_out.tcb = data.frame(dataprep.out.tcb$Y0plot%*%synth.out.tcb$solution.w) 
 date = as.numeric(row.names(synth_data_out.tcb))

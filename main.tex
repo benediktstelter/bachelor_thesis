@@ -26,7 +26,7 @@ $endif$
 \usepackage{tikz}
 
 \usepackage{array,makecell}
-\usepackage{caption}
+\usepackage[format=plain, labelfont=bf]{caption}
 
 
 \usepackage{tabularx}
@@ -132,38 +132,19 @@ $endif$
 \printbibliography$if(biblio-title)$[title=$biblio-title$]$endif$
 
 $endif$
-\chapter{Appendix}
-GitHub repository: \url{https://github.com/benediktstelter/bachelor_thesis}
 
-\noindent All of the data of the covariates and the R scripts used to analyse the data can be found in folder "scripts\_data", along with some additional information in README.
+\newpage
+\newenvironment{appendices}
+    {\chapter*{Appendix}
+\renewcommand{\thetable}{A.\arabic{table}}
+\renewcommand{\thefigure}{A.\arabic{figure}}
+\setcounter{table}{0}
+\setcounter{figure}{0}
+    }
 
 
 
-\chapter{Affidavit}
-\thispagestyle{empty}
 
-% Dieser Text entspricht den genauen Vorgaben der Richtlinien für Bachelorarbeiten sowie der Prüfungsordnung (\§ 14a) 
-% Stand: November 2014
-I affirm that this Bachelor thesis was written by myself without any unauthorised third-party support. All used references and resources are clearly indicated. All quotes and citations are properly referenced. This thesis was never presented in the past in the same or similar form to any examination board. 
-
-\noindent I agree that my thesis may be subject to electronic plagiarism check. For this purpose an anonymous copy may be distributed and uploaded to
-servers within and outside the University of Mannheim.
-
-\vspace{2\baselineskip}
-
-\noindent German translation:\\
-Ich versichere, dass ich die vorliegende Arbeit ohne Hilfe Dritter und ohne Benutzung anderer
-als der angegebenen Quellen und Hilfsmittel angefertigt und die den benutzten Quellen
-wörtlich oder inhaltlich entnommenen Stellen als solche kenntlich gemacht habe. Diese Arbeit
-hat in gleicher oder ähnlicher Form noch keiner Prüfungsbehörde vorgelegen.
-
-\noindent Ich bin damit einverstanden, dass meine Arbeit zum Zwecke eines Plagiatsabgleichs in
-elektronischer Form anonymisiert versendet und gespeichert werden kann.
-
-\vspace{4\baselineskip}
-\begin{center}
-\parbox{.8\textwidth}{Mannheim, $date$ \hfill $author$}
-\end{center}
 
 
  
