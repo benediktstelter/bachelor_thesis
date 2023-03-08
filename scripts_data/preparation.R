@@ -9,6 +9,8 @@ library(dbplyr)
 install.packages("scales")
 library(scales)
 
+install.packages("imputeTS")
+
 
 install.packages("AER")
 install.packages("car")
@@ -29,7 +31,7 @@ library(rdd)
 
 library(extrafont) 
 
-
+library(stargazer)
 
 #RDD analysis
 vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
@@ -37,15 +39,17 @@ vaccine$date <- as.Date(vaccine$date)
 rdd_pol <- vaccine[grep("Poland", vaccine$location), ]
 rdd_pol <- rdd_pol[, c(1:3,9) ]
 rdd_pol$date <- as.Date(rdd_pol$date)
-rdd_pol <- subset(rdd_pol, date >= as.Date("2021-02-01") & date <= as.Date("2021-09-30"))
+rdd_pol <- subset(rdd_pol, date >= as.Date("2021-04-25") & date <= as.Date("2021-06-23"))
 rdd_pol$date2 <- as.numeric(rdd_pol$date)
 
 
 Y <- rdd_pol$daily_vaccinations
 X <- rdd_pol$date2
 
-plot_rd <- rdplot(Y, X, c = 18772, ci=95)
+plot_rd <- rdplot(y=Y, x=X, c = 18772, p=4)
+plot_rd2 <- rdplot(y=Y, x=X, c = 18772, p=4, kernel = "triangular")
 testrd <- rdrobust(y=Y, x=X, c = 18772,p=4, kernel= "uniform")
+testrd2 <- rdrobust(y=Y, x=X, c = 18772,p=4)
 
 
 rdplot_mean_bin = plot_rd$vars_bins[,"rdplot_mean_bin"]
@@ -60,7 +64,7 @@ y_hat_l=y_hat[x_plot<c]
 x_plot_r=x_plot[x_plot>=c]
 x_plot_l=x_plot[x_plot<c]
 
-point_estimate <- 267396.17-307184.51
+point_estimate <- 280067.6-271687.8
 
 rdplot_mean_bin_exp <- rdd_pol$date
 
@@ -79,7 +83,7 @@ rdd_plot <- ggplot() + zew_plotstyle() +
   xlab(expression(bold(paste("Date in 2021")))) + theme(axis.title.y = element_blank()) +
   scale_y_continuous(labels = scales::comma_format(big.mark = ',',
                                                    decimal.mark = '.'),
-                     limits = c(0,400000))
+                     limits = c(270000,290000))
 rdd_plot
 
 point_estimate <- 306039.71-307184.51
@@ -336,16 +340,7 @@ Pol_gap_plot <- ggplot(plotgap.df,aes(y=gap,x=date,group=1,linetype="solid")
 
 Pol_gap_plot
 
-tdf <- generate.placebos(dataprep.out.tcb,synth.out.tcb, Sigf.ipop = 2)
-## Test how extreme was the observed treatment effect given the placebos:
-ratio <- mspe.test(tdf)
-ratio$p.val
-mspe.plot(tdf, discard.extreme = FALSE)
-plot_placebos(
-  tdf = tdf,
-  discard.extreme = FALSE,
-  mspe.limit = 20,
-  alpha.placebos = 1)
+
 
 
 year <- cont <- id <- Y1 <- synthetic.Y1 <- NULL
@@ -440,16 +435,32 @@ c(0.85, 0.45)
 
 
 dataprep.out2 <- dataprep(foo = poland_lottery, 
-                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20","entrydate"),
+                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                           predictors.op = "mean",
                           dependent = "onedose", unit.variable = "countryid",
                           time.variable = "date2", treatment.identifier = 10,
-                          controls.identifier = c(1,2,3,6,12,13),
-                          time.predictors.prior = c(18659:18772),
-                          time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
+                          controls.identifier = c(1,2,3,6,7,12),
+                          time.predictors.prior = c(18659:18771),
+                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                           unit.names.variable = "country")
 
 synth.out2 = synth(dataprep.out2)
+
+synth.tables2 <- synth.tab(
+  dataprep.res = dataprep.out2,
+  synth.res = synth.out2)
+print(synth.tables2)
+
+tdf2 <- generate.placebos(dataprep.out2,synth.out2, Sigf.ipop = 2)
+## Test how extreme was the observed treatment effect given the placebos:
+ratio2 <- mspe.test(tdf2)
+ratio2$p.val
+mspe.plot(tdf, discard.extreme = FALSE)
+plot_placebos(
+  tdf = tdf,
+  discard.extreme = FALSE,
+  mspe.limit = 20,
+  alpha.placebos = 1)
 
 
 synth_data_out2 = data.frame(dataprep.out2$Y0plot%*%synth.out2$solution.w) 
@@ -457,6 +468,11 @@ date = as.numeric(row.names(synth_data_out2))
 plot.df2 = data.frame(onedose=poland_lottery$onedose[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df2$synth = synth_data_out2$w.weight
 plot.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+gap2 <- dataprep.out2$Y1plot - (dataprep.out2$Y0plot %*% synth.out2$solution.w)
+gap.inspection2 <- round(gap2, 4)
+min(gap.inspection2)
+max(gap.inspection2)
 
 
 SCM_plot2 <- ggplot(plot.df2,aes(y=onedose,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
@@ -484,7 +500,12 @@ dataprep.out.tc <- dataprep(foo = poland_lottery,
                             time.optimize.ssr = c(18659:18808), time.plot = c(18659:18960),
                             unit.names.variable = "country")
 
-synth.out.tc = synth(dataprep.out)
+synth.out.tc = synth(dataprep.out.tc)
+
+tdf.tc <- generate.placebos(dataprep.out.tc,synth.out.tc, Sigf.ipop = 2)
+## Test how extreme was the observed treatment effect given the placebos:
+ratio.tc <- mspe.test(tdf.tc)
+ratio.tc$p.val
 
 synth.tables.tc <- synth.tab(
   dataprep.res = dataprep.out.tc,
@@ -528,6 +549,12 @@ dataprep.out.tcb <- dataprep(foo = poland_lottery,
                              unit.names.variable = "country")
 
 synth.out.tcb = synth(dataprep.out.tcb)
+
+tdf.tcb <- generate.placebos(dataprep.out.tcb,synth.out.tcb, Sigf.ipop = 2)
+## Test how extreme was the observed treatment effect given the placebos:
+ratio.tcb <- mspe.test(tdf.tcb)
+ratio.tcb$p.val
+
 
 synth.tables.tcb <- synth.tab(
   dataprep.res = dataprep.out.tcb,
