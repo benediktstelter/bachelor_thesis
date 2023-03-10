@@ -46,6 +46,7 @@ library(rdrobust)
 library(scales)
 library(dbplyr)
 library(showtext)
+library(imputeTS)
 font_add(family = "Latin Modern Roman 10", regular = "lmroman10-regular-webfont.ttf")
 showtext_auto()
 
@@ -59,13 +60,9 @@ rdd_pol <- rdd_pol[, c(1:3,9) ]
 rdd_pol$date <- as.Date(rdd_pol$date)
 rdd_pol <- subset(rdd_pol, date >= as.Date("2021-04-25") & date <= as.Date("2021-06-23"))
 rdd_pol$date2 <- as.numeric(rdd_pol$date)
-
-
 Y <- rdd_pol$daily_vaccinations
 X <- rdd_pol$date2
-
 plot_rd <- rdplot(Y, X, c = 18772, ci = 95)
-
 rdplot_mean_bin = plot_rd$vars_bins[,"rdplot_mean_bin"]
 rdplot_mean_y   = plot_rd$vars_bins[,"rdplot_mean_y"]
 y_hat           = plot_rd$vars_poly[,"rdplot_y"]
@@ -73,27 +70,18 @@ x_plot          = plot_rd$vars_poly[,"rdplot_x"]
 rdplot_cil_bin =  plot_rd$vars_bins[,"rdplot_ci_l"]
 rdplot_cir_bin =  plot_rd$vars_bins[,"rdplot_ci_r"]
 rdplot_mean_bin=  plot_rd$vars_bins[,"rdplot_mean_bin"]
-
-
-
-
-
 #GDP
 per_capita_gdp <- read_excel("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data\\gdp_per_capita.xlsx",sheet = "Blatt 1") 
 per_capita_gdp <- per_capita_gdp[10:22,1:2]
 names(per_capita_gdp)
 names(per_capita_gdp)[names(per_capita_gdp) == "Daten abgefragt am 29/12/2022 15:37:21 von [ESTAT]"] <- "country"
 names(per_capita_gdp)[names(per_capita_gdp) == "...2"] <- "gdpcapita20"
-
-
 #Population density
 pop_density <- read_excel("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data\\pop_density.xlsx",sheet = "Sheet 1") 
 pop_density <- pop_density[9:21,1:2]
 names(pop_density)
 names(pop_density)[names(pop_density) == "Data extracted on 29/12/2022 16:30:19 from [ESTAT]"] <- "country"
 names(pop_density)[names(pop_density) == "...2"] <- "popdensity19"
-
-
 #Share of elderly
 share_elderly <- read_excel("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data\\share_elderly.xlsx",sheet = "Blatt 1")
 share_elderly <- share_elderly[9:21,1:2]
@@ -101,8 +89,6 @@ names(share_elderly)
 names(share_elderly)[names(share_elderly) == "Daten abgefragt am 29/12/2022 15:52:45 von [ESTAT]"] <- "country"
 names(share_elderly)[names(share_elderly) == "...2"] <- "elderly20"
 share_elderly$elderly20 <- as.numeric(sub("%", "",share_elderly$elderly20,fixed=TRUE))/100
-
-
 #Tertiary education
 share_tertiary_ed <- read_excel("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data\\share_tertiary_ed.xlsx",
                                 sheet = "Blatt 1")
@@ -111,8 +97,6 @@ names(share_tertiary_ed)
 names(share_tertiary_ed)[names(share_tertiary_ed) == "Daten abgefragt am 29/12/2022 15:42:33 von [ESTAT]"] <- "country"
 names(share_tertiary_ed)[names(share_tertiary_ed) == "...2"] <- "tertiary20"
 share_tertiary_ed$tertiary20 <- as.numeric(sub("%", "",share_tertiary_ed$tertiary20,fixed=TRUE))/100
-
-
 #Influenza
 influenza_vacc_rates <- read_excel("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data\\influenza_vaccination_rates.xlsx",
                                 sheet = "Blatt 1")
@@ -128,125 +112,77 @@ df_list <- list(influenza_vacc_rates, per_capita_gdp, pop_density, share_elderly
 predictors <- df_list %>% reduce(full_join, by='country')
 predictors$country <- c("Bulgaria", "Czechia", "Estonia", "Greece", "Croatia", "Latvia", "Lithuania", "Hungary", "Austria",
                                           "Poland", "Romania", "Slovenia", "Slovakia")
-
-
 #Wellcome Global monitor
 trst_science <- data.frame (country  = c("Bulgaria", "Czechia", "Estonia", "Greece", "Croatia", "Latvia", "Lithuania",
                                          "Hungary", "Austria", "Poland", "Romania", "Slovenia", "Slovakia"),
                             trstscinc20 = c(0.819,0.948,0.918,0.830,0.895,0.851,0.836,0.936,0.895,0.872,0.795,0.889,0.923))
-
-
 #Merge again
 sndmerge <- list(predictors, trst_science)
 predictors <- sndmerge %>% reduce(full_join, by='country')
 predictors$countryid <- c(1:13)
-
-
-
 #Vaccination datset
-vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/bac6f96045857196fa439508492529d5b9e75d0e/public/data/vaccinations/vaccinations.csv")
 vaccine$date <- as.Date(vaccine$date)
 donor_countries <- "Bulgaria|Czechia|Estonia|Greece|Croatia|Latvia|Lithuania|Hungary|Austria|Poland|Romania|Slovenia|Slovakia"
 donor_pool <- vaccine[grep(donor_countries, vaccine$location), ]
-
-
 #Plotting vaccinations in Poland (descriptive)
-
-
 #Isolating for vaccinated per hundred
 poland_lottery <- donor_pool[, c(1:3,11,12) ]
 names(poland_lottery)[names(poland_lottery) == "location"] <- "country"
 mrgefrst <- list(poland_lottery, predictors)
 poland_lottery <- mrgefrst %>% reduce(full_join, by='country')
-
 poland_lottery <- as.data.frame(poland_lottery)
 poland_lottery$people_vaccinated_per_hundred <- as.numeric(sub("%", "",poland_lottery$people_vaccinated_per_hundred,fixed=TRUE))/100
 names(poland_lottery)[names(poland_lottery) == "people_vaccinated_per_hundred"] <- "onedose"
-
 poland_lottery$people_fully_vaccinated_per_hundred <- as.numeric(sub("%", "",poland_lottery$people_fully_vaccinated_per_hundred,fixed=TRUE))/100
 names(poland_lottery)[names(poland_lottery) == "people_fully_vaccinated_per_hundred"] <- "twodoses"
-
-
 #Remove 2020, 2022 and 2023
 poland_lottery <- poland_lottery[!grepl("2023|2022|2020", poland_lottery$date), ]
-
 #experiment:
 setwd("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data")
-source("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data\\kalman.R")
-
 poland <- poland_lottery[grep("Poland", poland_lottery$country), ]
 poland <- na_interpolation(poland)
-
-
 ##Plot poland (descriptive part)
 source("ggplot_theme.R")
 poland.plot <- poland
-
-
 remaining <- poland_lottery[!grepl("Poland", poland_lottery$country), ]
-
-
 estonia <- remaining[grep("Estonia", remaining$country), ]
 estonia <- na_interpolation(estonia)
 remaining <- remaining[!grepl("Estonia", remaining$country), ]
-
-
 hungary <- remaining[grep("Hungary", remaining$country), ]
 hungary <- na_interpolation(hungary)
 remaining <- remaining[!grepl("Hungary", remaining$country), ]
-
-
 lithuania <- remaining[grep("Lithuania", remaining$country), ]
 lithuania <- na_interpolation(lithuania)
 remaining <- remaining[!grepl("Lithuania", remaining$country), ]
-
-
 romania <- remaining[grep("Romania", remaining$country), ]
 romania <- na_interpolation(romania)
 remaining <- remaining[!grepl("Romania", remaining$country), ]
-
-
 slovenia <- remaining[grep("Slovenia", remaining$country), ]
 slovenia <- na_interpolation(slovenia)
 remaining <- remaining[!grepl("Slovenia", remaining$country), ]
-
 slovakia <- remaining[grep("Slovakia", remaining$country), ]
 slovakia <- na_interpolation(slovakia)
 remaining <- remaining[!grepl("Slovakia", remaining$country), ]
-
-
 croatia <- remaining[grep("Croatia", remaining$country), ]
 croatia <- na_interpolation(croatia)
 remaining <- remaining[!grepl("Croatia", remaining$country), ]
-
-
 bulgaria <- remaining[grep("Bulgaria", remaining$country), ]
 bulgaria <- na_interpolation(bulgaria)
 remaining <- remaining[!grepl("Bulgaria", remaining$country), ]
-
 mrgepol <- list(remaining, slovakia, bulgaria, croatia, slovenia, romania, lithuania, hungary, estonia, poland)
-
 poland_lottery <- bind_rows(mrgepol)
-
 poland_lottery <- subset(poland_lottery, date >= as.Date("2021-02-01") & date <= as.Date("2021-12-31"))
-
-
 poland_lottery$date <- as.Date(poland_lottery$date)
 poland_lottery$date2 <- as.numeric(poland_lottery$date)
 poland_lottery$gdpcapita20 <- as.numeric(poland_lottery$gdpcapita20)
 poland_lottery$popdensity19 <- as.numeric(poland_lottery$popdensity19)
-
-
 country <- c("Austria", "Czechia", "Greece", "Latvia","Slovakia","Bulgaria","Croatia",
                   "Slovenia","Romania","Lithuania","Hungary","Estonia","Poland")
 entrydate <- c(1995,2004,1981,2004,2004,2007,2013,2004,2007,2004,2004,2004,2004)
-
 eu_accession <- data.frame(country, entrydate)
-
 mrgeacc <- list(poland_lottery, eu_accession)
 poland_lottery <- mrgeacc %>% reduce(full_join, by='country')
-
-
 #"trstscinc20"
 
 #SCM
@@ -259,17 +195,13 @@ dataprep.out <- dataprep(foo = poland_lottery,
          time.predictors.prior = c(18659:18771),
          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
          unit.names.variable = "country")
-
 synth.out = synth(dataprep.out)
-
 
 
 synth.tables <- synth.tab(
   dataprep.res = dataprep.out,
   synth.res = synth.out)
-
 tdf <- generate.placebos(dataprep.out,synth.out, Sigf.ipop = 2)
-
 year <- cont <- id <- Y1 <- synthetic.Y1 <- NULL
 n<-tdf$n
 t1 <- unique(tdf$df$year)[which(tdf$df$year == tdf$t1) - 1]
@@ -277,7 +209,6 @@ tr<-tdf$tr
 names.and.numbers<-tdf$names.and.numbers
 treated.name<-as.character(tdf$treated.name)
 df.plot<-NULL
-
 for(i in 1:n){
   a<-cbind(tdf$df$year,tdf$df[,i],tdf$df[,n+i],i)
   df.plot<-rbind(df.plot, a)
@@ -287,9 +218,6 @@ df.plot$gap <- df.plot$V3-df.plot$V2
 colnames(df.plot)<-c('date2','cont','tr','id','gap')
 datedfplot <- rep(seq(as.Date("2021-02-01"),as.Date("2021-09-30"),1),6)
 df.plot$date <- datedfplot
-
-
-
 dataprep.out2 <- dataprep(foo = poland_lottery, 
          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
          predictors.op = "mean",
@@ -299,17 +227,12 @@ dataprep.out2 <- dataprep(foo = poland_lottery,
          time.predictors.prior = c(18659:18771),
          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
          unit.names.variable = "country")
-
 synth.out2 = synth(dataprep.out2)
-
-
 synth_data_out2 = data.frame(dataprep.out2$Y0plot%*%synth.out2$solution.w) 
 date = as.numeric(row.names(synth_data_out2))
 plot.df2 = data.frame(onedose=poland_lottery$onedose[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df2$synth = synth_data_out2$w.weight
 plot.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #SCM at start of lottery
 dataprep.out.tc <- dataprep(foo = poland_lottery, 
          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
@@ -320,16 +243,12 @@ dataprep.out.tc <- dataprep(foo = poland_lottery,
          time.predictors.prior = c(18659:18808),
          time.optimize.ssr = c(18659:18808), time.plot = c(18659:18900),
          unit.names.variable = "country")
-
 synth.out.tc = synth(dataprep.out.tc)
-
 synth_data_out.tc = data.frame(dataprep.out.tc$Y0plot%*%synth.out.tc$solution.w) 
 date = as.numeric(row.names(synth_data_out.tc))
 plot.df.tc = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.tc$synth = synth_data_out.tc$w.weight
 plot.df.tc$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #SCM one month prior
 dataprep.out.tcb <- dataprep(foo = poland_lottery, 
          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
@@ -340,16 +259,12 @@ dataprep.out.tcb <- dataprep(foo = poland_lottery,
          time.predictors.prior = c(18659:18741),
          time.optimize.ssr = c(18659:18741), time.plot = c(18659:18900),
          unit.names.variable = "country")
-
 synth.out.tcb = synth(dataprep.out.tcb)
-
 synth_data_out.tcb = data.frame(dataprep.out.tcb$Y0plot%*%synth.out.tcb$solution.w) 
 date = as.numeric(row.names(synth_data_out.tcb))
 plot.df.tcb = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.tcb$synth = synth_data_out.tcb$w.weight
 plot.df.tcb$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #Leave one out analysis
 #GDP
 dataprep.out.gdp <- dataprep(foo = poland_lottery, 
@@ -361,16 +276,12 @@ dataprep.out.gdp <- dataprep(foo = poland_lottery,
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
-
 synth.out.gdp = synth(dataprep.out.gdp)
-
 synth_data_out.gdp = data.frame(dataprep.out.gdp$Y0plot%*%synth.out.gdp$solution.w) 
 date = as.numeric(row.names(synth_data_out.gdp))
 plot.df.gdp = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.gdp$synth = synth_data_out.gdp$w.weight
 plot.df.gdp$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #influenza
 dataprep.out.infz <- dataprep(foo = poland_lottery, 
                             predictors = c("gdpcapita20","popdensity19","tertiary20","trstscinc20","elderly20"),
@@ -381,16 +292,12 @@ dataprep.out.infz <- dataprep(foo = poland_lottery,
                             time.predictors.prior = c(18659:18771),
                             time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                             unit.names.variable = "country")
-
 synth.out.infz = synth(dataprep.out.infz)
-
 synth_data_out.infz = data.frame(dataprep.out.infz$Y0plot%*%synth.out.infz$solution.w) 
 date = as.numeric(row.names(synth_data_out.infz))
 plot.df.infz = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.infz$synth = synth_data_out.infz$w.weight
 plot.df.infz$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #popdensity
 dataprep.out.pop <- dataprep(foo = poland_lottery, 
                             predictors = c("gdpcapita20","inflzvacc19","tertiary20","trstscinc20","elderly20"),
@@ -401,16 +308,12 @@ dataprep.out.pop <- dataprep(foo = poland_lottery,
                             time.predictors.prior = c(18659:18771),
                             time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                             unit.names.variable = "country")
-
 synth.out.pop = synth(dataprep.out.pop)
-
 synth_data_out.pop = data.frame(dataprep.out.pop$Y0plot%*%synth.out.pop$solution.w) 
 date = as.numeric(row.names(synth_data_out.pop))
 plot.df.pop = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.pop$synth = synth_data_out.pop$w.weight
 plot.df.pop$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #tertiary
 dataprep.out.tert <- dataprep(foo = poland_lottery, 
                             predictors = c("gdpcapita20","inflzvacc19","popdensity19","trstscinc20","elderly20"),
@@ -421,16 +324,12 @@ dataprep.out.tert <- dataprep(foo = poland_lottery,
                             time.predictors.prior = c(18659:18771),
                             time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                             unit.names.variable = "country")
-
 synth.out.tert = synth(dataprep.out.tert)
-
 synth_data_out.tert = data.frame(dataprep.out.tert$Y0plot%*%synth.out.tert$solution.w) 
 date = as.numeric(row.names(synth_data_out.tert))
 plot.df.tert = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.tert$synth = synth_data_out.tert$w.weight
 plot.df.tert$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #trstscinc
 dataprep.out.trst <- dataprep(foo = poland_lottery, 
                             predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20"),
@@ -441,16 +340,12 @@ dataprep.out.trst <- dataprep(foo = poland_lottery,
                             time.predictors.prior = c(18659:18771),
                             time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                             unit.names.variable = "country")
-
 synth.out.trst = synth(dataprep.out.trst)
-
 synth_data_out.trst = data.frame(dataprep.out.trst$Y0plot%*%synth.out.trst$solution.w) 
 date = as.numeric(row.names(synth_data_out.trst))
 plot.df.trst = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.trst$synth = synth_data_out.trst$w.weight
 plot.df.trst$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 #elderly
 dataprep.out.eld <- dataprep(foo = poland_lottery, 
                             predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","trstscinc20"),
@@ -461,19 +356,13 @@ dataprep.out.eld <- dataprep(foo = poland_lottery,
                             time.predictors.prior = c(18659:18771),
                             time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                             unit.names.variable = "country")
-
 synth.out.eld = synth(dataprep.out.eld)
-
 synth_data_out.eld = data.frame(dataprep.out.eld$Y0plot%*%synth.out.eld$solution.w) 
 date = as.numeric(row.names(synth_data_out.eld))
 plot.df.eld = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.eld$synth = synth_data_out.eld$w.weight
 plot.df.eld$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
-
 #Leave one out country plot
-
 dataprep.out.co1 <- dataprep(foo = poland_lottery, 
                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                          predictors.op = "mean",
@@ -483,17 +372,12 @@ dataprep.out.co1 <- dataprep(foo = poland_lottery,
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
-
 synth.out.co1 = synth(dataprep.out.co1)
-
 synth_data_out.co1 = data.frame(dataprep.out.co1$Y0plot%*%synth.out.co1$solution.w) 
 date = as.numeric(row.names(synth_data_out.co1))
 plot.df.co1 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.co1$synth = synth_data_out.co1$w.weight
 plot.df.co1$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
-
 dataprep.out.co2 <- dataprep(foo = poland_lottery, 
                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                          predictors.op = "mean",
@@ -503,17 +387,12 @@ dataprep.out.co2 <- dataprep(foo = poland_lottery,
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
-
 synth.out.co2 = synth(dataprep.out.co2)
-
-
 synth_data_out.co2 = data.frame(dataprep.out.co2$Y0plot%*%synth.out.co2$solution.w) 
 date = as.numeric(row.names(synth_data_out.co2))
 plot.df.co2 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.co2$synth = synth_data_out.co2$w.weight
 plot.df.co2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 dataprep.out.co3 <- dataprep(foo = poland_lottery, 
                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                          predictors.op = "mean",
@@ -523,17 +402,12 @@ dataprep.out.co3 <- dataprep(foo = poland_lottery,
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
-
 synth.out.co3 = synth(dataprep.out.co3)
-
 synth_data_out.co3 = data.frame(dataprep.out.co3$Y0plot%*%synth.out.co3$solution.w) 
 date = as.numeric(row.names(synth_data_out.co3))
 plot.df.co3 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.co3$synth = synth_data_out.co3$w.weight
 plot.df.co3$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
-
 dataprep.out.co6 <- dataprep(foo = poland_lottery, 
                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                          predictors.op = "mean",
@@ -543,18 +417,12 @@ dataprep.out.co6 <- dataprep(foo = poland_lottery,
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
-
 synth.out.co6 = synth(dataprep.out.co6)
-
-
 synth_data_out.co6 = data.frame(dataprep.out.co6$Y0plot%*%synth.out.co6$solution.w) 
 date = as.numeric(row.names(synth_data_out.co6))
 plot.df.co6 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.co6$synth = synth_data_out.co6$w.weight
 plot.df.co6$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
-
 dataprep.out.co12 <- dataprep(foo = poland_lottery, 
                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                          predictors.op = "mean",
@@ -564,16 +432,12 @@ dataprep.out.co12 <- dataprep(foo = poland_lottery,
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                          unit.names.variable = "country")
-
 synth.out.co12 = synth(dataprep.out.co12)
-
 synth_data_out.co12 = data.frame(dataprep.out.co12$Y0plot%*%synth.out.co12$solution.w) 
 date = as.numeric(row.names(synth_data_out.co12))
 plot.df.co12 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
 plot.df.co12$synth = synth_data_out.co12$w.weight
 plot.df.co12$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
 dataprep.out.co13 <- dataprep(foo = poland_lottery, 
                               predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
                               predictors.op = "mean",
@@ -583,10 +447,7 @@ dataprep.out.co13 <- dataprep(foo = poland_lottery,
                               time.predictors.prior = c(18659:18771),
                               time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
                               unit.names.variable = "country")
-
 synth.out.co13 = synth(dataprep.out.co13)
-
-
 synth_data_out.co13 = data.frame(dataprep.out.co13$Y0plot%*%synth.out.co13$solution.w) 
 date = as.numeric(row.names(synth_data_out.co13))
 plot.df.co13 = data.frame(twodoses=poland_lottery$twodoses[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
@@ -899,7 +760,7 @@ In order to improve the fit of the synthetic control unit, additional predictors
 
 
 
-\begin{table}[! htbp]\centering \caption[Weights of Synthetic Poland (share of the fully vaccinated)]{Slovenia takes up the largest weight of the synthetic control unit (share of the fully vaccinated).}
+\begin{table}[! htbp]\centering \caption[Weights for Synthetic Poland (share of the fully vaccinated)]{Slovenia takes up the largest weight of the synthetic control unit (share of the fully vaccinated).}
 \bigskip
 \label{table:weightssynth}
 \begin{threeparttable}
@@ -1008,7 +869,7 @@ SCM_plot <- ggplot(plot.df,aes(y=twodoses,x=date,color="Poland")) + geom_line(li
         plot.title = element_text(hjust = 0.5),
         legend.background = element_rect(fill = "white", color = "black", size = 0.5)) +
   scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d") +
-  annotate(geom="text", x=as.Date("2021-03-01"), y=0.4, label="Lottery was announced \non March 25",
+  annotate(geom="text", x=as.Date("2021-03-15"), y=0.4, label="Lottery was announced \non May 25",
            color="black", family= "Latin Modern Roman 10") +
 annotate("segment", x = as.Date("2021-04-30"), xend = as.Date("2021-05-20"), y = 0.4, 
            yend = 0.4, colour = "black", size = 0.2, arrow = arrow(angle = 25, 

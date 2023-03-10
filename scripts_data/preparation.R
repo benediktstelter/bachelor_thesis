@@ -174,7 +174,7 @@ predictors$countryid <- c(1:13)
 
 
 #Vaccination datset
-vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/master/public/data/vaccinations/vaccinations.csv")
+vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/bac6f96045857196fa439508492529d5b9e75d0e/public/data/vaccinations/vaccinations.csv")
 vaccine$date <- as.Date(vaccine$date)
 donor_countries <- "Bulgaria|Czechia|Estonia|Greece|Croatia|Latvia|Lithuania|Hungary|Austria|Poland|Romania|Slovenia|Slovakia"
 donor_pool <- vaccine[grep(donor_countries, vaccine$location), ]
@@ -202,7 +202,7 @@ poland_lottery <- poland_lottery[!grepl("2023|2022|2020", poland_lottery$date), 
 
 #experiment:
 setwd("C:\\Users\\bened\\Documents\\bachelor_thesis\\scripts_data")
-source("kalman.R")
+source("interpolation.R")
 
 poland <- poland_lottery[grep("Poland", poland_lottery$country), ]
 poland <- na_interpolation(poland)
@@ -210,7 +210,7 @@ poland <- na_interpolation(poland)
 
 ##Plot poland (descriptive part)
 source("ggplot_theme.R")
-Pol_desc_plot <- ggplot(lithuania,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
+Pol_desc_plot <- ggplot(bulgaria,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
   geom_line(size=1, colour="#527ca4") + 
   xlab(expression(bold(paste("Date in 2021")))) +  
   ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
@@ -267,7 +267,7 @@ mrgepol <- list(remaining, slovakia, bulgaria, croatia, slovenia, romania, lithu
 
 poland_lottery <- bind_rows(mrgepol)
 
-poland_lottery <- subset(poland_lottery, date >= as.Date("2021-02-01") & date <= as.Date("2021-12-31"))
+poland_lottery <- subset(poland_lottery, date >= as.Date("2021-02-01") & date <= as.Date("2021-09-30"))
 
 
 poland_lottery$date <- as.Date(poland_lottery$date)
