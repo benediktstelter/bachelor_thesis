@@ -15,7 +15,7 @@ library(imputeTS)
 
 
 
-#Import main dataset from Our World in Data (takes a few minutes)
+#Import main dataset from Our World in Data (takes a few seconds)
 #Commit from March 8, 2023
 vaccine <- read.csv("https://raw.githubusercontent.com/owid/covid-19-data/bac6f96045857196fa439508492529d5b9e75d0e/public/data/vaccinations/vaccinations.csv")
 
@@ -265,6 +265,7 @@ poland_lottery$gdpcapita20 <- as.numeric(poland_lottery$gdpcapita20)
 poland_lottery$popdensity19 <- as.numeric(poland_lottery$popdensity19)
 
 #Remove Austria
+poland_lottery <- poland_lottery[!grepl("Austria", poland_lottery$country), ]
 
 
 #Preparation done
@@ -341,10 +342,10 @@ tdf <- generate.placebos(dataprep.out,synth.out, Sigf.ipop = 2)
 
 ###If there are any problems with the plot, here's the simple version of plotting the placebos:
 #plot_placebos(
- # tdf = tdf,
- # discard.extreme = FALSE,
- # mspe.limit = 20,
- # alpha.placebos = 1)
+ #tdf = tdf,
+ #discard.extreme = FALSE,
+ #mspe.limit = 20,
+ #alpha.placebos = 1)
 
 
 ##Inference: Plotting the placebos (SCtools package)
@@ -368,7 +369,7 @@ df.plot$date <- datedfplot
 
 
 p.gaps <- ggplot(df.plot,mapping=aes(x=date, y=gap))+
-  geom_line(mapping=aes(group=id, color='2'),size=0.8)+
+  geom_line(mapping=aes(group=id, color='2'),size=0.5)+
   geom_line(plotgap.df, mapping = aes(color='1'),size=0.8)+ 
   geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
   geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) + 
@@ -396,132 +397,8 @@ ratio$p.val
 
 ##Main analysis done!
 
-#Synthetic control analysis-Standard, share with at least one dose
 
-
-dataprep.out2 <- dataprep(foo = poland_lottery, 
-                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
-                          predictors.op = "mean",
-                          dependent = "onedose", unit.variable = "countryid",
-                          time.variable = "date2", treatment.identifier = 10,
-                          controls.identifier = c(1,2,3,6,7,12),
-                          time.predictors.prior = c(18659:18771),
-                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
-                          unit.names.variable = "country")
-
-synth.out2 = synth(dataprep.out2)
-
-
-##Inspect weights and predictors
-synth.tables2 <- synth.tab(
-  dataprep.res = dataprep.out2,
-  synth.res = synth.out2)
-print(synth.tables2)
-
-##Plotting the results
-synth_data_out2 = data.frame(dataprep.out2$Y0plot%*%synth.out2$solution.w) 
-date = as.numeric(row.names(synth_data_out2))
-plot.df2 = data.frame(onedose=poland_lottery$onedose[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
-plot.df2$synth = synth_data_out2$w.weight
-plot.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
-###Standard SCM Plot
-SCM_plot2 <- ggplot(plot.df2,aes(y=onedose,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
-  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
-  geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
-  geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) + 
-  xlab(expression(bold(paste("Date")))) +  
-  ylab(expression(bold(paste("Share at least one dose")))) + 
-  scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
-  zew_plotstyle() +
-  theme(legend.position = c(0.8, 0.3),
-        axis.line.x = element_line(colour = "black", size = 0.5),
-        plot.title = element_text(hjust = 0.5),
-        legend.background = element_rect(fill = "white", color = "black", size = 0.5)) +
-  scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
-SCM_plot2
-
-
-###Plotting the gap/estimated difference
-gap2 <- dataprep.out2$Y1plot - (dataprep.out2$Y0plot %*% synth.out2$solution.w)
-plotgap.df2 = data.frame(gap2)
-plotgap.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
-
-
-Pol_gap_plot2 <- ggplot(plotgap.df2,aes(y=gap2,x=date,group=1,linetype="solid")
-)+ geom_line(size=0.8, colour="#9c2424") + zew_plotstyle() + ylim(-0.08, 0.08) +
-  xlab(expression(bold(paste("Date")))) + 
-  ylab(expression(bold(paste("Estimated Difference")))) + 
-  geom_hline(yintercept = 0, color = "black", size = 0.3) + 
-  theme(axis.line.x = element_line(colour = "black", size = 0.5),
-        plot.title = element_text(hjust = 0.5),
-        legend.position = "none") +
-  geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
-  geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) +
-  scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
-Pol_gap_plot2
-
-##Inference: Generating placebos
-tdf2 <- generate.placebos(dataprep.out2,synth.out2, Sigf.ipop = 2)
-
-
-
-##Inference: Plotting the placebos (SCtools package)
-year <- cont <- id <- Y1 <- synthetic.Y1 <- NULL
-n<-tdf2$n
-t1 <- unique(tdf2$df$year)[which(tdf2$df$year == tdf2$t1) - 1]
-tr<-tdf2$tr
-names.and.numbers<-tdf2$names.and.numbers
-treated.name<-as.character(tdf2$treated.name)
-df.plot2<-NULL
-
-for(i in 1:n){
-  a<-cbind(tdf2$df$year,tdf2$df[,i],tdf2$df[,n+i],i)
-  df.plot2<-rbind(df.plot2, a)
-}
-df.plot2<-data.frame(df.plot2)
-df.plot2$gap2 <- df.plot2$V3-df.plot2$V2
-colnames(df.plot2)<-c('date2','cont','tr','id','gap2')
-datedfplot2 <- rep(seq(as.Date("2021-02-01"),as.Date("2021-09-30"),1),6)
-df.plot2$date <- datedfplot2
-
-p.gaps2 <- ggplot(df.plot2,mapping=aes(x=date, y=gap2))+
-  geom_line(mapping=aes(group=id, color='2'),size=0.8)+
-  geom_line(plotgap.df2, mapping = aes(color='1'),size=0.8)+ 
-  geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
-  geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) + 
-  geom_hline(yintercept = 0, color = "black", size = 0.3) + 
-  ylim(-0.3, 0.3) +
-  xlab(expression(bold(paste("Date")))) +
-  ylab(expression(bold(paste("Estimated Difference")))) +
-  scale_color_manual(name="Countries",
-                     values = c( '1' = '#9c2424', '2' = '#c7a92f'),
-                     labels = c(tdf2$treated.name, 'Donor pool')) +
-  zew_plotstyle() + theme(axis.line.x = element_line(colour = "black", size = 0.5),
-                          legend.position = c(0.15, 0.23),
-                          legend.background = element_rect(fill = "white", color = "black", size = 0.5),) + scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
-
-
-p.gaps2
-
-
-###If there are any problems with the plot, here's the simple version of plotting the placebos:
-#plot_placebos(
-# tdf = tdf2,
-# discard.extreme = FALSE,
-# mspe.limit = 20,
-# alpha.placebos = 1)
-
-##Inference: Test and resulting p-value(SCtools package)
-ratio2 <- mspe.test(tdf2)
-ratio2$p.val
-
-
-#Analysis done!
-
-
-#Next: Robustness checks (share of the fully vaccinated)
+#Next: Robustness checks
 
 #First: Changing the time of intervention to July 1, 2021
 
@@ -537,6 +414,13 @@ dataprep.out.tc <- dataprep(foo = poland_lottery,
                             unit.names.variable = "country")
 
 synth.out.tc = synth(dataprep.out.tc)
+
+##Inspect weights and predictors
+synth.tables.tc <- synth.tab(
+  dataprep.res = dataprep.out.tc,
+  synth.res = synth.out.tc)
+print(synth.tables.tc)
+
 
 
 ##Plotting the results
@@ -592,6 +476,13 @@ dataprep.out.tcb <- dataprep(foo = poland_lottery,
                              unit.names.variable = "country")
 
 synth.out.tcb = synth(dataprep.out.tcb)
+
+##Inspect weights and predictors
+synth.tables.tcb <- synth.tab(
+  dataprep.res = dataprep.out.tcb,
+  synth.res = synth.out.tcb)
+print(synth.tables.tcb)
+
 
 
 ##Plotting the results
@@ -793,7 +684,7 @@ loo.plot
 
 
 
-#Lastly: Leave-one out with countries
+#Leave-one out with countries
 #Synthetic control analyses-Robustness check, share of the fully vaccinated, leaving out each country once
 #Will probably take a few seconds/minutes
 #Preparation for plotting is also carried out
@@ -944,6 +835,129 @@ looc.plot <- ggplot(plot.df,mapping=aes(x=date, y=twodoses,color="Poland"))+geom
                           legend.background = element_rect(fill = "white", color = "black", size = 1)) + scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
 
 looc.plot
+
+
+#Share with at least one dose
+#Synthetic control analysis-Standard, share with at least one dose
+
+
+dataprep.out2 <- dataprep(foo = poland_lottery, 
+                          predictors = c("gdpcapita20","inflzvacc19","popdensity19","tertiary20","elderly20","trstscinc20"),
+                          predictors.op = "mean",
+                          dependent = "onedose", unit.variable = "countryid",
+                          time.variable = "date2", treatment.identifier = 10,
+                          controls.identifier = c(1,2,3,6,7,12),
+                          time.predictors.prior = c(18659:18771),
+                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18900),
+                          unit.names.variable = "country")
+
+synth.out2 = synth(dataprep.out2)
+
+
+##Inspect weights and predictors
+synth.tables2 <- synth.tab(
+  dataprep.res = dataprep.out2,
+  synth.res = synth.out2)
+print(synth.tables2)
+
+##Plotting the results
+synth_data_out2 = data.frame(dataprep.out2$Y0plot%*%synth.out2$solution.w) 
+date = as.numeric(row.names(synth_data_out2))
+plot.df2 = data.frame(onedose=poland_lottery$onedose[poland_lottery$countryid==10 & poland_lottery$date2 %in% date])
+plot.df2$synth = synth_data_out2$w.weight
+plot.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+###Standard SCM Plot
+SCM_plot2 <- ggplot(plot.df2,aes(y=onedose,x=date,color="Poland")) + geom_line(linetype="solid",size=0.8) + 
+  geom_line(aes(y=synth,x=date,color="Synthetic Poland"),linetype="solid",size=0.8) +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) + 
+  xlab(expression(bold(paste("Date")))) +  
+  ylab(expression(bold(paste("Share at least one dose")))) + 
+  scale_color_manual(name="Countries",values=c("Poland"="#527ca4","Synthetic Poland"="#b4be28")) +
+  zew_plotstyle() +
+  theme(legend.position = c(0.8, 0.3),
+        axis.line.x = element_line(colour = "black", size = 0.5),
+        plot.title = element_text(hjust = 0.5),
+        legend.background = element_rect(fill = "white", color = "black", size = 0.5)) +
+  scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
+SCM_plot2
+
+
+###Plotting the gap/estimated difference
+gap2 <- dataprep.out2$Y1plot - (dataprep.out2$Y0plot %*% synth.out2$solution.w)
+plotgap.df2 = data.frame(gap2)
+plotgap.df2$date <- poland_lottery$date[poland_lottery$countryid==10 & poland_lottery$date2 %in% date]
+
+
+Pol_gap_plot2 <- ggplot(plotgap.df2,aes(y=gap2,x=date,group=1,linetype="solid")
+)+ geom_line(size=0.8, colour="#9c2424") + zew_plotstyle() + ylim(-0.12, 0.12) +
+  xlab(expression(bold(paste("Date")))) + 
+  ylab(expression(bold(paste("Estimated Difference")))) + 
+  geom_hline(yintercept = 0, color = "black", size = 0.3) + 
+  theme(axis.line.x = element_line(colour = "black", size = 0.5),
+        plot.title = element_text(hjust = 0.5),
+        legend.position = "none") +
+  geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) +
+  scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
+Pol_gap_plot2
+
+##Inference: Generating placebos
+tdf2 <- generate.placebos(dataprep.out2,synth.out2, Sigf.ipop = 2)
+
+
+
+##Inference: Plotting the placebos (SCtools package)
+year <- cont <- id <- Y1 <- synthetic.Y1 <- NULL
+n<-tdf2$n
+t1 <- unique(tdf2$df$year)[which(tdf2$df$year == tdf2$t1) - 1]
+tr<-tdf2$tr
+names.and.numbers<-tdf2$names.and.numbers
+treated.name<-as.character(tdf2$treated.name)
+df.plot2<-NULL
+
+for(i in 1:n){
+  a<-cbind(tdf2$df$year,tdf2$df[,i],tdf2$df[,n+i],i)
+  df.plot2<-rbind(df.plot2, a)
+}
+df.plot2<-data.frame(df.plot2)
+df.plot2$gap2 <- df.plot2$V3-df.plot2$V2
+colnames(df.plot2)<-c('date2','cont','tr','id','gap2')
+datedfplot2 <- rep(seq(as.Date("2021-02-01"),as.Date("2021-09-30"),1),6)
+df.plot2$date <- datedfplot2
+
+p.gaps2 <- ggplot(df.plot2,mapping=aes(x=date, y=gap2))+
+  geom_line(mapping=aes(group=id, color='2'),size=0.5)+
+  geom_line(plotgap.df2, mapping = aes(color='1'),size=0.8)+ 
+  geom_vline(xintercept=18772,color="black",linetype=2,size=0.5) + 
+  geom_vline(xintercept=18900,color="black",linetype=2,size=0.5) + 
+  geom_hline(yintercept = 0, color = "black", size = 0.3) + 
+  ylim(-0.3, 0.3) +
+  xlab(expression(bold(paste("Date")))) +
+  ylab(expression(bold(paste("Estimated Difference")))) +
+  scale_color_manual(name="Countries",
+                     values = c( '1' = '#9c2424', '2' = '#c7a92f'),
+                     labels = c(tdf2$treated.name, 'Donor pool')) +
+  zew_plotstyle() + theme(axis.line.x = element_line(colour = "black", size = 0.5),
+                          legend.position = c(0.15, 0.23),
+                          legend.background = element_rect(fill = "white", color = "black", size = 0.5),) + scale_x_date(date_breaks = "2 months", date_minor_breaks = "1 month", date_labels = "%Y-%m-%d")
+
+
+p.gaps2
+
+
+###If there are any problems with the plot, here's the simple version of plotting the placebos:
+#plot_placebos(
+# tdf = tdf2,
+# discard.extreme = FALSE,
+# mspe.limit = 20,
+# alpha.placebos = 1)
+
+##Inference: Test and resulting p-value(SCtools package)
+ratio2 <- mspe.test(tdf2)
+ratio2$p.val
 
 
 #Everything done!

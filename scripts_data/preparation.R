@@ -47,7 +47,6 @@ Y <- rdd_pol$daily_vaccinations
 X <- rdd_pol$date2
 
 plot_rd <- rdplot(y=Y, x=X, c = 18772, p=4)
-plot_rd2 <- rdplot(y=Y, x=X, c = 18772, p=4, kernel = "triangular")
 testrd <- rdrobust(y=Y, x=X, c = 18772,p=4, kernel= "uniform")
 testrd2 <- rdrobust(y=Y, x=X, c = 18772,p=4)
 
@@ -210,7 +209,7 @@ poland <- na_interpolation(poland)
 
 ##Plot poland (descriptive part)
 source("ggplot_theme.R")
-Pol_desc_plot <- ggplot(bulgaria,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
+Pol_desc_plot <- ggplot(poland,aes(y=twodoses,x=date,group=1,linetype="solid")) + 
   geom_line(size=1, colour="#527ca4") + 
   xlab(expression(bold(paste("Date in 2021")))) +  
   ylab(expression(bold(paste("Share of Population fully vaccinated (in %)")))) + 
@@ -275,15 +274,6 @@ poland_lottery$date2 <- as.numeric(poland_lottery$date)
 poland_lottery$gdpcapita20 <- as.numeric(poland_lottery$gdpcapita20)
 poland_lottery$popdensity19 <- as.numeric(poland_lottery$popdensity19)
 
-
-country <- c("Austria", "Czechia", "Greece", "Latvia","Slovakia","Bulgaria","Croatia",
-                  "Slovenia","Romania","Lithuania","Hungary","Estonia","Poland")
-entrydate <- c(1995,2004,1981,2004,2004,2007,2013,2004,2007,2004,2004,2004,2004)
-
-eu_accession <- data.frame(country, entrydate)
-
-mrgeacc <- list(poland_lottery, eu_accession)
-poland_lottery <- mrgeacc %>% reduce(full_join, by='country')
 
 
 #"trstscinc20"
@@ -595,7 +585,7 @@ dataprep.out.gdp <- dataprep(foo = poland_lottery,
                          predictors.op = "mean",
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
-                         controls.identifier = c(1,2,3,6,12,13),
+                         controls.identifier = c(1,2,3,6,7,12),
                          time.predictors.prior = c(18659:18772),
                          time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
                          unit.names.variable = "country")
@@ -615,7 +605,7 @@ dataprep.out.infz <- dataprep(foo = poland_lottery,
                             predictors.op = "mean",
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
-                            controls.identifier = c(1,2,3,6,12,13),
+                            controls.identifier = c(1,2,3,6,7,12),
                             time.predictors.prior = c(18659:18772),
                             time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
                             unit.names.variable = "country")
@@ -635,7 +625,7 @@ dataprep.out.pop <- dataprep(foo = poland_lottery,
                             predictors.op = "mean",
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
-                            controls.identifier = c(1,2,3,6,12,13),
+                            controls.identifier = c(1,2,3,6,7,12),
                             time.predictors.prior = c(18659:18772),
                             time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
                             unit.names.variable = "country")
@@ -675,7 +665,7 @@ dataprep.out.trst <- dataprep(foo = poland_lottery,
                             predictors.op = "mean",
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
-                            controls.identifier = c(1,2,3,6,12,13),
+                            controls.identifier = c(1,2,3,6,7,12),
                             time.predictors.prior = c(18659:18772),
                             time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
                             unit.names.variable = "country")
@@ -695,7 +685,7 @@ dataprep.out.eld <- dataprep(foo = poland_lottery,
                             predictors.op = "mean",
                             dependent = "twodoses", unit.variable = "countryid",
                             time.variable = "date2", treatment.identifier = 10,
-                            controls.identifier = c(1,2,3,6,12,13),
+                            controls.identifier = c(1,2,3,6,7,12),
                             time.predictors.prior = c(18659:18772),
                             time.optimize.ssr = c(18659:18772), time.plot = c(18659:18960),
                             unit.names.variable = "country")
@@ -736,7 +726,7 @@ dataprep.out.co1 <- dataprep(foo = poland_lottery,
                          predictors.op = "mean",
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
-                         controls.identifier = c(2,3,6,12,13),
+                         controls.identifier = c(2,3,6,7,12),
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                          unit.names.variable = "country")
@@ -756,7 +746,7 @@ dataprep.out.co2 <- dataprep(foo = poland_lottery,
                          predictors.op = "mean",
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
-                         controls.identifier = c(1,3,6,12,13),
+                         controls.identifier = c(1,3,6,7,12),
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                          unit.names.variable = "country")
@@ -796,7 +786,7 @@ dataprep.out.co6 <- dataprep(foo = poland_lottery,
                          predictors.op = "mean",
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
-                         controls.identifier = c(1,2,3,12,13),
+                         controls.identifier = c(1,2,3,7,12),
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                          unit.names.variable = "country")
@@ -817,7 +807,7 @@ dataprep.out.co12 <- dataprep(foo = poland_lottery,
                          predictors.op = "mean",
                          dependent = "twodoses", unit.variable = "countryid",
                          time.variable = "date2", treatment.identifier = 10,
-                         controls.identifier = c(1,2,3,6,13),
+                         controls.identifier = c(1,2,3,6,12),
                          time.predictors.prior = c(18659:18771),
                          time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                          unit.names.variable = "country")
@@ -836,7 +826,7 @@ dataprep.out.co13 <- dataprep(foo = poland_lottery,
                               predictors.op = "mean",
                               dependent = "twodoses", unit.variable = "countryid",
                               time.variable = "date2", treatment.identifier = 10,
-                              controls.identifier = c(1,2,3,6,12),
+                              controls.identifier = c(1,2,3,6,7),
                               time.predictors.prior = c(18659:18771),
                               time.optimize.ssr = c(18659:18771), time.plot = c(18659:18961),
                               unit.names.variable = "country")
